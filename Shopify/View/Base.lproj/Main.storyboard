@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yRd-gQ-vfL">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -74,8 +74,99 @@
             </objects>
             <point key="canvasLocation" x="778" y="23"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="liP-tq-3AI">
+            <objects>
+                <viewController id="yRd-gQ-vfL" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="W8v-6J-tPt">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ff8-Mb-Iwl">
+                                <rect key="frame" x="0.0" y="255" width="393" height="367"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="uf6-dp-N50"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="uf6-dp-N50" firstAttribute="bottom" secondItem="ff8-Mb-Iwl" secondAttribute="bottom" constant="196" id="NiE-sB-jLE"/>
+                            <constraint firstItem="ff8-Mb-Iwl" firstAttribute="leading" secondItem="uf6-dp-N50" secondAttribute="leading" id="TTg-Ty-arT"/>
+                            <constraint firstItem="uf6-dp-N50" firstAttribute="trailing" secondItem="ff8-Mb-Iwl" secondAttribute="trailing" id="seW-ts-TVT"/>
+                            <constraint firstItem="ff8-Mb-Iwl" firstAttribute="top" secondItem="uf6-dp-N50" secondAttribute="top" constant="196" id="zE6-x9-az1"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="thy-PD-mXq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1579.3893129770993" y="11.971830985915494"/>
+        </scene>
+        <!--Home-->
+        <scene sceneID="YIW-lX-qRg">
+            <objects>
+                <viewController id="iVh-rI-z8y" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vKb-bV-J6O">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="veq-b7-qsu">
+                                <rect key="frame" x="0.0" y="58" width="393" height="44"/>
+                                <items>
+                                    <navigationItem id="MZw-qb-5cr">
+                                        <rightBarButtonItems>
+                                            <barButtonItem image="heart.fill" catalog="system" id="Ctz-BY-Zpx"/>
+                                            <barButtonItem image="cart.fill" catalog="system" id="D3N-EX-Ja0"/>
+                                        </rightBarButtonItems>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-6V-BPT">
+                                <rect key="frame" x="0.0" y="102" width="393" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cC5-Qy-GXr"/>
+                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="veq-b7-qsu" firstAttribute="top" secondItem="vKb-bV-J6O" secondAttribute="topMargin" constant="-1" id="6Jd-V5-WNi"/>
+                            <constraint firstItem="LDp-6V-BPT" firstAttribute="trailing" secondItem="cC5-Qy-GXr" secondAttribute="trailing" id="DmI-lt-NrZ"/>
+                            <constraint firstItem="LDp-6V-BPT" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" id="U79-90-XWY"/>
+                            <constraint firstItem="veq-b7-qsu" firstAttribute="leading" secondItem="LDp-6V-BPT" secondAttribute="leading" id="ac6-Bl-k8e"/>
+                            <constraint firstItem="LDp-6V-BPT" firstAttribute="top" secondItem="veq-b7-qsu" secondAttribute="bottom" id="hNu-NT-NsE"/>
+                            <constraint firstItem="veq-b7-qsu" firstAttribute="trailing" secondItem="LDp-6V-BPT" secondAttribute="trailing" id="tyq-To-i1b"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Home" selectedImage="house" catalog="system" id="IZz-Kb-ty7"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mAt-Gm-4q2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3756.4885496183206" y="26.760563380281692"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="Xv2-aB-WT7">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Tx8-Le-g1L" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KpV-H8-au5">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="iVh-rI-z8y" kind="relationship" relationship="viewControllers" id="RWY-2j-JMq"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KFO-7y-IZu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2829.770992366412" y="26.760563380281692"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="cart.fill" catalog="system" width="128" height="102"/>
+        <image name="heart.fill" catalog="system" width="128" height="107"/>
+        <image name="house" catalog="system" width="128" height="104"/>
+        <image name="splash-img" width="624" height="652"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
