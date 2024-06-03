@@ -14,24 +14,27 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logoutButton: UIButton!
     
-    let settings = ["Currency", "Address", "About us"]
+    let settings = ["Currency", "Address", "About Us","Contact Us"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        setUpUI()
     }
     
     func setUpUI(){
         profileImageView.image = UIImage(named: "profile")
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-        profileImageView.clipsToBounds = true
-        profileImageView.layer.borderWidth = 2
-        profileImageView.layer.borderColor = UIColor.lightGray.cgColor
         nameLabel.text = "Yennefer Doe"
         logoutButton.setTitle("Log out", for: .normal)
-        logoutButton.backgroundColor = .orange
+        logoutButton.backgroundColor = UIColor(hex: "#FF7D29")
         logoutButton.layer.cornerRadius = 8
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 1.9
+        profileImageView.clipsToBounds = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -41,7 +44,10 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = settings[indexPath.row]
-        cell.accessoryType = .disclosureIndicator
+        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+        let disclosureIndicator = UIImageView(image: UIImage(systemName: "chevron.right"))
+        disclosureIndicator.tintColor = .black
+        cell.accessoryView = disclosureIndicator
         return cell
     }
     
