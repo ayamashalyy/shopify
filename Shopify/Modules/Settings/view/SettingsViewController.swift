@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 1.9
+        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
         profileImageView.clipsToBounds = true
     }
     

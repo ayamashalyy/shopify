@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="107" id="KGk-i7-Jjw" customClass="SelectAddressCell" customModule="Shopify" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="107"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="400" height="107"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Byd-92-yNa">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="107"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mu1-gT-Az9">
+                                <rect key="frame" x="20" y="22" width="72" height="22"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQQ-9Y-1Tf">
+                                <rect key="frame" x="20" y="67" width="55" height="22"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="min-l6-kfs">
+                                <rect key="frame" x="117" y="22" width="250" height="20.333333333333329"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="qOg-4Y-Q7V"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TwM-2S-t9t">
+                                <rect key="frame" x="117" y="65.333333333333329" width="250" height="20.333333333333329"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="Xwe-F8-bGd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="mu1-gT-Az9" firstAttribute="top" secondItem="Byd-92-yNa" secondAttribute="top" constant="22" id="4wk-rh-6vz"/>
+                            <constraint firstItem="TwM-2S-t9t" firstAttribute="leading" secondItem="IQQ-9Y-1Tf" secondAttribute="trailing" constant="42" id="7Nh-Nt-A5G"/>
+                            <constraint firstItem="TwM-2S-t9t" firstAttribute="top" secondItem="min-l6-kfs" secondAttribute="bottom" constant="23" id="EPY-wt-QRg"/>
+                            <constraint firstItem="IQQ-9Y-1Tf" firstAttribute="leading" secondItem="Byd-92-yNa" secondAttribute="leading" constant="20" id="bry-J3-cg6"/>
+                            <constraint firstItem="min-l6-kfs" firstAttribute="top" secondItem="Byd-92-yNa" secondAttribute="top" constant="22" id="hhj-wW-FLW"/>
+                            <constraint firstItem="mu1-gT-Az9" firstAttribute="leading" secondItem="Byd-92-yNa" secondAttribute="leading" constant="20" id="hwT-Mb-E9n"/>
+                            <constraint firstItem="IQQ-9Y-1Tf" firstAttribute="top" secondItem="mu1-gT-Az9" secondAttribute="bottom" constant="23" id="nny-GZ-thL"/>
+                            <constraint firstItem="min-l6-kfs" firstAttribute="leading" secondItem="mu1-gT-Az9" secondAttribute="trailing" constant="25" id="r63-Cg-51e"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Byd-92-yNa" secondAttribute="bottom" id="5gm-Ex-xZp"/>
+                    <constraint firstItem="Byd-92-yNa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="NeQ-ey-mOJ"/>
+                    <constraint firstItem="Byd-92-yNa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="YHD-zm-Bba"/>
+                    <constraint firstAttribute="trailing" secondItem="Byd-92-yNa" secondAttribute="trailing" id="cSp-ef-7O8"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="addressLabel" destination="min-l6-kfs" id="9MV-fB-anO"/>
+                <outlet property="phoneLabel" destination="TwM-2S-t9t" id="hCc-2e-biC"/>
+            </connections>
+            <point key="canvasLocation" x="-36.641221374045799" y="-25"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
