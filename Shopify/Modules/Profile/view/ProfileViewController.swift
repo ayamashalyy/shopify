@@ -29,12 +29,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.delegate = self
         tableview.register(UINib(nibName: "OrderViewCell", bundle: nil), forCellReuseIdentifier: "OrderViewCell")
         tableview.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
+        tableview.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 190
@@ -44,7 +45,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 20
+        if section == 1 {
+            return 60
+        } else {
+            return 5
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -93,5 +98,52 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             return "WishList"
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: tableView.bounds.width - 100, y: 10, width: 80, height: 30)
+        button.setTitle("See More", for: .normal)
+        button.tag = section
+        
+        button.addTarget(self, action: #selector(headerButtonTapped(_:)), for: .touchUpInside)
+        
+        headerView.addSubview(button)
+        
+        let label = UILabel(frame: CGRect(x: 20, y: 10, width: 200, height: 30))
+        label.font = UIFont.boldSystemFont(ofSize: 25)
+        if section == 0 {
+            label.text = "Orders"
+        } else {
+            label.text = "WishList"
+        }
+        headerView.addSubview(label)
+        
+        return headerView
+    }
+    
+    @objc func headerButtonTapped(_ sender: UIButton) {
+        let section = sender.tag
+        if section == 0 {
+            print("See More button in Orders section tapped")
+            showMoreOrders()
+        } else if section == 1 {
+            print("See More button in WishList section tapped")
+            showMoreWishListItems()
+        }
+    }
+    
+    func showMoreOrders() {
+        print("See More button in Orders section tapped")
+    }
+    
+    func showMoreWishListItems() {
+        print("See More button in WishList section tapped")
+    }
+    
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
 }
