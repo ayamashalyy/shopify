@@ -31,7 +31,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
     }
     
-    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 190
@@ -54,13 +57,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if section == 0 {
             return orders.count
         } else {
-            return 3
-        }
-        
-        func numberOfSections(in tableView: UITableView) -> Int {
             return 2
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -96,6 +94,4 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             return "WishList"
         }
     }
-    
 }
-
