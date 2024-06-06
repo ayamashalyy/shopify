@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oQU-NF-Ewm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Nja-uh-eME">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -544,6 +545,45 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jmm-0T-oCz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4217.5572519083971" y="-32.394366197183103"/>
+        </scene>
+        <!--Orders View Controller-->
+        <scene sceneID="2LA-fZ-J9L">
+            <objects>
+                <viewController id="Nja-uh-eME" customClass="OrdersViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ojK-qF-3ZC">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1rH-mu-pJQ">
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <items>
+                                    <navigationItem title="Orders" id="T1a-8k-XsW"/>
+                                </items>
+                            </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="pFi-Js-CCa">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="CFu-oD-lvW"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pFi-Js-CCa" firstAttribute="leading" secondItem="CFu-oD-lvW" secondAttribute="leading" id="4ij-S7-Xp6"/>
+                            <constraint firstItem="CFu-oD-lvW" firstAttribute="bottom" secondItem="pFi-Js-CCa" secondAttribute="bottom" id="6Fr-8c-9UX"/>
+                            <constraint firstItem="CFu-oD-lvW" firstAttribute="trailing" secondItem="1rH-mu-pJQ" secondAttribute="trailing" id="Bu4-aP-H4K"/>
+                            <constraint firstItem="1rH-mu-pJQ" firstAttribute="leading" secondItem="ojK-qF-3ZC" secondAttribute="leading" id="Gy6-4I-BaW"/>
+                            <constraint firstItem="1rH-mu-pJQ" firstAttribute="top" secondItem="CFu-oD-lvW" secondAttribute="top" id="HTO-y0-0ae"/>
+                            <constraint firstItem="pFi-Js-CCa" firstAttribute="top" secondItem="1rH-mu-pJQ" secondAttribute="bottom" id="VlG-cv-5WW"/>
+                            <constraint firstItem="CFu-oD-lvW" firstAttribute="trailing" secondItem="pFi-Js-CCa" secondAttribute="trailing" id="wBY-x5-XHy"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="ordersTable" destination="pFi-Js-CCa" id="FGg-b5-8dd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Y9-95-z26" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5030" y="-32"/>
         </scene>
     </scenes>
     <resources>
