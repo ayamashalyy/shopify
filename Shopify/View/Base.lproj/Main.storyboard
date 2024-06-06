@@ -148,52 +148,20 @@
                                     <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
                                 </connections>
                             </searchBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lSO-Ay-Fuj">
-                                <rect key="frame" x="0.0" y="158" width="393" height="186"/>
-                                <viewLayoutGuide key="contentLayoutGuide" id="yXX-Zb-Rrg"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="gNj-95-iqS"/>
-                                <connections>
-                                    <outlet property="delegate" destination="iVh-rI-z8y" id="giK-j7-DzC"/>
-                                </connections>
-                            </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="4k8-Ga-daK">
-                                <rect key="frame" x="138.66666666666666" y="345" width="116" height="26"/>
-                                <color key="pageIndicatorTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="currentPageIndicatorTintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </pageControl>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brands" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZG-uy-uIk">
-                                <rect key="frame" x="20" y="364" width="353" height="29"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cC5-Qy-GXr"/>
-                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="lSO-Ay-Fuj" firstAttribute="leading" secondItem="LDp-6V-BPT" secondAttribute="leading" id="1Oy-9Z-NsC"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="top" secondItem="vKb-bV-J6O" secondAttribute="topMargin" constant="-1" id="6Jd-V5-WNi"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="trailing" secondItem="cC5-Qy-GXr" secondAttribute="trailing" id="DmI-lt-NrZ"/>
-                            <constraint firstItem="JZG-uy-uIk" firstAttribute="top" secondItem="lSO-Ay-Fuj" secondAttribute="bottom" constant="20" id="SpI-2U-BHd"/>
-                            <constraint firstAttribute="bottom" secondItem="lSO-Ay-Fuj" secondAttribute="bottom" constant="508" id="Tbk-TM-X3U"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" id="U79-90-XWY"/>
-                            <constraint firstItem="4k8-Ga-daK" firstAttribute="top" secondItem="lSO-Ay-Fuj" secondAttribute="bottom" constant="1" id="V2R-0I-xqG"/>
-                            <constraint firstItem="lSO-Ay-Fuj" firstAttribute="top" secondItem="LDp-6V-BPT" secondAttribute="bottom" id="Xhb-7K-48n"/>
-                            <constraint firstItem="lSO-Ay-Fuj" firstAttribute="centerX" secondItem="4k8-Ga-daK" secondAttribute="centerX" id="YhY-WV-iaq"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="leading" secondItem="LDp-6V-BPT" secondAttribute="leading" id="ac6-Bl-k8e"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="top" secondItem="veq-b7-qsu" secondAttribute="bottom" id="hNu-NT-NsE"/>
-                            <constraint firstItem="JZG-uy-uIk" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" constant="20" id="iOt-fG-mP0"/>
-                            <constraint firstItem="lSO-Ay-Fuj" firstAttribute="trailing" secondItem="LDp-6V-BPT" secondAttribute="trailing" id="sVS-HI-Ieg"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="trailing" secondItem="LDp-6V-BPT" secondAttribute="trailing" id="tyq-To-i1b"/>
-                            <constraint firstItem="cC5-Qy-GXr" firstAttribute="trailing" secondItem="JZG-uy-uIk" secondAttribute="trailing" constant="20" id="y7r-wl-NLq"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="IZz-Kb-ty7"/>
-                    <connections>
-                        <outlet property="pageControl" destination="4k8-Ga-daK" id="CoB-Op-tAf"/>
-                        <outlet property="scrollView" destination="lSO-Ay-Fuj" id="aCw-gs-Mqq"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mAt-Gm-4q2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -473,7 +441,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

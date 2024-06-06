@@ -9,47 +9,61 @@ import UIKit
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
     
-
-    @IBOutlet weak var pageControl: UIPageControl!
-
-    @IBOutlet weak var scrollView: UIScrollView!
-    
     let brandsImgs = ["splash-img.jpg", "splash-img.jpg", "splash-img.jpg", "splash-img.jpg"]
     let brandsNames = ["brand1", "brand2", "brand3", "brand4"]
     
     var brandsCollectionView: UICollectionView!
     
     let coponesImages = ["splash-img.jpg", "splash-img.jpg", "splash-img.jpg"]
+    var couponsCollectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(hex: "#F5F5F5")
-        
-        scrollView.delegate = self
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-        
-        pageControl.numberOfPages = coponesImages.count
-        pageControl.currentPage = 0
-        
-        for i in 0..<coponesImages.count{
-            let imageView = UIImageView()
-            imageView.contentMode = .scaleToFill
-            imageView.image = UIImage(named: coponesImages[i])
-            let xpos = CGFloat(i)*self.view.bounds.size.width
-            imageView.frame = CGRect(x: xpos, y: 0, width: view.frame.size.width, height: scrollView.frame.size.height)
-            scrollView.contentSize.width = view.frame.size.width*CGFloat(i+1)
-            scrollView.addSubview(imageView)
-        }
         
         let layout = UICollectionViewFlowLayout()
         brandsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
 
         view.addSubview(brandsCollectionView)
         
+        // Setup couponsCollectionView
+        let couponLayout = UICollectionViewFlowLayout()
+        couponLayout.scrollDirection = .horizontal
+        couponsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: couponLayout)
+        view.addSubview(couponsCollectionView)
+        couponsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            couponsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 160),
+            couponsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            couponsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            couponsCollectionView.heightAnchor.constraint(equalToConstant: 210)
+        ])
+
+        couponsCollectionView.backgroundColor = UIColor.clear
+        couponsCollectionView.dataSource = self
+        couponsCollectionView.delegate = self
+
+        couponsCollectionView.register(CustomCouponCell.self, forCellWithReuseIdentifier: "couponCell")
+        
+        let brandsTitleLabel = UILabel()
+        brandsTitleLabel.text = "Brands"
+        brandsTitleLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        brandsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(brandsTitleLabel)
+        
+        NSLayoutConstraint.activate([
+            brandsTitleLabel.topAnchor.constraint(equalTo: couponsCollectionView.bottomAnchor, constant: 20),
+            brandsTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            brandsTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            brandsTitleLabel.heightAnchor.constraint(equalToConstant: 30)
+        ])
+
+        
         brandsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        brandsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 400).isActive = true
+        brandsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 430).isActive = true
         brandsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor , constant: -100).isActive = true
         brandsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         brandsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
@@ -61,35 +75,39 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         brandsCollectionView.register(CustomBrandCell.self, forCellWithReuseIdentifier: "brandCell")
 
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let page = scrollView.contentOffset.x / scrollView.frame.width
-        
-        pageControl.currentPage = Int(page)
-    }
 
 }
 
+extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return brandsImgs.count
+        if collectionView == couponsCollectionView {
+            return coponesImages.count
+        } else {
+            return brandsImgs.count
+        }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = brandsCollectionView.dequeueReusableCell(withReuseIdentifier: "brandCell", for: indexPath) as! CustomBrandCell
-        
-        cell.brandImgView.image = UIImage(named: brandsImgs[indexPath.row])
-        cell.nameBrandLabel.text = brandsNames[indexPath.row]
-        
-        return cell
+        if collectionView == couponsCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "couponCell", for: indexPath) as! CustomCouponCell
+            cell.imageView.image = UIImage(named: coponesImages[indexPath.item])
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "brandCell", for: indexPath) as! CustomBrandCell
+            cell.brandImgView.image = UIImage(named: brandsImgs[indexPath.item])
+            cell.nameBrandLabel.text = brandsNames[indexPath.item]
+            return cell
+        }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width / 2 - 20 , height: 180)
+        if collectionView == couponsCollectionView {
+            return CGSize(width: view.frame.width, height: 260)
+        } else {
+            return CGSize(width: view.frame.width / 2 - 20, height: 180)
+        }
     }
-    
 }
 
 class CustomBrandCell: UICollectionViewCell{
@@ -135,4 +153,29 @@ class CustomBrandCell: UICollectionViewCell{
         fatalError("init(coder:) has been implemented")
     }
     
+}
+
+class CustomCouponCell: UICollectionViewCell {
+
+    let imageView = UIImageView()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 230)
+        ])
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

@@ -22,7 +22,7 @@ class CategoriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(hex: "#F5F5F5")
+        //view.backgroundColor = UIColor(hex: "#F5F5F5")
         
         let layout = UICollectionViewFlowLayout()
         categoriesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
