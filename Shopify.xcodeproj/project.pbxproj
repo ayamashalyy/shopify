@@ -44,6 +44,7 @@
 		3E9062E48B8C093AB275CAB3 /* Pods_Shopify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F670E37743DB839BF0AE2DB2 /* Pods_Shopify.framework */; };
 		51871C462C0F122F0045676F /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51871C452C0F122F0045676F /* CategoriesViewController.swift */; };
 		51871C4B2C0F6C5D0045676F /* BrandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51871C4A2C0F6C5D0045676F /* BrandsViewController.swift */; };
+		51D8D7FA2C110D9600F49A0B /* OrdersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D8D7F92C110D9600F49A0B /* OrdersViewController.swift */; };
 		8C35AF66B224495AAF7CD12A /* Pods_Shopify_ShopifyUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98394E6E9D062E8037B07F16 /* Pods_Shopify_ShopifyUITests.framework */; };
 		E4724DE79BB277F9EB2CAF63 /* Pods_ShopifyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75244E20E1F9E8DDADB573A0 /* Pods_ShopifyTests.framework */; };
 /* End PBXBuildFile section */
@@ -107,6 +108,7 @@
 		32F3EAF027D02D4428DBD6A9 /* Pods-Shopify-ShopifyUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shopify-ShopifyUITests.release.xcconfig"; path = "Target Support Files/Pods-Shopify-ShopifyUITests/Pods-Shopify-ShopifyUITests.release.xcconfig"; sourceTree = "<group>"; };
 		51871C452C0F122F0045676F /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		51871C4A2C0F6C5D0045676F /* BrandsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandsViewController.swift; sourceTree = "<group>"; };
+		51D8D7F92C110D9600F49A0B /* OrdersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersViewController.swift; sourceTree = "<group>"; };
 		75244E20E1F9E8DDADB573A0 /* Pods_ShopifyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShopifyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75A1868325D2BBC64C5D3B5D /* Pods-Shopify-ShopifyUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shopify-ShopifyUITests.debug.xcconfig"; path = "Target Support Files/Pods-Shopify-ShopifyUITests/Pods-Shopify-ShopifyUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		95B2A733B6C8163058600CF3 /* Pods-ShopifyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShopifyTests.release.xcconfig"; path = "Target Support Files/Pods-ShopifyTests/Pods-ShopifyTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 		03D35CBC2C0CECC400523AF7 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				51D8D7F62C110D5700F49A0B /* Orders */,
 				03E40D932C10C24D00489854 /* Profile */,
 				03EFE7742C0F118B00B2F51E /* Payment */,
 				037955D52C0E80F7003A3AF9 /* Place Order */,
@@ -547,6 +550,30 @@
 			sourceTree = "<group>";
 		};
 		51871C492C0F6C410045676F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		51D8D7F62C110D5700F49A0B /* Orders */ = {
+			isa = PBXGroup;
+			children = (
+				51D8D7F82C110D6A00F49A0B /* ViewModel */,
+				51D8D7F72C110D6300F49A0B /* View */,
+			);
+			path = Orders;
+			sourceTree = "<group>";
+		};
+		51D8D7F72C110D6300F49A0B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				51D8D7F92C110D9600F49A0B /* OrdersViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		51D8D7F82C110D6A00F49A0B /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -818,6 +845,7 @@
 				0351671B2C0D3E6C00B208A8 /* SettingsViewController.swift in Sources */,
 				0337F1F82C0E0BAF00D97CBD /* ShoppingCartViewController.swift in Sources */,
 				03ED90F12C0DCD5200EE0A50 /* SplashViewController.swift in Sources */,
+				51D8D7FA2C110D9600F49A0B /* OrdersViewController.swift in Sources */,
 				03E40D972C10C29B00489854 /* ProfileViewController.swift in Sources */,
 				03D2CE492C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift in Sources */,
 				03E40D9E2C10D5AE00489854 /* WishListViewCell.swift in Sources */,
