@@ -13,7 +13,7 @@
         <!--Login View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController id="Y6W-OH-hqX" customClass="LoginViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="Y6W-OH-hqX" customClass="LoginViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -143,7 +143,7 @@
                                 <connections>
                                     <action selector="signUpBtn:" destination="WHz-E2-Jte" eventType="touchUpInside" id="X0A-6c-kbj"/>
                                     <action selector="signUpBtx:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Y3f-H9-05M"/>
-                                    <segue destination="TIU-hi-w1U" kind="show" id="fAM-Pc-xdk"/>
+                                    <segue destination="CI3-Be-L5h" kind="show" id="vd9-IC-Wn9"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ZWo-7V-c1W">
@@ -193,13 +193,13 @@
         <!--Product View Controller-->
         <scene sceneID="uYE-vI-Mlf">
             <objects>
-                <viewController id="CI3-Be-L5h" customClass="ProductViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="productDetails" id="CI3-Be-L5h" customClass="ProductViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OZQ-LH-f5Q">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0nB-v7-E6T">
-                                <rect key="frame" x="0.0" y="59" width="393" height="278"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="278"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="278" id="GIU-IP-VKF"/>
@@ -294,7 +294,7 @@
                                 </constraints>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="zkS-v6-Nc5">
-                                <rect key="frame" x="138.66666666666666" y="333" width="115.66666666666666" height="25.666666666666686"/>
+                                <rect key="frame" x="138.66666666666666" y="377" width="115.66666666666666" height="25.666666666666686"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="currentPageIndicatorTintColor" systemColor="systemOrangeColor"/>
                             </pageControl>
@@ -325,7 +325,13 @@
                                     <color key="tintColor" systemColor="systemRedColor"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" image="heart.fill" catalog="system"/>
+                                    <connections>
+                                        <action selector="showFaviourts:" destination="CI3-Be-L5h" eventType="touchUpInside" id="fJZ-hc-zXy"/>
+                                    </connections>
                                 </button>
+                                <connections>
+                                    <action selector="showAllFavouirts:" destination="CI3-Be-L5h" id="OS0-0a-adc"/>
+                                </connections>
                             </barButtonItem>
                             <barButtonItem style="plain" id="dXB-dC-lYj">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="4Yn-D9-FtM">
@@ -343,7 +349,6 @@
                     <connections>
                         <outlet property="addToCart" destination="Wbj-uI-j0v" id="Drh-WO-yJZ"/>
                         <outlet property="allBasketButton" destination="dXB-dC-lYj" id="qUu-Yp-nFx"/>
-                        <outlet property="allFavBtn" destination="xfg-os-hyo" id="Cu1-If-Stg"/>
                         <outlet property="basket" destination="4Yn-D9-FtM" id="zqP-Wj-ma6"/>
                         <outlet property="myCollectionOfImages" destination="0nB-v7-E6T" id="Qow-Y7-AaS"/>
                         <outlet property="pageContoller" destination="zkS-v6-Nc5" id="BYL-LN-YMQ"/>
@@ -359,7 +364,7 @@
         <!--Search-->
         <scene sceneID="K3z-zb-ux2">
             <objects>
-                <viewController id="X4K-Tg-Jpv" customClass="SearchViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchViewController" id="X4K-Tg-Jpv" customClass="SearchViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0kG-Iv-Rxd">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -511,13 +516,13 @@
         <!--All Faviourts Products-->
         <scene sceneID="GtW-wK-axw">
             <objects>
-                <viewController id="TIU-hi-w1U" customClass="AllFavViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AllFavViewController" id="TIU-hi-w1U" customClass="AllFavViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MNd-QI-MpB">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cfb-Kd-f43">
-                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="192" id="C5y-2j-Igz">
@@ -587,16 +592,16 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

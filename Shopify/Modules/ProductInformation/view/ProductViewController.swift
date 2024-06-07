@@ -9,6 +9,8 @@ import UIKit
 import Cosmos
 
 class ProductViewController: UIViewController {
+    
+    var productId : String?
     // the data from api not conatin reviews and not contain rate
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
@@ -18,19 +20,34 @@ class ProductViewController: UIViewController {
     @IBOutlet weak var allBasketButton: UIBarButtonItem!
     @IBOutlet weak var myCollectionOfImages: UICollectionView!
    
+    
+    
+    
+    @IBAction func showFaviourts(_ sender: UIButton) {
+        print("show all fav")
+        Navigation.ToAllFavourite(from: self)
+    }
+    
+    
     @IBOutlet weak var pageContoller: UIPageControl!
     @IBAction func allBasketProduct(_ sender: UIButton) {
+        print("show all basket")
+        Navigation.ToOrders(from: self)
     }
-        
-    @IBOutlet weak var allFavBtn: UIButton!
-        
+                
     @IBAction func productFavBtn(_ sender: UIButton) {
+        
+        print("show add to fav")
+
     }
     
     
     @IBAction func addCartAction(_ sender: UIButton) {
+                
+        print("show add to cart")
+        
     }
-    
+
     var imageArrary = [UIImage(named: "payment")!,UIImage(named: "payment")!]
     
     var reviews = [
@@ -43,6 +60,7 @@ class ProductViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("inproduct the id\(productId)")
         setUpUI()
         myCollectionOfImages.delegate = self
         myCollectionOfImages.dataSource = self
@@ -101,10 +119,9 @@ class ProductViewController: UIViewController {
            stack.addArrangedSubview(reviewsHeader)
            stack.addArrangedSubview(reviewsTableView)
         NSLayoutConstraint.activate([
-               reviewsTableView.heightAnchor.constraint(equalToConstant: 200) // Adjust as needed
+               reviewsTableView.heightAnchor.constraint(equalToConstant: 200)
            ])
 
-           // Button to see more reviews
            let seeMoreButton = UIButton(type: .system)
            seeMoreButton.setTitle("See More", for: .normal)
            seeMoreButton.addTarget(self, action: #selector(seeMoreReviews), for: .touchUpInside)
@@ -150,14 +167,13 @@ extension ProductViewController :  UICollectionViewDelegate,UICollectionViewData
 extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min(3, reviews.count) // Limit to 3 reviews
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath)
         let review = reviews[indexPath.row]
                     
-        //Default Content Configuration
         var content = cell.defaultContentConfiguration()
         content.text = review.1
         content.secondaryText = review.0
