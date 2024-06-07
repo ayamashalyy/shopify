@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,67 +21,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="190" height="153.66666666666666"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcl-aE-UuQ">
-                        <rect key="frame" x="10" y="156" width="111" height="22"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <rect key="frame" x="10" y="156.33333333333334" width="50" height="25.333333333333343"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="21"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YeP-ha-ViN">
-                        <rect key="frame" x="10" y="181.66666666666666" width="43.666666666666664" height="21.666666666666657"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <rect key="frame" x="10" y="185.33333333333334" width="46" height="23"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xpW-BA-ZVi">
-                        <rect key="frame" x="129.33333333333334" y="166.33333333333334" width="50.666666666666657" height="39.666666666666657"/>
-                        <color key="tintColor" systemColor="systemRedColor"/>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" image="heart.fill" catalog="system"/>
-                    </button>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iRk-yY-b5e">
-                        <rect key="frame" x="0.0" y="214" width="190" height="5"/>
-                        <color key="backgroundColor" systemColor="systemGray5Color"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="5" id="WfI-Hh-I8D"/>
-                        </constraints>
-                    </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="S8O-tM-d3l" secondAttribute="trailing" id="2Mg-hk-ZpP"/>
                 <constraint firstItem="wcl-aE-UuQ" firstAttribute="top" secondItem="S8O-tM-d3l" secondAttribute="bottom" constant="2.6666666666666714" id="2eJ-4i-xs2"/>
                 <constraint firstItem="S8O-tM-d3l" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="5P1-ck-28J"/>
                 <constraint firstItem="S8O-tM-d3l" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="8gs-a2-AKQ"/>
-                <constraint firstItem="iRk-yY-b5e" firstAttribute="top" secondItem="xpW-BA-ZVi" secondAttribute="bottom" constant="8" id="9Bs-b9-3wC"/>
                 <constraint firstItem="YeP-ha-ViN" firstAttribute="top" secondItem="wcl-aE-UuQ" secondAttribute="bottom" constant="3.6666666666666714" id="KMX-N5-itT"/>
-                <constraint firstAttribute="bottom" secondItem="iRk-yY-b5e" secondAttribute="bottom" constant="2" id="NMB-0w-KZD"/>
                 <constraint firstItem="YeP-ha-ViN" firstAttribute="leading" secondItem="wcl-aE-UuQ" secondAttribute="leading" id="Q06-lU-Pct"/>
-                <constraint firstAttribute="trailing" secondItem="xpW-BA-ZVi" secondAttribute="trailing" constant="10" id="VGa-u7-DJ7"/>
-                <constraint firstAttribute="trailing" secondItem="iRk-yY-b5e" secondAttribute="trailing" id="Xnk-n4-Nav"/>
                 <constraint firstItem="wcl-aE-UuQ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="ZT6-rE-sQt"/>
-                <constraint firstItem="iRk-yY-b5e" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="gT1-tz-L03"/>
-                <constraint firstItem="xpW-BA-ZVi" firstAttribute="leading" secondItem="wcl-aE-UuQ" secondAttribute="trailing" constant="4" id="kpE-2c-chs"/>
+                <constraint firstItem="S8O-tM-d3l" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="dnR-6e-RBr"/>
                 <constraint firstItem="S8O-tM-d3l" firstAttribute="height" secondItem="gTV-IL-0wX" secondAttribute="height" multiplier="0.695312" id="pLJ-ru-EE5"/>
-                <constraint firstItem="xpW-BA-ZVi" firstAttribute="top" secondItem="S8O-tM-d3l" secondAttribute="bottom" constant="12.666666666666671" id="qbJ-Nl-It8"/>
-                <constraint firstAttribute="trailing" secondItem="S8O-tM-d3l" secondAttribute="trailing" id="yJx-UW-XrA"/>
             </constraints>
             <size key="customSize" width="190" height="221"/>
             <connections>
-                <outlet property="favButoon" destination="xpW-BA-ZVi" id="F7n-e8-mcC"/>
                 <outlet property="image" destination="S8O-tM-d3l" id="V5R-1Z-5Fl"/>
                 <outlet property="name" destination="wcl-aE-UuQ" id="g80-Eg-IrH"/>
                 <outlet property="priceLabel" destination="YeP-ha-ViN" id="2qN-De-TYm"/>
             </connections>
-            <point key="canvasLocation" x="157.25190839694656" y="48.943661971830991"/>
+            <point key="canvasLocation" x="149.61832061068702" y="30.633802816901412"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="heart.fill" catalog="system" width="128" height="107"/>
-        <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>

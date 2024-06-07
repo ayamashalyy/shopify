@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oev-ZH-AMF">
-                                <rect key="frame" x="30" y="500" width="333" height="33"/>
+                                <rect key="frame" x="30" y="500" width="330" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="330" id="GxQ-Ui-exl"/>
                                     <constraint firstAttribute="height" constant="33" id="bUL-vd-NEY"/>
@@ -28,7 +28,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vct-gn-mPK">
-                                <rect key="frame" x="30" y="558" width="333" height="33"/>
+                                <rect key="frame" x="30" y="558" width="330" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="330" id="lZg-MO-L8z"/>
                                     <constraint firstAttribute="height" constant="33" id="maK-c3-Sky"/>
@@ -49,7 +49,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2rf-Ps-poK">
-                                <rect key="frame" x="288" y="128" width="80" height="22"/>
+                                <rect key="frame" x="288" y="128" width="77" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="G0Q-Wj-KgK"/>
                                 </constraints>
@@ -61,7 +61,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ijr-Zq-Cav">
-                                <rect key="frame" x="16" y="150" width="323" height="277"/>
+                                <rect key="frame" x="16" y="150" width="320" height="277"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXd-Xe-Iy7">
                                 <rect key="frame" x="162" y="751" width="80" height="35"/>
@@ -143,7 +143,7 @@
                                 <connections>
                                     <action selector="signUpBtn:" destination="WHz-E2-Jte" eventType="touchUpInside" id="X0A-6c-kbj"/>
                                     <action selector="signUpBtx:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Y3f-H9-05M"/>
-                                    <segue destination="EhA-wq-btI" kind="show" id="L7D-SW-pLv"/>
+                                    <segue destination="TIU-hi-w1U" kind="show" id="fAM-Pc-xdk"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ZWo-7V-c1W">
@@ -398,7 +398,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="buh-C3-ppC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1650" y="765"/>
+            <point key="canvasLocation" x="3127" y="805"/>
         </scene>
         <!--Reviews View Controller-->
         <scene sceneID="jrm-eH-V4N">
@@ -456,16 +456,16 @@
             </objects>
             <point key="canvasLocation" x="3423.6641221374043" y="-34.507042253521128"/>
         </scene>
-        <!--My Favorite Products-->
+        <!--draft My Favorite Products-->
         <scene sceneID="gb1-Rh-PIX">
             <objects>
-                <viewController id="EhA-wq-btI" customClass="AllFavViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="EhA-wq-btI" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fuX-g8-bGE">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" bounces="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0IW-vL-0YZ">
-                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="y0f-XI-kYs">
                                     <size key="itemSize" width="350" height="200"/>
@@ -499,14 +499,55 @@
                             <constraint firstItem="0IW-vL-0YZ" firstAttribute="top" secondItem="kwa-g3-fCc" secondAttribute="top" id="eeL-wa-OIQ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="My Favorite Products" id="FKD-gM-Ls7"/>
+                    <navigationItem key="navigationItem" title="draft My Favorite Products" id="FKD-gM-Ls7"/>
                     <connections>
                         <outlet property="AllFavCollection" destination="0IW-vL-0YZ" id="XQX-Ul-rI3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GTf-pj-94k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="730.53435114503816" y="753.52112676056345"/>
+            <point key="canvasLocation" x="729" y="1154"/>
+        </scene>
+        <!--All Faviourts Products-->
+        <scene sceneID="GtW-wK-axw">
+            <objects>
+                <viewController id="TIU-hi-w1U" customClass="AllFavViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MNd-QI-MpB">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cfb-Kd-f43">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="192" id="C5y-2j-Igz">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="192"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="C5y-2j-Igz" id="sPJ-Ts-h25">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="192"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Mpf-N6-4sX"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="cfb-Kd-f43" firstAttribute="top" secondItem="Mpf-N6-4sX" secondAttribute="top" id="EGX-lQ-ata"/>
+                            <constraint firstItem="cfb-Kd-f43" firstAttribute="leading" secondItem="Mpf-N6-4sX" secondAttribute="leading" id="PR6-Z6-d6e"/>
+                            <constraint firstItem="cfb-Kd-f43" firstAttribute="bottom" secondItem="Mpf-N6-4sX" secondAttribute="bottom" id="YB8-kc-uJv"/>
+                            <constraint firstItem="cfb-Kd-f43" firstAttribute="trailing" secondItem="Mpf-N6-4sX" secondAttribute="trailing" id="ZlQ-St-bl8"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="All Faviourts Products" id="suo-Ze-6lo"/>
+                    <connections>
+                        <outlet property="allFavTable" destination="cfb-Kd-f43" id="Mze-if-XOp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ufN-eP-Ybh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1890.8396946564885" y="759.85915492957747"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lLr-zp-jZw">
@@ -546,16 +587,16 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
