@@ -120,7 +120,7 @@
         <!--Home-->
         <scene sceneID="YIW-lX-qRg">
             <objects>
-                <viewController id="iVh-rI-z8y" customClass="HomeViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" id="iVh-rI-z8y" customClass="HomeViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vKb-bV-J6O">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -227,7 +227,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Xv2-aB-WT7">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Tx8-Le-g1L" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="UITabBarController" automaticallyAdjustsScrollViewInsets="NO" id="Tx8-Le-g1L" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KpV-H8-au5">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -358,7 +358,7 @@
                                 </constraints>
                             </view>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ron-fu-qgY">
-                                <rect key="frame" x="-1" y="65" width="394" height="44"/>
+                                <rect key="frame" x="-2" y="65" width="394" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" red="1" green="0.40429029960000001" blue="0.15705770390000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

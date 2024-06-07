@@ -14,7 +14,7 @@ class PaymentSuccessfulViewController: UIViewController {
         setupbackoHomeButton()
         
     }
-   
+    
     func setupbackoHomeButton() {
         backoHome.backgroundColor = UIColor(hex: "#FF7D29")
         backoHome.setTitleColor(UIColor.white, for: .normal)
@@ -23,7 +23,12 @@ class PaymentSuccessfulViewController: UIViewController {
     }
     
     @IBAction func backoHome(_ sender: UIButton) {
-        print("back home")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let HomeViewController = storyboard.instantiateViewController(withIdentifier: "UITabBarController") as? UITabBarController{
+            HomeViewController.modalPresentationStyle = .fullScreen
+            present(HomeViewController, animated: true, completion: nil)
+        }
     }
-
 }
+
+
