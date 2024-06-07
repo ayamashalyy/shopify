@@ -63,10 +63,11 @@
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.94819463864721432" green="0.94819463864721432" blue="0.94819463864721432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="4lc-or-7uh" secondAttribute="trailing" constant="20" id="62V-v2-dOu"/>
                                     <constraint firstItem="4lc-or-7uh" firstAttribute="top" secondItem="zNb-xo-tqj" secondAttribute="top" constant="15" id="AKf-8c-IBg"/>
+                                    <constraint firstAttribute="height" constant="130" id="VSs-YR-sj5"/>
                                     <constraint firstItem="4lc-or-7uh" firstAttribute="leading" secondItem="zNb-xo-tqj" secondAttribute="leading" constant="20" id="aXH-nx-zqm"/>
                                     <constraint firstAttribute="bottom" secondItem="4lc-or-7uh" secondAttribute="bottom" constant="10" id="egG-Sm-nFf"/>
                                     <constraint firstAttribute="width" constant="120" id="hcj-j2-QZ7"/>
@@ -141,6 +142,7 @@
                 <outlet property="productImageView" destination="4lc-or-7uh" id="Kad-FP-0DX"/>
                 <outlet property="productNameLabel" destination="F0k-JB-dlw" id="nhw-lb-hGj"/>
                 <outlet property="productPriceLabel" destination="ZyZ-FU-Oj0" id="63a-TE-QIJ"/>
+                <outlet property="productView" destination="zNb-xo-tqj" id="7qJ-HG-Te2"/>
                 <outlet property="quantityLabel" destination="ZJH-fb-iz5" id="xmx-qq-G2I"/>
             </connections>
             <point key="canvasLocation" x="74.809160305343511" y="-20.774647887323944"/>

@@ -69,4 +69,17 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         return footerView
     }
     
+    @IBAction func backToShoppingCart(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
+    
+    @IBAction func navToPlaceOrder(_ sender: UIBarButtonItem) {
+            let storyboard = UIStoryboard(name: "Second", bundle: nil)
+            if let PlaceOrderViewController = storyboard.instantiateViewController(withIdentifier: "PlaceOrderViewController") as? PlaceOrderViewController {
+                PlaceOrderViewController.modalPresentationStyle = .fullScreen
+                present(PlaceOrderViewController, animated: true, completion: nil)
+            }
+        }
+
 }

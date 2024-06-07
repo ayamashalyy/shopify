@@ -16,6 +16,7 @@ class ShoppingCartableViewCell: UITableViewCell {
     @IBOutlet weak var incrementButton: UIButton!
     @IBOutlet weak var decrementButton: UIButton!
     
+    @IBOutlet weak var productView: UIView!
     
     
     override func awakeFromNib() {
@@ -28,6 +29,13 @@ class ShoppingCartableViewCell: UITableViewCell {
         contentView.layer.shadowOffset = CGSize(width: 0, height: 1)
         contentView.layer.shadowRadius = 5
         contentView.layer.shadowOpacity = 0.3
+        productView.clipsToBounds = false
+        productView.layer.cornerRadius = 8
+        productView.backgroundColor = .white
+        productView.layer.shadowColor = UIColor.black.cgColor
+        productView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        productView.layer.shadowRadius = 5
+        productView.layer.shadowOpacity = 0.3
         
     }
     
@@ -39,6 +47,7 @@ class ShoppingCartableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+        productView.layer.shadowPath = UIBezierPath(roundedRect: productView.bounds, cornerRadius: productView.layer.cornerRadius).cgPath
     }
     
 }
