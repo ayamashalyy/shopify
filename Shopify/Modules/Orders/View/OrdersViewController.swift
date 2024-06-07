@@ -61,4 +61,8 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         return cell
     }
     
+    @IBAction func backToProfile(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
 }

@@ -40,13 +40,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.section == 0 {
             return 190
         } else {
-            return 100
+            return 110
         }
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 60
+            return 80
         } else {
             return 5
         }
@@ -60,7 +60,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return orders.count
+            return 1
         } else {
             return 2
         }
@@ -87,35 +87,35 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             print("WishListViewCell")
             cell.productName.text = "Converse | Toddler Chuck Taylor All Star Axel Mid"
             cell.productPrice.text = "$70.00"
-            cell.favImage.image = UIImage(named: "1")
+            cell.favImage.image = UIImage(named: "4")
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
-            return "Orders"
+            return nil
         } else {
             return "WishList"
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            return nil
+        }
+        
         let headerView = UIView()
         let button = UIButton(type: .system)
         button.frame = CGRect(x: tableView.bounds.width - 100, y: 10, width: 80, height: 30)
         button.setTitle("See More", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.tag = section
-        
         button.addTarget(self, action: #selector(headerButtonTapped(_:)), for: .touchUpInside)
-        
         headerView.addSubview(button)
-        
         let label = UILabel(frame: CGRect(x: 20, y: 10, width: 200, height: 30))
         label.font = UIFont.boldSystemFont(ofSize: 25)
-        if section == 0 {
-            label.text = "Orders"
-        } else {
+        if section == 1 {
             label.text = "WishList"
         }
         headerView.addSubview(label)
@@ -125,25 +125,51 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     @objc func headerButtonTapped(_ sender: UIButton) {
         let section = sender.tag
-        if section == 0 {
-            print("See More button in Orders section tapped")
-            showMoreOrders()
-        } else if section == 1 {
+        if section == 1 {
             print("See More button in WishList section tapped")
             showMoreWishListItems()
         }
-    }
-    
-    func showMoreOrders() {
-        print("See More button in Orders section tapped")
     }
     
     func showMoreWishListItems() {
         print("See More button in WishList section tapped")
     }
     
+    @IBAction func seeMoreOrders(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let OrdersViewController = storyboard.instantiateViewController(withIdentifier: "OrdersViewController") as? OrdersViewController {
+            OrdersViewController.modalPresentationStyle = .fullScreen
+            present(OrdersViewController, animated: true, completion: nil)
+        } else {
+            print("Failed to instantiate OrdersViewController")
+        }
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 0
+        }
         return 50
+    }
+    
+    @IBAction func navToSettings(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let settingsViewController = storyboard.instantiateViewController(withIdentifier: "SettingsViewController") as? SettingsViewController {
+            settingsViewController.modalPresentationStyle = .fullScreen
+            present(settingsViewController, animated: true, completion: nil)
+        } else {
+            print("Failed to instantiate SettingsViewController")
+        }
+    }
+
+    
+    @IBAction func navToShoppingCart(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let ShoppingCartViewController = storyboard.instantiateViewController(withIdentifier: "ShoppingCartViewController") as? ShoppingCartViewController {
+            ShoppingCartViewController.modalPresentationStyle = .fullScreen
+            present(ShoppingCartViewController, animated: true, completion: nil)
+        } else {
+            print("Failed to instantiate ShoppingCartViewController")
+        }
     }
 }
