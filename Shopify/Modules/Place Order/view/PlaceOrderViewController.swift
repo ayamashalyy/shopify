@@ -21,7 +21,11 @@ class PlaceOrderViewController: UIViewController , UITableViewDataSource, UITabl
     ]
     
     @IBAction func placeOrder(_ sender: UIButton) {
-        print("place order")
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let PaymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
+            PaymentViewController.modalPresentationStyle = .fullScreen
+            present(PaymentViewController, animated: true, completion: nil)
+        }
     }
     
     override func viewDidLoad() {
@@ -69,7 +73,9 @@ class PlaceOrderViewController: UIViewController , UITableViewDataSource, UITabl
         
         return cell
     }
-    
+    @IBAction func backToPSelectAddress(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
     
     
 }

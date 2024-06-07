@@ -48,6 +48,17 @@ class PaymentViewController: UIViewController {
     }
     
     @IBAction func Payment(_ sender: UIButton) {
-        print("Done Payment")
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let PaymentSuccessfulViewController = storyboard.instantiateViewController(withIdentifier: "PaymentSuccessfulViewController") as? PaymentSuccessfulViewController {
+            PaymentSuccessfulViewController.modalPresentationStyle = .fullScreen
+            present(PaymentSuccessfulViewController, animated: true, completion: nil)
+        }
     }
+
+
+    @IBAction func backToPlaceOrders(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+
+
 }

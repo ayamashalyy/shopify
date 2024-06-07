@@ -101,8 +101,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
-        print("Processed to buy")
-    }
+            let storyboard = UIStoryboard(name: "Second", bundle: nil)
+            if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+                selectAddressVC.modalPresentationStyle = .fullScreen
+                present(selectAddressVC, animated: true, completion: nil)
+            }
+        }
+
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
