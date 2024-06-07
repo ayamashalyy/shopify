@@ -14,5 +14,18 @@ class ProductViewModel{
         
         
     }
-    
+//    var bindResultToViewController : (()->()) = {}
+//    var news : [News]?{
+//        didSet{
+//            bindResultToViewController()
+//        }
+//    }
+//    
+//    func getNews(){
+//        
+//        fetchData { [weak self] news in
+//            self?.news = news
+//            //self?.bindResultToViewController()
+//        }
+//    }
 }
