@@ -9,7 +9,7 @@ import UIKit
 import Cosmos
 
 class ProductViewController: UIViewController {
-    
+    // the data from api not conatin reviews and not contain rate
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var addToCart: UIButton!
@@ -36,11 +36,8 @@ class ProductViewController: UIViewController {
     var reviews = [
         ("John Doe", "Great product!"),
         ("Jane Smith", "Not worth the price."),
-        ("Alice Johnson", "Average quality."),
-        ("John Doe", "Great product!"),
         ("Jane Smith", "Not worth the price."),
         ("Alice Johnson", "Average quality.")
-    
     ]
 
 
@@ -82,6 +79,7 @@ class ProductViewController: UIViewController {
            let descriptionTextView = UITextView()
            descriptionTextView.text = "This is a great product description.This is a great product description.This is a great product description.This is a great product description."
         descriptionTextView.isScrollEnabled = false
+        descriptionTextView.isEditable = false
 
            descriptionTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
            
@@ -89,13 +87,7 @@ class ProductViewController: UIViewController {
            reviewsHeader.text = "Reviews"
            reviewsHeader.font = UIFont.systemFont(ofSize: 20, weight: .bold)
            
-           // See More button
-           let seeMoreButton = UIButton(type: .system)
-           seeMoreButton.setTitle("See More", for: .normal)
-           seeMoreButton.addTarget(self, action: #selector(seeMoreReviews), for: .touchUpInside)
-           
-           // Table view for reviews
-           let reviewsTableView = UITableView()
+            let reviewsTableView = UITableView()
            reviewsTableView.delegate = self
            reviewsTableView.dataSource = self
            reviewsTableView.isScrollEnabled = false
@@ -108,12 +100,17 @@ class ProductViewController: UIViewController {
            stack.addArrangedSubview(descriptionTextView)
            stack.addArrangedSubview(reviewsHeader)
            stack.addArrangedSubview(reviewsTableView)
-           stack.addArrangedSubview(seeMoreButton)
-           
-           reviewsTableView.translatesAutoresizingMaskIntoConstraints = false
-           NSLayoutConstraint.activate([
-               reviewsTableView.heightAnchor.constraint(equalToConstant: 150) // Adjust as needed
+        NSLayoutConstraint.activate([
+               reviewsTableView.heightAnchor.constraint(equalToConstant: 200) // Adjust as needed
            ])
+
+           // Button to see more reviews
+           let seeMoreButton = UIButton(type: .system)
+           seeMoreButton.setTitle("See More", for: .normal)
+           seeMoreButton.addTarget(self, action: #selector(seeMoreReviews), for: .touchUpInside)
+           
+           stack.addArrangedSubview(seeMoreButton)
+           stack.setCustomSpacing(20, after: reviewsTableView)
        }
        
     @objc func seeMoreReviews() {
@@ -149,18 +146,22 @@ extension ProductViewController :  UICollectionViewDelegate,UICollectionViewData
     
 }
 
+
 extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return reviews.count
+        return min(3, reviews.count) // Limit to 3 reviews
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath)
         let review = reviews[indexPath.row]
-            
-        cell.textLabel?.text = review.1 // Review text
-        cell.detailTextLabel?.text = review.0 // Reviewer name
+                    
+        //Default Content Configuration
+        var content = cell.defaultContentConfiguration()
+        content.text = review.1
+        content.secondaryText = review.0
+        cell.contentConfiguration = content
         
         return cell
     }

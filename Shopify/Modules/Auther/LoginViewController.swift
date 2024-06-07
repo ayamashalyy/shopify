@@ -44,8 +44,6 @@ class LoginViewController: UIViewController {
         guestBtn.layer.cornerRadius = 8
         loginButton.backgroundColor = UIColor(hex: "#FF7D29")
         loginButton.layer.cornerRadius = 8
-//        signUpButton.backgroundColor = UIColor(hex: "#FF7D29")
-//        signUpButton.layer.cornerRadius = 8
     }
 
 }

@@ -143,7 +143,7 @@
                                 <connections>
                                     <action selector="signUpBtn:" destination="WHz-E2-Jte" eventType="touchUpInside" id="X0A-6c-kbj"/>
                                     <action selector="signUpBtx:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Y3f-H9-05M"/>
-                                    <segue destination="CI3-Be-L5h" kind="show" id="elL-fb-8ms"/>
+                                    <segue destination="X4K-Tg-Jpv" kind="show" id="ehP-dy-TXn"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ZWo-7V-c1W">
@@ -199,7 +199,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0nB-v7-E6T">
-                                <rect key="frame" x="0.0" y="103" width="393" height="278"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="278"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="278" id="GIU-IP-VKF"/>
@@ -294,7 +294,7 @@
                                 </constraints>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="zkS-v6-Nc5">
-                                <rect key="frame" x="138.66666666666666" y="377" width="115.66666666666666" height="25.666666666666686"/>
+                                <rect key="frame" x="138.66666666666666" y="333" width="115.66666666666666" height="25.666666666666686"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="currentPageIndicatorTintColor" systemColor="systemOrangeColor"/>
                             </pageControl>
@@ -356,6 +356,50 @@
             </objects>
             <point key="canvasLocation" x="2672.5190839694656" y="-35.211267605633807"/>
         </scene>
+        <!--Search-->
+        <scene sceneID="K3z-zb-ux2">
+            <objects>
+                <viewController id="X4K-Tg-Jpv" customClass="SearchViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0kG-Iv-Rxd">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4j-nU-YHE">
+                                <rect key="frame" x="265" y="210.66666666666666" width="78" height="35"/>
+                                <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Search"/>
+                                <connections>
+                                    <action selector="serchButoon:" destination="X4K-Tg-Jpv" eventType="touchUpInside" id="JNW-iz-UCG"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ex: bag" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VOj-WU-BBr">
+                                <rect key="frame" x="10" y="133" width="373" height="30"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WKS-zo-bMb"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="WKS-zo-bMb" firstAttribute="trailing" secondItem="VOj-WU-BBr" secondAttribute="trailing" constant="10" id="DyA-pe-PT1"/>
+                            <constraint firstItem="VOj-WU-BBr" firstAttribute="leading" secondItem="WKS-zo-bMb" secondAttribute="leading" constant="10" id="QU3-c4-RQ6"/>
+                            <constraint firstItem="X4j-nU-YHE" firstAttribute="firstBaseline" secondItem="VOj-WU-BBr" secondAttribute="baseline" constant="80" id="UGR-mD-iKY"/>
+                            <constraint firstItem="VOj-WU-BBr" firstAttribute="top" secondItem="WKS-zo-bMb" secondAttribute="top" constant="30" id="VCr-c9-SB0"/>
+                            <constraint firstItem="WKS-zo-bMb" firstAttribute="trailing" secondItem="X4j-nU-YHE" secondAttribute="trailing" constant="50" id="rtY-Uq-E4T"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Search" id="bJs-M7-Iq7"/>
+                    <connections>
+                        <outlet property="searchAbout" destination="VOj-WU-BBr" id="AeD-eu-med"/>
+                        <outlet property="serachBtn" destination="X4j-nU-YHE" id="4dU-xZ-VEk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="buh-C3-ppC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1650" y="765"/>
+        </scene>
         <!--Reviews View Controller-->
         <scene sceneID="jrm-eH-V4N">
             <objects>
@@ -368,7 +412,7 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReviewCell" textLabel="Pdh-hT-lJD" detailTextLabel="L03-Pc-wRn" style="IBUITableViewCellStyleSubtitle" id="zOt-4c-srG">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReviewCell" textLabel="Pdh-hT-lJD" detailTextLabel="rrA-9j-hnr" style="IBUITableViewCellStyleSubtitle" id="zOt-4c-srG">
                                         <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zOt-4c-srG" id="8hw-LU-5QZ">
@@ -382,7 +426,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L03-Pc-wRn">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rrA-9j-hnr">
                                                     <rect key="frame" x="19.999999999999996" y="22.333333333333336" width="43.666666666666664" height="14.333333333333334"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
@@ -455,6 +499,9 @@
         <image name="splash-img" width="624" height="652"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
