@@ -143,7 +143,7 @@
                                 <connections>
                                     <action selector="signUpBtn:" destination="WHz-E2-Jte" eventType="touchUpInside" id="X0A-6c-kbj"/>
                                     <action selector="signUpBtx:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Y3f-H9-05M"/>
-                                    <segue destination="X4K-Tg-Jpv" kind="show" id="ehP-dy-TXn"/>
+                                    <segue destination="EhA-wq-btI" kind="show" id="L7D-SW-pLv"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ZWo-7V-c1W">
@@ -284,7 +284,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <constraints>
                                     <constraint firstItem="Wbj-uI-j0v" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="10" id="Npp-jI-gcF"/>
                                     <constraint firstItem="C4E-5S-qhL" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="10" id="VMT-Wb-k4l"/>
@@ -365,7 +365,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4j-nU-YHE">
-                                <rect key="frame" x="265" y="210.66666666666666" width="78" height="35"/>
+                                <rect key="frame" x="265" y="168.66666666666666" width="78" height="35"/>
                                 <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Search"/>
@@ -373,9 +373,9 @@
                                     <action selector="serchButoon:" destination="X4K-Tg-Jpv" eventType="touchUpInside" id="JNW-iz-UCG"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ex: bag" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VOj-WU-BBr">
-                                <rect key="frame" x="10" y="133" width="373" height="30"/>
-                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ex: bag" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VOj-WU-BBr">
+                                <rect key="frame" x="10" y="89" width="373" height="34"/>
+                                <color key="textColor" systemColor="scrollViewTexturedBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -456,21 +456,57 @@
             </objects>
             <point key="canvasLocation" x="3423.6641221374043" y="-34.507042253521128"/>
         </scene>
-        <!--Fav View Controller-->
+        <!--My Favorite Products-->
         <scene sceneID="gb1-Rh-PIX">
             <objects>
-                <viewController id="EhA-wq-btI" customClass="FavViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="EhA-wq-btI" customClass="AllFavViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fuX-g8-bGE">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" bounces="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0IW-vL-0YZ">
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="y0f-XI-kYs">
+                                    <size key="itemSize" width="350" height="200"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="FavCell" id="cRi-I2-FgB" customClass="FavCollectionViewCell" customModule="Shopify" customModuleProvider="target">
+                                        <rect key="frame" x="44" y="0.0" width="305" height="150"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="305" height="150"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                        <size key="customSize" width="305" height="150"/>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="EhA-wq-btI" id="Zmt-7N-ZNH"/>
+                                    <outlet property="delegate" destination="EhA-wq-btI" id="Cof-C9-RPJ"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="kwa-g3-fCc"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="0IW-vL-0YZ" firstAttribute="leading" secondItem="kwa-g3-fCc" secondAttribute="leading" id="1fk-s6-dym"/>
+                            <constraint firstItem="0IW-vL-0YZ" firstAttribute="trailing" secondItem="kwa-g3-fCc" secondAttribute="trailing" id="8d1-8o-Ek0"/>
+                            <constraint firstItem="kwa-g3-fCc" firstAttribute="bottom" secondItem="0IW-vL-0YZ" secondAttribute="bottom" id="Kfh-P4-zaQ"/>
+                            <constraint firstItem="0IW-vL-0YZ" firstAttribute="top" secondItem="kwa-g3-fCc" secondAttribute="top" id="eeL-wa-OIQ"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="FKD-gM-Ls7"/>
+                    <navigationItem key="navigationItem" title="My Favorite Products" id="FKD-gM-Ls7"/>
+                    <connections>
+                        <outlet property="AllFavCollection" destination="0IW-vL-0YZ" id="XQX-Ul-rI3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GTf-pj-94k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="723" y="723"/>
+            <point key="canvasLocation" x="730.53435114503816" y="753.52112676056345"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lLr-zp-jZw">
@@ -500,14 +536,17 @@
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
+        <systemColor name="scrollViewTexturedBackgroundColor">
+            <color red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
