@@ -25,7 +25,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     
     func setUpUI(){
         profileImageView.image = UIImage(named: "profile")
-        nameLabel.text = "Yennefer Doe"
+        nameLabel.text = "Aya"
         logoutButton.setTitle("Log out", for: .normal)
         logoutButton.backgroundColor = UIColor(hex: "#FF7D29")
         logoutButton.layer.cornerRadius = 8
@@ -53,6 +53,10 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
         print("Log out tapped")
+    }
+    
+    @IBAction func backToProfile(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
     }
     
 }

@@ -14,11 +14,11 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var getThemButton: UIButton!
     
     var cartItems = [
-        ("He Cares", 6000, 1, UIImage(named: "1")),
-        ("God Day", 6000, 2, UIImage(named: "1")),
-        ("God Day", 6000, 2, UIImage(named: "1")),
-        ("God Day", 6000, 2, UIImage(named: "1")),
-        ("God Day", 6000, 2, UIImage(named: "1"))
+        ("He Cares", 6000, 1, UIImage(named: "4")),
+        ("God Day", 6000, 2, UIImage(named: "4")),
+        ("God Day", 6000, 2, UIImage(named: "4")),
+        ("God Day", 6000, 2, UIImage(named: "4")),
+        ("God Day", 6000, 2, UIImage(named: "4"))
     ]
     
     override func viewDidLoad() {
@@ -104,4 +104,8 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         print("Processed to buy")
     }
     
+    @IBAction func backToProfile(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+
 }

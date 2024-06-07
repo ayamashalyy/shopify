@@ -23,7 +23,7 @@ class WishListViewCell: UITableViewCell {
         contentView.layer.shadowRadius = 5
         contentView.layer.shadowOpacity = 0.3
         contentView.layer.borderWidth = 1.0
-        contentView.layer.borderColor = UIColor.gray.cgColor
+        contentView.layer.borderColor = UIColor.white.cgColor
         
         
     }

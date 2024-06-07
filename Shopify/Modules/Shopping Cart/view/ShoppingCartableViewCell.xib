@@ -63,7 +63,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <color key="backgroundColor" red="0.94819463864721432" green="0.94819463864721432" blue="0.94819463864721432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="4lc-or-7uh" secondAttribute="trailing" constant="20" id="62V-v2-dOu"/>
                                     <constraint firstItem="4lc-or-7uh" firstAttribute="top" secondItem="zNb-xo-tqj" secondAttribute="top" constant="15" id="AKf-8c-IBg"/>
@@ -149,9 +149,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
