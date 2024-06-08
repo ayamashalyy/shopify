@@ -21,6 +21,8 @@ enum Root: String {
 
 }
 
+// remove it every time before push
+
 //comment here token
 class NetworkManager {
 
