@@ -9,23 +9,37 @@ import Foundation
 
 class ProductViewModel{
     
-    func getProductDetails (id: String){
-        
-        
-        
+    var bindResultToViewController : (()->()) = {}
+    
+    var product : Product?{
+        didSet{
+            bindResultToViewController()
+        }
     }
-//    var bindResultToViewController : (()->()) = {}
-//    var news : [News]?{
-//        didSet{
-//            bindResultToViewController()
-//        }
-//    }
-//    
-//    func getNews(){
-//        
-//        fetchData { [weak self] news in
-//            self?.news = news
-//            //self?.bindResultToViewController()
-//        }
-//    }
+    
+    func getProductDetails(id: String) {
+        
+        // static id insted of take it from parmeter
+       //  let addition = "\(id).json"
+              
+        NetworkManager.fetchDataFromApi(endpoint: .specificProduct, rootOfJson: .product, addition: "8575847989496.json") { data , error in
+            guard let data = data, error == nil else {
+                print("error in data")
+                return
+            }
+            
+            Decoding.decodeData(data: data, objectType: Product.self) { [weak self] (product, decodeError) in
+                guard let self = self else { return }
+                if let product = product {
+                    self.product = product
+                }
+                
+            }
+        }
+    }
+    
+        static func getReviews() -> [(String, String)] {
+            return ProductReviews.getReviews()
+    }
+
 }
