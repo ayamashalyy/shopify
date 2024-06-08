@@ -13,6 +13,7 @@ import Alamofire
 enum Endpoint: String {
     case smartCollections = "smart_collections.json"
     case specificProduct = "products/"
+    case listOfBrandProducts = "products.json?collection_id="
 //    8575848153336.json
 }
 

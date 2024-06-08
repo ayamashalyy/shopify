@@ -23,9 +23,9 @@ class BrandProductsViewModel{
             return
         }
         
-        let additionalParams = ["collection_id": collectionId]
+        let additionalParams = "\(collectionId)"
             
-        NetworkManager.fetchDataFromApi(endpoint: .products, rootOfJson: .productsRoot, additionalParams: additionalParams) { data, error in
+        NetworkManager.fetchDataFromApi(endpoint: .listOfBrandProducts, rootOfJson: .products, addition: additionalParams) { data, error in
             guard let data = data, error == nil else {
                 completion(error)
                 return

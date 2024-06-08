@@ -96,10 +96,10 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "brandsCell", for: indexPath) as! CustomCategoriesCell
         
         if let product = brandProductsViewModel.product(at: indexPath.row) {
-            cell.nameCategoriesLabel.text = product.title
+            cell.nameCategoriesLabel.text = product.name
             cell.priceLabel.text = product.variants.first?.price
             
-            if let imageUrlString = product.images.first?.src, let imageUrl = URL(string: imageUrlString) {
+            if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
                  cell.categoriesImgView.kf.setImage(with: imageUrl)
              } else {
                  cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
