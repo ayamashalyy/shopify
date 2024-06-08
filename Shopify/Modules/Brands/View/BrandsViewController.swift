@@ -9,19 +9,22 @@ import UIKit
 
 class BrandsViewController: UIViewController {
     
-    
-    @IBAction func backButton(_ sender: UIBarButtonItem) {
-        dismiss(animated: true)
-    }
-    
-    let categoriesImgs = ["splash-img.jpg", "splash-img.jpg", "splash-img.jpg", "splash-img.jpg", "splash-img.jpg"]
-    let categoriesNames = ["category1", "category2", "category3", "category4", "category4"]
-    let prices = ["100 $", "200 $" , "180 $" , "220 $", "280 $"]
+   // @IBOutlet weak var sliderFilter: UISlider!
+    var brandProductsViewModel = BrandProductsViewModel()
     
     var categoriesCollectionView: UICollectionView!
+    var valueLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setupUI()
+        fetchProducts()
+        
+        valueLabel.text = "50.0"
+    }
+    
+    func setupUI(){
         //view.backgroundColor = UIColor(hex: "#F5F5F5")
         
         let layout = UICollectionViewFlowLayout()
@@ -31,7 +34,7 @@ class BrandsViewController: UIViewController {
         
         categoriesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 210).isActive = true
         categoriesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         categoriesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         categoriesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
@@ -41,22 +44,68 @@ class BrandsViewController: UIViewController {
         categoriesCollectionView.delegate = self
         
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "brandsCell")
+        
+        // Set the range for the slider
+        //sliderFilter.minimumValue = 50.0
+        //sliderFilter.maximumValue = 500.0
+        
+        // Add target for value changed event
+        //sliderFilter.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+        
+        // Label setup
+        valueLabel = UILabel()
+        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(valueLabel)
+        
+        // Constraints for label
+        NSLayoutConstraint.activate([
+           // valueLabel.topAnchor.constraint(equalTo: sliderFilter.bottomAnchor, constant: 10),
+            valueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
+    
+    func fetchProducts() {
+        brandProductsViewModel.fetchProducts{ [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching products: \(error)")
+            } else {
+                self.categoriesCollectionView.reloadData()
+            }
+        }
+    }
+    
+    @IBAction func backButton(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
+//    @objc func sliderValueChanged(_ sender: UISlider) {
+//        let currentValue = String(format: "%.2f", sender.value)
+//        valueLabel.text = "\(currentValue)"
+//    }
 
 }
 
 extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoriesImgs.count
+        return brandProductsViewModel.numberOfProducts()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "brandsCell", for: indexPath) as! CustomCategoriesCell
         
-        cell.categoriesImgView.image = UIImage(named: categoriesImgs[indexPath.row])
-        cell.nameCategoriesLabel.text = categoriesNames[indexPath.row]
-        cell.priceLabel.text = prices[indexPath.row]
+        if let product = brandProductsViewModel.product(at: indexPath.row) {
+            cell.nameCategoriesLabel.text = product.title
+            cell.priceLabel.text = product.variants.first?.price
+            
+            if let imageUrlString = product.images.first?.src, let imageUrl = URL(string: imageUrlString) {
+                 cell.categoriesImgView.kf.setImage(with: imageUrl)
+             } else {
+                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
+             }
+        }
+        
         cell.heartImageView.image = UIImage(systemName: "heart")
         
         return cell
