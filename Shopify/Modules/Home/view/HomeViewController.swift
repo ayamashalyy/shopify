@@ -12,6 +12,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
     var brandsCollectionView: UICollectionView!
     let homeViewModel = HomeViewModel()
+    let brandProductsViewModel = BrandProductsViewModel()
     
     let coponesImages = ["splash-img.jpg", "splash-img.jpg", "splash-img.jpg"]
     var couponsCollectionView: UICollectionView!
@@ -33,6 +34,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             }
         }
     }
+    
     
     func setupUI(){
         //view.backgroundColor = UIColor(hex: "#F5F5F5")
@@ -123,4 +125,18 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return CGSize(width: view.frame.width / 2 - 20, height: 190)
         }
     }
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if collectionView == brandsCollectionView {
+//            guard let brand = homeViewModel.brand(at: indexPath.item) else { return }
+//            
+//            guard let brandsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "BrandsViewController") as? BrandsViewController else {
+//                return
+//            }
+//            // Pass collectionId to BrandsViewController
+//            brandsVC.brandProductsViewModel.setCollectionId(brand.id)
+//            brandsVC.modalPresentationStyle = .fullScreen
+//            self.present(brandsVC, animated: true, completion: nil)
+//        }
+//    }
+
 }

@@ -35,12 +35,12 @@ class CustomCategoriesCell: UICollectionViewCell{
             categoriesImgView.bottomAnchor.constraint(equalTo: nameCategoriesLabel.topAnchor),
             
             nameCategoriesLabel.leadingAnchor.constraint(equalTo: leadingAnchor , constant: 10),
-            nameCategoriesLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            nameCategoriesLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+            nameCategoriesLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            nameCategoriesLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -25),
             
             priceLabel.leadingAnchor.constraint(equalTo: leadingAnchor , constant: 10),
             priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            priceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+            priceLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             
             heartImageView.centerYAnchor.constraint(equalTo: nameCategoriesLabel.centerYAnchor),
             heartImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
@@ -50,10 +50,12 @@ class CustomCategoriesCell: UICollectionViewCell{
         ])
         
         nameCategoriesLabel.textAlignment = .left
-        nameCategoriesLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        nameCategoriesLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        nameCategoriesLabel.numberOfLines = 0
+        nameCategoriesLabel.lineBreakMode = .byWordWrapping
         
         priceLabel.textAlignment = .left
-        priceLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        priceLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         
         categoriesImgView.layer.cornerRadius = 20
         categoriesImgView.layer.masksToBounds = true
