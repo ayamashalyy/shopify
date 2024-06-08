@@ -7,36 +7,117 @@
 
 import UIKit
 
-struct Address {
-    let address: String
-    let phone: String
-}
+
 
 class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITableViewDelegate {
-    
-    var addresses: [Address] = [
-        Address(address: "123 Main St, Springfield", phone: "555-1234"),
-        Address(address: "456 Elm St, Shelbyville", phone: "555-5678"),
-        Address(address: "456 Elm St, Shelbyville", phone: "555-5678"),
-        Address(address: "456 Elm St, Shelbyville", phone: "555-5678"),
-        Address(address: "456 Elm St, Shelbyville", phone: "555-5678"),
-        Address(address: "456 Elm St, Shelbyville", phone: "555-5678"),
-        Address(address: "456 Elm St, Shelbyville", phone: "555-5678")
-    ]
+    private let viewModel: AddressViewModel
     
     @IBOutlet weak var tableView: UITableView!
+    
+    init(viewModel: AddressViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: "SelectAddressViewController", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        self.viewModel = AddressViewModel()
+        super.init(coder: coder)
+    }
+    
     @IBAction func addAddress(_ sender: UIBarButtonItem) {
-        print("Added Address")
+        showAddAddressAlert()
+    }
+    
+    private func showAddAddressAlert() {
+        let alert = UIAlertController(title: "Add Address", message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Address"
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Phone"
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "City"
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Country"
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Zip Code"
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let addAction = UIAlertAction(title: "Add Address", style: .default) { (_) in
+            guard let address = alert.textFields?.first?.text,!address.isEmpty,
+                  let phone = alert.textFields?[1].text,!phone.isEmpty,
+                  let city = alert.textFields?[2].text,!city.isEmpty,
+                  let country = alert.textFields?[3].text,!country.isEmpty,
+                  let zip = alert.textFields?[4].text,!zip.isEmpty else {
+                let emptyFieldAlert = UIAlertController(title: "Error", message: "Please fill in all fields", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                emptyFieldAlert.addAction(okAction)
+                self.present(emptyFieldAlert, animated: true, completion: nil)
+                return
+            }
+            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+            let newAddress = Address(address1: address, phone: phone, city: city, country: country, zip: zip)
+            self.viewModel.addAddress(newAddress) { result in
+                switch result {
+                case .success(let address):
+                    print("Address added successfully: \(address)")
+                    let successAlert = UIAlertController(title: "Success", message: "Address added successfully", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    successAlert.addAction(okAction)
+                    self.present(successAlert, animated: true, completion: nil)
+                case .failure(let error):
+                    print("Failed to post address: \(error)")
+                    let postFailureAlert = UIAlertController(title: "Error", message: "Failed to post address: \(error)", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    postFailureAlert.addAction(okAction)
+                    self.present(postFailureAlert, animated: true, completion: nil)
+                    
+                }
+            }
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(addAction)
+        present(alert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "SelectAddressCell", bundle: nil), forCellReuseIdentifier: "SelectAddressCell")
+       
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.getAllAddresses { [weak self] result in
+            switch result {
+            case.success(let addresses):
+                self?.viewModel.addresses = addresses
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            case.failure(let error):
+                print("Error retrieving addresses: \(error.localizedDescription)")
+                let alertController = UIAlertController(title: "Error", message: "Failed to retrieve addresses: \(error.localizedDescription)", preferredStyle:.alert)
+                let okAction = UIAlertAction(title: "OK", style:.default, handler: nil)
+                alertController.addAction(okAction)
+                self?.present(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return addresses.count
+        return  viewModel.addresses.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -44,19 +125,22 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
             return UITableViewCell()
         }
         
-        let address = addresses[indexPath.row]
-        cell.addressLabel.text = address.address
+        let address = viewModel.addresses[indexPath.row]
+        cell.addressLabel.text = address.address1
         cell.phoneLabel.text = address.phone
+        cell.cityLabel.text = address.city
+        cell.countryLabel.text = address.country
+        cell.zipCodeLabel.text = address.zip
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected Address: \(addresses[indexPath.row].address)")
+        print("Selected Address: \(viewModel.addresses[indexPath.row].address1)")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 130
+        return 200
         
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -75,11 +159,11 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     @IBAction func navToPlaceOrder(_ sender: UIBarButtonItem) {
-            let storyboard = UIStoryboard(name: "Second", bundle: nil)
-            if let PlaceOrderViewController = storyboard.instantiateViewController(withIdentifier: "PlaceOrderViewController") as? PlaceOrderViewController {
-                PlaceOrderViewController.modalPresentationStyle = .fullScreen
-                present(PlaceOrderViewController, animated: true, completion: nil)
-            }
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let PlaceOrderViewController = storyboard.instantiateViewController(withIdentifier: "PlaceOrderViewController") as? PlaceOrderViewController {
+            PlaceOrderViewController.modalPresentationStyle = .fullScreen
+            present(PlaceOrderViewController, animated: true, completion: nil)
         }
-
+    }
+    
 }

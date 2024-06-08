@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsS-gE-pfE">
-                        <rect key="frame" x="20" y="20" width="344" height="81"/>
+                        <rect key="frame" x="20" y="10" width="344" height="101"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vXE-SS-a3M">
                                 <rect key="frame" x="8" y="5" width="70" height="70"/>
@@ -66,9 +66,10 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="lsS-gE-pfE" secondAttribute="bottom" constant="20" id="ODF-G8-5Mc"/>
-                    <constraint firstItem="lsS-gE-pfE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="UOq-wr-d5d"/>
+                    <constraint firstAttribute="bottom" secondItem="lsS-gE-pfE" secondAttribute="bottom" constant="10" id="ODF-G8-5Mc"/>
+                    <constraint firstItem="lsS-gE-pfE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="UOq-wr-d5d"/>
                     <constraint firstAttribute="trailing" secondItem="lsS-gE-pfE" secondAttribute="trailing" constant="20" id="dLC-ma-7UP"/>
                     <constraint firstItem="lsS-gE-pfE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="gm1-bz-fCb"/>
                 </constraints>
@@ -80,6 +81,7 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
+                <outlet property="containerView" destination="lsS-gE-pfE" id="hRu-Gv-M65"/>
                 <outlet property="favImage" destination="vXE-SS-a3M" id="Qu3-Be-TAn"/>
                 <outlet property="productName" destination="hoF-hr-hgr" id="dKX-23-gy1"/>
                 <outlet property="productPrice" destination="6bt-RH-HKE" id="piR-3L-BVn"/>

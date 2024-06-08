@@ -12,6 +12,9 @@ class SelectAddressCell: UITableViewCell {
     
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var countryLabel: UILabel!
+    @IBOutlet weak var zipCodeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

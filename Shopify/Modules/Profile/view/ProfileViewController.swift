@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.section == 0 {
             return 190
         } else {
-            return 110
+            return 100
         }
     }
     
@@ -88,6 +88,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.productName.text = "Converse | Toddler Chuck Taylor All Star Axel Mid"
             cell.productPrice.text = "$70.00"
             cell.favImage.image = UIImage(named: "4")
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: self.view.bounds.size.width)
             return cell
         }
     }

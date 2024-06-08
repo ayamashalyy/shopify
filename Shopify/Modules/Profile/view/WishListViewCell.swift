@@ -12,20 +12,22 @@ class WishListViewCell: UITableViewCell {
     @IBOutlet weak var productPrice: UILabel!
     @IBOutlet weak var productName: UILabel!
     @IBOutlet weak var favImage: UIImageView!
+    
+    @IBOutlet weak var containerView: UIView!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        contentView.clipsToBounds = false
-        contentView.layer.cornerRadius = 20
-        contentView.backgroundColor = .white
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        contentView.layer.shadowRadius = 5
-        contentView.layer.shadowOpacity = 0.3
-        contentView.layer.borderWidth = 1.0
-        contentView.layer.borderColor = UIColor.white.cgColor
-        
-        
+        containerView.clipsToBounds = false
+        containerView.layer.cornerRadius = 20
+        containerView.backgroundColor = .white
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        containerView.layer.shadowRadius = 5
+        containerView.layer.shadowOpacity = 0.3
+        containerView.layer.borderWidth = 1.0
+        containerView.layer.borderColor = UIColor.white.cgColor
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -35,6 +37,7 @@ class WishListViewCell: UITableViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+        containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: containerView.layer.cornerRadius).cgPath
+        
     }
 }
