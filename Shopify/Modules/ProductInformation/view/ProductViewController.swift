@@ -7,10 +7,38 @@
 
 import UIKit
 import Cosmos
+import Kingfisher
 
 class ProductViewController: UIViewController {
     
-    var productId : String?
+    var productId : String? = "8575848153336"
+    var productViewModel : ProductViewModel?
+    let indicator = UIActivityIndicatorView(style: .large)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        print("inproduct the id\(productId)")
+        setUpUI()
+        myCollectionOfImages.delegate = self
+        myCollectionOfImages.dataSource = self
+        pageContoller.numberOfPages = imageArrary.count
+        productViewModel = ProductViewModel()
+        productViewModel?.bindResultToViewController = { [weak self] in
+            DispatchQueue.main.async {
+          guard let self = self, let product = self.productViewModel?.product else { return }
+              print("response come")
+            print("the product \(product.name)")
+             self.setupStackView(name: product.name, price: product.variants.first?.price ?? "")
+                                               
+//                self?.newsLabel.text = self?.homeViewModel?.news?[0].person ?? ".. "
+//                
+              self.indicator.stopAnimating()
+            }
+        }
+        productViewModel?.getProductDetails(id: productId!)
+        
+    }
     // the data from api not conatin reviews and not contain rate
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
@@ -20,9 +48,6 @@ class ProductViewController: UIViewController {
     @IBOutlet weak var allBasketButton: UIBarButtonItem!
     @IBOutlet weak var myCollectionOfImages: UICollectionView!
    
-    
-    
-    
     @IBAction func showFaviourts(_ sender: UIButton) {
         print("show all fav")
         Navigation.ToAllFavourite(from: self)
@@ -58,32 +83,25 @@ class ProductViewController: UIViewController {
     ]
 
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("inproduct the id\(productId)")
-        setUpUI()
-        myCollectionOfImages.delegate = self
-        myCollectionOfImages.dataSource = self
-        pageContoller.numberOfPages = imageArrary.count
-        setupStackView()
-
-        
-    }
+  
     
     func setUpUI (){
         addToCart.backgroundColor = UIColor(hex: "#FF7D29")
         addToCart.layer.cornerRadius = 8
         basket.tintColor = UIColor(hex: "#FF7D29")
         scroll.contentSize = CGSize(width: 0, height: scroll.contentSize.height)
+        indicator.center = self.view.center
+        indicator.startAnimating()
+        view.addSubview(indicator)
     }
     
-    func setupStackView() {
+    func setupStackView(name:String ,price : String ) {
            let nameLabel = UILabel()
-           nameLabel.text = "Product Name"
+           nameLabel.text = name
            nameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
            
            let priceLabel = UILabel()
-           priceLabel.text = "$99.99"
+           priceLabel.text = price
            priceLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
            
            let sizesLabel = UILabel()
