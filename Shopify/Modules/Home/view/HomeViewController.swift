@@ -14,7 +14,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let homeViewModel = HomeViewModel()
     let brandProductsViewModel = BrandProductsViewModel()
     
-    let coponesImages = ["splash-img.jpg", "splash-img.jpg", "splash-img.jpg"]
+    let coponesImages = ["coupon2.jpg", "coupon2.jpg"]
     var couponsCollectionView: UICollectionView!
     
     override func viewDidLoad() {

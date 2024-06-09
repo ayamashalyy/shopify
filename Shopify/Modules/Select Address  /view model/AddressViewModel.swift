@@ -22,7 +22,7 @@ class AddressViewModel {
     
     
     func addAddress(_ address: Address, completion: @escaping (Swift.Result<Address, Error>) -> Void) {
-        let urlString = 
+        let urlString =
         
         let addressDict: [String: Any] = [
             "address": [
@@ -124,4 +124,31 @@ class AddressViewModel {
             }
     }
     
+    func deleteAddress(_ address: Address, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+        guard let id = address.id else {
+            print("Address ID is nil")
+            completion(.failure(NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "Address ID is nil"])))
+            return
+        }
+
+        let urlString = 
+
+        var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 30
+
+        Alamofire.request(request)
+            .validate()
+            .responseData { response in
+                switch response.result {
+                case .success:
+                    print("Address deleted successfully")
+                    completion(.success(()))
+                case .failure(let error):
+                    print("Error deleting address: \(error)")
+                    completion(.failure(error))
+                }
+            }
+    }
 }

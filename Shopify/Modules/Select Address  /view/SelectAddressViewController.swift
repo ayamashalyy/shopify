@@ -135,12 +135,50 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            let address = viewModel.addresses[indexPath.row]
+            self.showConfirmDeleteAlert(address: address, indexPath: indexPath)
+        }
+    }
+
+    func showConfirmDeleteAlert(address: Address, indexPath: IndexPath) {
+        let alertController = UIAlertController(title: "Confirm Delete", message: "Are you sure you want to delete this address?", preferredStyle:.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style:.cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Delete", style:.destructive) { [weak self] _ in
+            self?.viewModel.deleteAddress(address) { result in
+                switch result {
+                case.success:
+                    print("Address deleted successfully")
+                    self?.viewModel.addresses.remove(at: indexPath.row)
+                    self?.tableView.deleteRows(at: [indexPath], with:.fade)
+                    self?.showAlert(title: "Success", message: "Address deleted successfully")
+                case.failure(let error):
+                    print("Error deleting address: \(error)")
+                    self?.showAlert(title: "Error", message: "Failed to delete address: \(error.localizedDescription)")
+                }
+            }
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    func showAlert(title: String, message: String) {
+         let alertController = UIAlertController(title: title, message: message, preferredStyle:.alert)
+         let okAction = UIAlertAction(title: "OK", style:.default, handler: nil)
+         alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+     }
+    
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected Address: \(viewModel.addresses[indexPath.row].address1)")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return 210
         
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

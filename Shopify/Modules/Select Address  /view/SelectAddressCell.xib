@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Byd-92-yNa">
-                        <rect key="frame" x="20" y="0.0" width="378" height="215"/>
+                        <rect key="frame" x="5" y="0.0" width="407" height="215"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="254" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mu1-gT-Az9">
                                 <rect key="frame" x="20" y="22" width="72" height="22"/>
@@ -69,13 +69,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JO6-zN-Pn1">
-                                <rect key="frame" x="139" y="100.66666666666667" width="250" height="21"/>
+                                <rect key="frame" x="139" y="97.666666666666671" width="250" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sv7-il-Iap">
-                                <rect key="frame" x="139" y="138.66666666666666" width="250" height="21"/>
+                                <rect key="frame" x="139" y="135.66666666666666" width="250" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -102,7 +102,7 @@
                             <constraint firstItem="TwM-2S-t9t" firstAttribute="top" secondItem="min-l6-kfs" secondAttribute="bottom" constant="20" id="EPY-wt-QRg"/>
                             <constraint firstItem="5QJ-dK-Svk" firstAttribute="leading" secondItem="sv7-il-Iap" secondAttribute="leading" id="IMI-XB-gua"/>
                             <constraint firstItem="xjL-80-Y8a" firstAttribute="trailing" secondItem="7Cn-f5-JdD" secondAttribute="trailing" id="JR8-60-zSr"/>
-                            <constraint firstItem="5QJ-dK-Svk" firstAttribute="top" secondItem="sv7-il-Iap" secondAttribute="bottom" constant="9" id="Msh-7X-7KP"/>
+                            <constraint firstItem="5QJ-dK-Svk" firstAttribute="top" secondItem="sv7-il-Iap" secondAttribute="bottom" constant="12" id="Msh-7X-7KP"/>
                             <constraint firstItem="7Cn-f5-JdD" firstAttribute="leading" secondItem="IQQ-9Y-1Tf" secondAttribute="leading" id="MxI-jT-bnE"/>
                             <constraint firstItem="1p3-zk-uC7" firstAttribute="leading" secondItem="xjL-80-Y8a" secondAttribute="leading" id="Ncv-rD-sRU"/>
                             <constraint firstItem="sv7-il-Iap" firstAttribute="leading" secondItem="JO6-zN-Pn1" secondAttribute="leading" id="T8N-gz-eSI"/>
@@ -128,8 +128,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="Byd-92-yNa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="AU0-8d-aoW"/>
-                    <constraint firstItem="Byd-92-yNa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="ApA-9D-aMc"/>
-                    <constraint firstAttribute="trailing" secondItem="Byd-92-yNa" secondAttribute="trailing" constant="20" id="NDw-HJ-WCC"/>
+                    <constraint firstItem="Byd-92-yNa" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="ApA-9D-aMc"/>
+                    <constraint firstAttribute="trailing" secondItem="Byd-92-yNa" secondAttribute="trailing" constant="6" id="NDw-HJ-WCC"/>
                     <constraint firstAttribute="bottom" secondItem="Byd-92-yNa" secondAttribute="bottom" constant="10" id="RpF-r9-gK2"/>
                 </constraints>
             </tableViewCellContentView>
@@ -137,6 +137,7 @@
             <connections>
                 <outlet property="addressLabel" destination="min-l6-kfs" id="9MV-fB-anO"/>
                 <outlet property="cityLabel" destination="JO6-zN-Pn1" id="T02-pl-Ap4"/>
+                <outlet property="containerView" destination="Byd-92-yNa" id="fs9-pn-lPU"/>
                 <outlet property="countryLabel" destination="sv7-il-Iap" id="lQX-f5-ML6"/>
                 <outlet property="phoneLabel" destination="TwM-2S-t9t" id="hCc-2e-biC"/>
                 <outlet property="zipCodeLabel" destination="5QJ-dK-Svk" id="XsX-4t-3Xf"/>

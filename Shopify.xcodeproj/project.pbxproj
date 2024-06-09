@@ -20,6 +20,7 @@
 		037955D92C0E8144003A3AF9 /* PlaceOrderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037955D82C0E8144003A3AF9 /* PlaceOrderViewController.swift */; };
 		037955DC2C0E825D003A3AF9 /* PlaceOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037955DA2C0E825D003A3AF9 /* PlaceOrderCell.swift */; };
 		037955DD2C0E825D003A3AF9 /* PlaceOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 037955DB2C0E825D003A3AF9 /* PlaceOrderCell.xib */; };
+		03CF26F02C15166C005A89D1 /* Common Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF26EF2C15166C005A89D1 /* Common Methods.swift */; };
 		03D2CE492C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D2CE482C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift */; };
 		03D35C852C0CEC1300523AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D35C842C0CEC1300523AF7 /* AppDelegate.swift */; };
 		03D35C872C0CEC1300523AF7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D35C862C0CEC1300523AF7 /* SceneDelegate.swift */; };
@@ -106,6 +107,7 @@
 		037955D82C0E8144003A3AF9 /* PlaceOrderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceOrderViewController.swift; sourceTree = "<group>"; };
 		037955DA2C0E825D003A3AF9 /* PlaceOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceOrderCell.swift; sourceTree = "<group>"; };
 		037955DB2C0E825D003A3AF9 /* PlaceOrderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceOrderCell.xib; sourceTree = "<group>"; };
+		03CF26EF2C15166C005A89D1 /* Common Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Common Methods.swift"; sourceTree = "<group>"; };
 		03D2CE482C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSuccessfulViewController.swift; sourceTree = "<group>"; };
 		03D35C812C0CEC1300523AF7 /* Shopify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shopify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D35C842C0CEC1300523AF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -522,11 +524,9 @@
 			children = (
 				03ED90F72C0DD2E400EE0A50 /* Color.swift */,
 				7DC25B462C13705B00D046D7 /* Navigation.swift */,
-
 				03E754192C14838F0027C8F8 /* APIError.swift */,
-
 				7DC25B5C2C13A9F800D046D7 /* Decoding.swift */,
-
+				03CF26EF2C15166C005A89D1 /* Common Methods.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1085,6 +1085,7 @@
 				518B837E2C132F5D001DD3A4 /* CustomBrandCell.swift in Sources */,
 				03D35CC12C0CED0B00523AF7 /* HomeViewModel.swift in Sources */,
 				517E826A2C1277D0004FBD00 /* NetworkManager.swift in Sources */,
+				03CF26F02C15166C005A89D1 /* Common Methods.swift in Sources */,
 				03D35C872C0CEC1300523AF7 /* SceneDelegate.swift in Sources */,
 				7D30296D2C12981400B235B4 /* AllFavViewController.swift in Sources */,
 				03ED90ED2C0DCCC700EE0A50 /* HomeViewController.swift in Sources */,
