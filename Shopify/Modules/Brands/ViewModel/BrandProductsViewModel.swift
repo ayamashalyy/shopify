@@ -11,6 +11,7 @@ class BrandProductsViewModel{
     
     var products: [Product] = []
     private var collectionId: Int?
+    var filteredProducts: [Product] = []
     
     func setCollectionId(_ id: Int) {
         self.collectionId = id
@@ -35,6 +36,7 @@ class BrandProductsViewModel{
                 guard let self = self else { return }
                 if let products = products {
                     self.products = products
+                    self.filteredProducts = products
                     completion(nil)
                 } else if let decodeError = decodeError {
                     completion(decodeError)
@@ -46,13 +48,24 @@ class BrandProductsViewModel{
     }
         
     func numberOfProducts() -> Int {
-        return products.count
+        return filteredProducts.count
     }
 
     func product(at index: Int) -> Product? {
-        guard index >= 0 && index < products.count else {
+        guard index >= 0 && index < filteredProducts.count else {
             return nil
         }
-        return products[index]
+        return filteredProducts[index]
+    }
+    
+    func filterProducts(byPrice price: Float) {
+        filteredProducts = products.filter { product in
+            if let priceString = product.variants.first?.price, let priceValue = Float(priceString) {
+                print("Comparing product price: \(priceValue) with filter price: \(price)")
+                return priceValue <= price
+            }
+            return false
+        }
+        print("Filtered products count: \(filteredProducts.count)")  
     }
 }
