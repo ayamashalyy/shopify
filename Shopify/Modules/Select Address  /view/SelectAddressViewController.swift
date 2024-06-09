@@ -13,6 +13,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     private let viewModel: AddressViewModel
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var navToPlaceOrder: UIButton!
     
     init(viewModel: AddressViewModel) {
         self.viewModel = viewModel
@@ -71,7 +72,10 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
                 case .success(let address):
                     print("Address added successfully: \(address)")
                     let successAlert = UIAlertController(title: "Success", message: "Address added successfully", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                        self.tableView.reloadData()
+                    }
+                    
                     successAlert.addAction(okAction)
                     self.present(successAlert, animated: true, completion: nil)
                 case .failure(let error):
@@ -95,10 +99,13 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "SelectAddressCell", bundle: nil), forCellReuseIdentifier: "SelectAddressCell")
-       
+        navToPlaceOrder.backgroundColor = UIColor(hex: "#FF7D29")
+        navToPlaceOrder.layer.cornerRadius = 8
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.getAllAddresses { [weak self] result in
             switch result {
             case.success(let addresses):
@@ -141,7 +148,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
             self.showConfirmDeleteAlert(address: address, indexPath: indexPath)
         }
     }
-
+    
     func showConfirmDeleteAlert(address: Address, indexPath: IndexPath) {
         let alertController = UIAlertController(title: "Confirm Delete", message: "Are you sure you want to delete this address?", preferredStyle:.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style:.cancel, handler: nil)
@@ -163,13 +170,13 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         alertController.addAction(deleteAction)
         self.present(alertController, animated: true, completion: nil)
     }
-
+    
     func showAlert(title: String, message: String) {
-         let alertController = UIAlertController(title: title, message: message, preferredStyle:.alert)
-         let okAction = UIAlertAction(title: "OK", style:.default, handler: nil)
-         alertController.addAction(okAction)
+        let alertController = UIAlertController(title: title, message: message, preferredStyle:.alert)
+        let okAction = UIAlertAction(title: "OK", style:.default, handler: nil)
+        alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
-     }
+    }
     
     
     
@@ -196,7 +203,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     
-    @IBAction func navToPlaceOrder(_ sender: UIBarButtonItem) {
+    @IBAction func navToPlaceOrder(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let PlaceOrderViewController = storyboard.instantiateViewController(withIdentifier: "PlaceOrderViewController") as? PlaceOrderViewController {
             PlaceOrderViewController.modalPresentationStyle = .fullScreen

@@ -261,23 +261,16 @@
                                                 <action selector="backToShoppingCart:" destination="Z6i-dV-EwK" id="7Xa-fw-jxV"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem title="Item" image="placeholder" id="ryh-5X-PkI">
-                                                <connections>
-                                                    <action selector="addAddress:" destination="Z6i-dV-EwK" id="0zr-g3-yxq"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem title="Item" image="discounts" id="bAb-Og-Dg0">
-                                                <connections>
-                                                    <action selector="navToPlaceOrder:" destination="Z6i-dV-EwK" id="clO-3G-obU"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" title="Item" image="add" id="ryh-5X-PkI">
+                                            <connections>
+                                                <action selector="addAddress:" destination="Z6i-dV-EwK" id="0zr-g3-yxq"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="LxX-Wu-HfR">
-                                <rect key="frame" x="0.0" y="143" width="393" height="684"/>
+                                <rect key="frame" x="0.0" y="143" width="393" height="502"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SelectAddressCell" id="lNh-vo-g7y" customClass="SelectAddressCell" customModule="Shopify" customModuleProvider="target">
@@ -290,20 +283,37 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mJv-Kf-Byn">
+                                <rect key="frame" x="102" y="725" width="191" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="Zy1-Oc-34F"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Discount">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="navToPlaceOrder:" destination="Z6i-dV-EwK" eventType="touchUpInside" id="cfV-W4-dWt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Erx-81-LsO"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="kSr-kD-HzM" firstAttribute="leading" secondItem="LxX-Wu-HfR" secondAttribute="leading" id="AfZ-EC-Yka"/>
+                            <constraint firstItem="mJv-Kf-Byn" firstAttribute="top" secondItem="LxX-Wu-HfR" secondAttribute="bottom" constant="80" id="CCJ-RA-Tue"/>
                             <constraint firstItem="LxX-Wu-HfR" firstAttribute="leading" secondItem="Erx-81-LsO" secondAttribute="leading" id="Cbh-5q-LEi"/>
-                            <constraint firstAttribute="bottom" secondItem="LxX-Wu-HfR" secondAttribute="bottom" constant="25" id="Mqd-Ef-TJD"/>
                             <constraint firstItem="kSr-kD-HzM" firstAttribute="trailing" secondItem="LxX-Wu-HfR" secondAttribute="trailing" id="Nsa-qk-pH6"/>
+                            <constraint firstItem="Erx-81-LsO" firstAttribute="trailing" secondItem="mJv-Kf-Byn" secondAttribute="trailing" constant="100" id="T71-dL-sxy"/>
                             <constraint firstItem="LxX-Wu-HfR" firstAttribute="trailing" secondItem="Erx-81-LsO" secondAttribute="trailing" id="WIj-BN-im2"/>
+                            <constraint firstItem="mJv-Kf-Byn" firstAttribute="leading" secondItem="Erx-81-LsO" secondAttribute="leading" constant="102" id="WUq-JQ-k4l"/>
+                            <constraint firstItem="Erx-81-LsO" firstAttribute="bottom" secondItem="mJv-Kf-Byn" secondAttribute="bottom" constant="50" id="X81-IZ-xJH"/>
                             <constraint firstItem="kSr-kD-HzM" firstAttribute="top" secondItem="Erx-81-LsO" secondAttribute="top" constant="30" id="XON-Up-rSC"/>
                             <constraint firstItem="LxX-Wu-HfR" firstAttribute="top" secondItem="kSr-kD-HzM" secondAttribute="bottom" constant="10" id="g37-3F-w07"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="navToPlaceOrder" destination="mJv-Kf-Byn" id="0ut-Ec-C9H"/>
                         <outlet property="tableView" destination="LxX-Wu-HfR" id="3Di-gK-Ssw"/>
                     </connections>
                 </viewController>
@@ -715,12 +725,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="discounts" width="24" height="24"/>
+        <image name="add" width="32" height="32"/>
         <image name="left" width="24" height="24"/>
         <image name="payment" width="2000" height="2000"/>
         <image name="payment_9346571" width="256" height="256"/>
         <image name="place" width="3000" height="2000"/>
-        <image name="placeholder" width="24" height="24"/>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
