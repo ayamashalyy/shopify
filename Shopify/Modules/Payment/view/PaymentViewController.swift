@@ -48,11 +48,11 @@ class PaymentViewController: UIViewController {
     }
     
     @IBAction func Payment(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Second", bundle: nil)
-        if let PaymentSuccessfulViewController = storyboard.instantiateViewController(withIdentifier: "PaymentSuccessfulViewController") as? PaymentSuccessfulViewController {
-            PaymentSuccessfulViewController.modalPresentationStyle = .fullScreen
-            present(PaymentSuccessfulViewController, animated: true, completion: nil)
-        }
+//        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+//        if let PaymentSuccessfulViewController = storyboard.instantiateViewController(withIdentifier: "PaymentSuccessfulViewController") as? PaymentSuccessfulViewController {
+//            PaymentSuccessfulViewController.modalPresentationStyle = .fullScreen
+//            present(PaymentSuccessfulViewController, animated: true, completion: nil)
+//        }
     }
 
 

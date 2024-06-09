@@ -22,7 +22,12 @@ class AddressViewModel {
     
     
     func addAddress(_ address: Address, completion: @escaping (Swift.Result<Address, Error>) -> Void) {
+<<<<<<< HEAD
       /*  let urlString =
+=======
+        
+        let urlString = 
+>>>>>>> development
         
         let addressDict: [String: Any] = [
             "address": [
@@ -53,7 +58,10 @@ class AddressViewModel {
                             do {
                                 let decoder = JSONDecoder()
                                 let addressResponse = try decoder.decode(AddressResponse.self, from: data)
-                                completion(.success(addressResponse.customer_address))
+                                let newAddress = addressResponse.customer_address
+                                self.addresses.append(newAddress)
+                                completion(.success(newAddress))
+                                
                                 
                             } catch {
                                 print("Error decoding JSON: \(error.localizedDescription)")
@@ -124,4 +132,29 @@ class AddressViewModel {
             }*/
     }
     
+    func deleteAddress(_ address: Address, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
+        print("Deleting address with ID: \(address.id)")
+        
+        let urlString =
+        
+        var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        Alamofire.request(request)
+            .validate()
+            .responseData { response in
+                switch response.result {
+                case.success:
+                    print("Address deleted successfully")
+                    completion(.success(()))
+                case.failure(let error):
+                    print("Error deleting address: \(error)")
+                    if let afError = error as? AFError {
+                        print("AFError: \(afError)")
+                    }
+                    completion(.failure(error))
+                }
+            }
+    }
 }

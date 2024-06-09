@@ -15,27 +15,27 @@ class ShoppingCartableViewCell: UITableViewCell {
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var incrementButton: UIButton!
     @IBOutlet weak var decrementButton: UIButton!
-    
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var productView: UIView!
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.clipsToBounds = false
-        contentView.clipsToBounds = false
-        contentView.layer.cornerRadius = 8
-        contentView.backgroundColor = .white
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        contentView.layer.shadowRadius = 5
-        contentView.layer.shadowOpacity = 0.3
+        containerView.clipsToBounds = false
+        containerView.layer.cornerRadius = 8
+        containerView.backgroundColor = .white
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        containerView.layer.shadowRadius = 3
+        containerView.layer.shadowOpacity = 0.2
         productView.clipsToBounds = false
         productView.layer.cornerRadius = 8
         productView.backgroundColor = .white
         productView.layer.shadowColor = UIColor.black.cgColor
         productView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        productView.layer.shadowRadius = 5
-        productView.layer.shadowOpacity = 0.3
+        productView.layer.shadowRadius = 3
+        productView.layer.shadowOpacity = 0.2
         
     }
     
@@ -46,7 +46,7 @@ class ShoppingCartableViewCell: UITableViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+        containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: containerView.layer.cornerRadius).cgPath
         productView.layer.shadowPath = UIBezierPath(roundedRect: productView.bounds, cornerRadius: productView.layer.cornerRadius).cgPath
     }
     

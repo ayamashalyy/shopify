@@ -8,7 +8,7 @@
 import Foundation
 
 struct Address: Codable {
-    let id: Int?
+    let id: Int
     let customerId: Int?
     let firstName: String?
     let lastName: String?
@@ -32,7 +32,7 @@ struct Address: Codable {
         self.city = city
         self.country = country
         self.zip = zip
-        self.id = nil
+        self.id = 0
         self.customerId = nil
         self.firstName = nil
         self.lastName = nil

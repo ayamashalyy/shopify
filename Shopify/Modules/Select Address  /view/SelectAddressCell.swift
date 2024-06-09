@@ -15,16 +15,17 @@ class SelectAddressCell: UITableViewCell {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var countryLabel: UILabel!
     @IBOutlet weak var zipCodeLabel: UILabel!
+    @IBOutlet weak var containerView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        contentView.clipsToBounds = false
-        contentView.layer.cornerRadius = 8
-        contentView.backgroundColor = .white
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        contentView.layer.shadowRadius = 5
-        contentView.layer.shadowOpacity = 0.3
+        containerView.clipsToBounds = false
+        containerView.layer.cornerRadius = 8
+        containerView.backgroundColor = .white
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        containerView.layer.shadowRadius = 3
+        containerView.layer.shadowOpacity = 0.2
         
     }
     
@@ -35,7 +36,7 @@ class SelectAddressCell: UITableViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+        containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: containerView.layer.cornerRadius).cgPath
     }
     
 }
