@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -92,11 +93,11 @@
             <objects>
                 <viewController id="yRd-gQ-vfL" customClass="SplashViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="W8v-6J-tPt">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ff8-Mb-Iwl">
-                                <rect key="frame" x="0.0" y="176" width="393" height="411"/>
+                                <rect key="frame" x="0.0" y="176" width="393" height="470"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="uf6-dp-N50"/>
@@ -126,7 +127,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veq-b7-qsu">
-                                <rect key="frame" x="0.0" y="58" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="-1" width="393" height="44"/>
                                 <items>
                                     <navigationItem id="MZw-qb-5cr">
                                         <rightBarButtonItems>
@@ -141,7 +142,7 @@
                                 </items>
                             </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-6V-BPT">
-                                <rect key="frame" x="0.0" y="102" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="43" width="393" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
@@ -169,7 +170,7 @@
         <!--Brands View Controller-->
         <scene sceneID="Bjb-oH-iBU">
             <objects>
-                <viewController id="WBw-X9-L8X" customClass="BrandsViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BrandsViewController" id="WBw-X9-L8X" customClass="BrandsViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ef1-T1-4bc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -177,16 +178,17 @@
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3B-R0-kGE">
                                 <rect key="frame" x="0.0" y="50" width="393" height="44"/>
                                 <items>
-                                    <navigationItem id="DVz-gN-GXg">
+                                    <navigationItem title="Products" id="DVz-gN-GXg">
                                         <barButtonItem key="leftBarButtonItem" image="arrowshape.turn.up.backward.fill" catalog="system" id="vFx-pr-d1L">
                                             <connections>
                                                 <action selector="backButton:" destination="WBw-X9-L8X" id="GPz-y2-GEJ"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem image="heart.fill" catalog="system" id="EHm-lY-KFm"/>
-                                            <barButtonItem image="cart.fill" catalog="system" id="U9r-CC-Cm9"/>
-                                        </rightBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" image="line.3.horizontal.decrease" catalog="system" id="U9r-CC-Cm9">
+                                            <connections>
+                                                <action selector="filterByPrice:" destination="WBw-X9-L8X" id="5X5-rN-q5B"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -197,10 +199,10 @@
                                     <outlet property="delegate" destination="WBw-X9-L8X" id="qVF-AF-VQU"/>
                                 </connections>
                             </searchBar>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Pi4-Em-hux">
-                                <rect key="frame" x="-2" y="150" width="397" height="30"/>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="DXp-vs-0dF">
+                                <rect key="frame" x="163" y="150" width="227" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="29" id="Pjg-mE-kj5"/>
+                                    <constraint firstAttribute="width" constant="223" id="AU8-5H-Z4J"/>
                                 </constraints>
                             </slider>
                         </subviews>
@@ -209,20 +211,23 @@
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="I3B-R0-kGE" secondAttribute="trailing" id="9Mq-qq-0mi"/>
-                            <constraint firstItem="Pi4-Em-hux" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="A7j-u9-XHS"/>
                             <constraint firstItem="UY5-N1-Yj9" firstAttribute="trailing" secondItem="KRT-99-nkg" secondAttribute="trailing" id="Ete-ig-uzw"/>
-                            <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="Pi4-Em-hux" secondAttribute="trailing" id="P2y-zv-Klm"/>
+                            <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="DXp-vs-0dF" secondAttribute="trailing" constant="5" id="JsO-TX-cZO"/>
                             <constraint firstItem="I3B-R0-kGE" firstAttribute="top" secondItem="ef1-T1-4bc" secondAttribute="top" constant="50" id="PBD-6k-QRy"/>
+                            <constraint firstItem="DXp-vs-0dF" firstAttribute="top" secondItem="UY5-N1-Yj9" secondAttribute="bottom" id="RZE-he-khg"/>
                             <constraint firstItem="I3B-R0-kGE" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="VFc-vV-0Ff"/>
                             <constraint firstItem="UY5-N1-Yj9" firstAttribute="top" secondItem="I3B-R0-kGE" secondAttribute="bottom" id="hzw-OL-xnH"/>
                             <constraint firstItem="UY5-N1-Yj9" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="ula-da-2x3"/>
-                            <constraint firstItem="Pi4-Em-hux" firstAttribute="top" secondItem="UY5-N1-Yj9" secondAttribute="bottom" id="wv1-pC-LNV"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="searchBar" destination="UY5-N1-Yj9" id="0iF-2M-J15"/>
+                        <outlet property="sliderFilter" destination="DXp-vs-0dF" id="Gcc-jZ-0oD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kro-6S-kln" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5312" y="-627"/>
+            <point key="canvasLocation" x="5309.160305343511" y="-627.46478873239437"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Xv2-aB-WT7">
@@ -254,7 +259,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ia7-LF-Udd">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                                 <items>
                                     <navigationItem id="Fb6-Ic-b3x">
                                         <rightBarButtonItems>
@@ -265,7 +270,7 @@
                                 </items>
                             </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c7o-8O-5Vr">
-                                <rect key="frame" x="0.0" y="103" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="44" width="393" height="56"/>
                                 <offsetWrapper key="searchFieldBackgroundPositionAdjustment" horizontal="0.0" vertical="0.0"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -273,7 +278,7 @@
                                 </connections>
                             </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lNn-8x-aJ3">
-                                <rect key="frame" x="5" y="159" width="383" height="32"/>
+                                <rect key="frame" x="5" y="100" width="383" height="32"/>
                                 <segments>
                                     <segment title="Men"/>
                                     <segment title="Women"/>
@@ -312,7 +317,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="5pl-CX-fZK">
-                                <rect key="frame" x="16" y="109" width="60" height="60"/>
+                                <rect key="frame" x="16" y="50" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="cFI-fc-oRk"/>
                                     <constraint firstAttribute="width" constant="60" id="vHI-bU-xzD"/>
@@ -324,7 +329,7 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aya" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TnP-ac-Y3B">
-                                <rect key="frame" x="108" y="119" width="229" height="34"/>
+                                <rect key="frame" x="108" y="60" width="229" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="dz0-uE-5tk"/>
                                 </constraints>
@@ -333,7 +338,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="EEY-B4-vdU">
-                                <rect key="frame" x="0.0" y="227.66666666666663" width="393" height="600"/>
+                                <rect key="frame" x="0.0" y="168.66666666666663" width="393" height="600"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="600" id="9hw-3J-J2D"/>
@@ -350,7 +355,7 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rdX-jY-G5R">
-                                <rect key="frame" x="0.0" y="829.66666666666663" width="393" height="1"/>
+                                <rect key="frame" x="0.0" y="770.66666666666663" width="393" height="1"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="393" id="Okg-0K-fjK"/>
@@ -388,13 +393,13 @@
                                 </items>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Orders" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HfD-Iy-5xs">
-                                <rect key="frame" x="16" y="199" width="77" height="28.666666666666657"/>
+                                <rect key="frame" x="16" y="140" width="77" height="28.666666666666657"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wB7-3d-xCQ">
-                                <rect key="frame" x="288" y="199" width="97" height="35"/>
+                                <rect key="frame" x="288" y="140" width="97" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="See More"/>
                                 <connections>
@@ -461,6 +466,7 @@
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="profile" width="1200" height="1200"/>
         <image name="splash-img" width="624" height="652"/>

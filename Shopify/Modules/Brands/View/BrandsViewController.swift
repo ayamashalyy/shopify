@@ -9,7 +9,9 @@ import UIKit
 
 class BrandsViewController: UIViewController {
     
-   // @IBOutlet weak var sliderFilter: UISlider!
+    @IBOutlet weak var sliderFilter: UISlider!
+
+    @IBOutlet weak var searchBar: UISearchBar!
     var brandProductsViewModel = BrandProductsViewModel()
     
     var categoriesCollectionView: UICollectionView!
@@ -22,6 +24,9 @@ class BrandsViewController: UIViewController {
         fetchProducts()
         
         valueLabel.text = "50.0"
+        
+        sliderFilter.isHidden = true
+        valueLabel.isHidden = true
     }
     
     func setupUI(){
@@ -34,7 +39,7 @@ class BrandsViewController: UIViewController {
         
         categoriesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 210).isActive = true
+        categoriesCollectionView.topAnchor.constraint(equalTo: sliderFilter.bottomAnchor, constant: 10).isActive = true
         categoriesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         categoriesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         categoriesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
@@ -46,11 +51,11 @@ class BrandsViewController: UIViewController {
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "brandsCell")
         
         // Set the range for the slider
-        //sliderFilter.minimumValue = 50.0
-        //sliderFilter.maximumValue = 500.0
+        sliderFilter.minimumValue = 50.0
+        sliderFilter.maximumValue = 500.0
         
-        // Add target for value changed event
-        //sliderFilter.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
+        //Add target for value changed event
+        sliderFilter.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
         
         // Label setup
         valueLabel = UILabel()
@@ -59,8 +64,9 @@ class BrandsViewController: UIViewController {
         
         // Constraints for label
         NSLayoutConstraint.activate([
-           // valueLabel.topAnchor.constraint(equalTo: sliderFilter.bottomAnchor, constant: 10),
-            valueLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            valueLabel.topAnchor.constraint(equalTo: categoriesCollectionView.topAnchor, constant: -30),
+            valueLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            valueLabel.trailingAnchor.constraint(equalTo: sliderFilter.leadingAnchor, constant: -10),
         ])
     }
     
@@ -79,10 +85,31 @@ class BrandsViewController: UIViewController {
         dismiss(animated: true)
     }
     
-//    @objc func sliderValueChanged(_ sender: UISlider) {
-//        let currentValue = String(format: "%.2f", sender.value)
-//        valueLabel.text = "\(currentValue)"
-//    }
+    
+    @IBAction func filterByPrice(_ sender: UIBarButtonItem) {
+        sliderFilter.isHidden.toggle()
+        valueLabel.isHidden.toggle()
+        
+        if !sliderFilter.isHidden {
+            filterProductsByCurrentSliderValue()
+        }
+    }
+    
+    @objc func sliderValueChanged(_ sender: UISlider) {
+        let currentValue = String(format: "%.2f", sender.value)
+        valueLabel.text = "\(currentValue)"
+        
+        filterProductsByCurrentSliderValue()
+    }
+    
+    func filterProductsByCurrentSliderValue() {
+        if let currentValue = Float(valueLabel.text ?? "50.0") {
+            print("Filtering products by price: \(currentValue)")
+            brandProductsViewModel.filterProducts(byPrice: currentValue)
+            categoriesCollectionView.reloadData()
+            print("Reloaded collection view with filtered products.")
+        }
+    }
 
 }
 
@@ -96,6 +123,8 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "brandsCell", for: indexPath) as! CustomCategoriesCell
         
         if let product = brandProductsViewModel.product(at: indexPath.row) {
+            print("Displaying product: \(product.name) with price: \(product.variants.first?.price ?? "N/A")")
+
             cell.nameCategoriesLabel.text = product.name
             cell.priceLabel.text = product.variants.first?.price
             
