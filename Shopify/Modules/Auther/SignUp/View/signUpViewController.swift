@@ -9,7 +9,9 @@ import UIKit
 
 class signUpViewController: UIViewController {
 
+    @IBOutlet weak var firstName: UITextField!
     @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var secondName: UITextField!
     
     @IBOutlet weak var pass: UITextField!
     
@@ -31,6 +33,7 @@ class signUpViewController: UIViewController {
     func setUpUI (){
         signUpButton.backgroundColor = UIColor(hex: "#FF7D29")
         signUpButton.layer.cornerRadius = 8
-   
     }
+    
+    
 }

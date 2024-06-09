@@ -107,7 +107,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="980.91603053435108" y="-34.507042253521128"/>
+            <point key="canvasLocation" x="868" y="-35"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="5HK-oM-TUU">
@@ -207,7 +207,9 @@
                     <connections>
                         <outlet property="confirmPass" destination="iAo-Ij-1yQ" id="0XC-bx-Is7"/>
                         <outlet property="email" destination="cDZ-wm-ZPJ" id="lCz-TB-ZLK"/>
+                        <outlet property="firstName" destination="V1X-36-OkZ" id="xLc-no-uJO"/>
                         <outlet property="pass" destination="tLy-tN-8P6" id="ugO-Au-6dq"/>
+                        <outlet property="secondName" destination="MeG-EU-ap7" id="IJH-6r-Y24"/>
                         <outlet property="signUpButton" destination="a8c-Ef-S5O" id="Pju-9s-QAn"/>
                     </connections>
                 </viewController>
@@ -595,7 +597,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nE6-f9-6tX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="44" y="-52"/>
+            <point key="canvasLocation" x="37" y="-35"/>
         </scene>
     </scenes>
     <resources>
