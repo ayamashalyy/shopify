@@ -22,7 +22,7 @@ class AddressViewModel {
     
     
     func addAddress(_ address: Address, completion: @escaping (Swift.Result<Address, Error>) -> Void) {
-        let urlString = 
+      /*  let urlString =
         
         let addressDict: [String: Any] = [
             "address": [
@@ -75,11 +75,11 @@ class AddressViewModel {
         {
             print("Error serializing json: \(error)")
             completion(.failure(error))
-        }
+        }*/
     }
     
     func getAllAddresses(completion: @escaping (Swift.Result<[Address], Error>) -> Void) {
-        let urlString =
+       /* let urlString =
         
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "GET"
@@ -121,7 +121,7 @@ class AddressViewModel {
                     print("Request failed: \(error)")
                     completion(.failure(error))
                 }
-            }
+            }*/
     }
     
 }
