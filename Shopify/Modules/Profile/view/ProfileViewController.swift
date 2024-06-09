@@ -133,7 +133,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func showMoreWishListItems() {
-        print("See More button in WishList section tapped")
+        Navigation.ToAllFavourite(from: self)
     }
     
     @IBAction func seeMoreOrders(_ sender: UIButton) {
@@ -165,12 +165,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
 
     
     @IBAction func navToShoppingCart(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Second", bundle: nil)
-        if let ShoppingCartViewController = storyboard.instantiateViewController(withIdentifier: "ShoppingCartViewController") as? ShoppingCartViewController {
-            ShoppingCartViewController.modalPresentationStyle = .fullScreen
-            present(ShoppingCartViewController, animated: true, completion: nil)
-        } else {
-            print("Failed to instantiate ShoppingCartViewController")
-        }
+        Navigation.ToOrders(from: self)
     }
 }

@@ -17,6 +17,9 @@ class AllFavViewController: UIViewController {
     let favPrices = ["10 $", "20 $" , "30 $"]
     
     
+    @IBAction func back(_ sender: Any) {
+        dismiss(animated: true)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         allFavTable.dataSource = self

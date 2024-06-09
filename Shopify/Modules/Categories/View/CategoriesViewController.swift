@@ -19,6 +19,10 @@ class CategoriesViewController: UIViewController {
     var fabButton: JJFloatingActionButton!
     var additionalFABsVisible = false
     
+    @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
+        Navigation.ToAllFavourite(from: self)
+
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         

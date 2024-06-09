@@ -14,34 +14,46 @@ class Navigation {
 //    Navigation.ToSearch(from: self)
 //    Navigation.ToAllFavourite(from: self)
 //    Navigation.ToOrders(from: self)
-       
-        static func ToProduct(productId: String, from viewController: UIViewController) {
-            let storyboard = UIStoryboard(name: "third", bundle: nil)
-             let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as! ProductViewController
-                vc.productId = productId
-                viewController.navigationController?.pushViewController(vc, animated: true)
-            
-        }
+    
+    
+    static func ToAllFavourite(from viewController: UIViewController) {
+         let storyboard = UIStoryboard(name: "third", bundle: nil)
+         if let vc = storyboard.instantiateViewController(withIdentifier: "AllFavViewController") as? AllFavViewController {
+             vc.modalPresentationStyle = .fullScreen
+             viewController.present(vc, animated: true, completion: nil)
+         }
+     }
 
-        static func ToSearch(from viewController: UIViewController) {
-            let storyboard = UIStoryboard(name: "third", bundle: nil)
-             let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as! SearchViewController
-                viewController.navigationController?.pushViewController(vc, animated: true)
-            
-        }
+    
+    static func ToProduct(productId: String, from viewController: UIViewController) {
+           let storyboard = UIStoryboard(name: "third", bundle: nil)
+           if let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as? ProductViewController {
+               print("to product")
+               vc.productId = productId
+               vc.modalPresentationStyle = .fullScreen
 
-        static func ToAllFavourite(from viewController: UIViewController) {
-            let storyboard = UIStoryboard(name: "third", bundle: nil)
-             let vc = storyboard.instantiateViewController(withIdentifier: "AllFavViewController") as! AllFavViewController
-                viewController.navigationController?.pushViewController(vc, animated: true)
-            
-        }
+               viewController.present(vc, animated: true, completion: nil)
+           }else {
+               print("to product")
+           }
+       }
+
+
+    static func ToSearch(from viewController: UIViewController) {
+           let storyboard = UIStoryboard(name: "third", bundle: nil)
+           if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+               vc.modalPresentationStyle = .fullScreen
+               viewController.present(vc, animated: true, completion: nil)
+           }
+       }
+     
 
         static func ToOrders(from viewController: UIViewController) {
             let storyboard = UIStoryboard(name: "Second", bundle: nil)
-//             let vc = storyboard.instantiateViewController(withIdentifier: "OrdersViewController") as! OrdersViewController
-//                viewController.navigationController?.pushViewController(vc, animated: true)
-//            
+            if let ShoppingCartViewController = storyboard.instantiateViewController(withIdentifier: "ShoppingCartViewController") as? ShoppingCartViewController {
+                ShoppingCartViewController.modalPresentationStyle = .fullScreen
+                viewController.present(ShoppingCartViewController, animated: true, completion: nil)
+            }
         }
     
     static func ToALogin(from viewController: UIViewController) {
