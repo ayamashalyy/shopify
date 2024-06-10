@@ -14,6 +14,7 @@ enum Endpoint: String {
     case smartCollections = "smart_collections.json"
     case specificProduct = "products/"
     case listOfBrandProducts = "products.json?collection_id="
+    case draftOrder = "draft_orders.json"
     //    8575848153336.json
 }
 
@@ -21,6 +22,7 @@ enum Root: String {
     case smartCollectionsRoot = "smart_collections"
     case product = "product"
     case products = "products"
+    case draftOrderRoot = "draft_orders"
     
 }
 
@@ -43,7 +45,8 @@ class NetworkManager {
                     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
                     return
                 }
-                
+                print("Raw JSON: \(json)")
+
                 var jsonData: Data?
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
                     // Handle single object

@@ -12,14 +12,8 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var getThemButton: UIButton!
-    
-    var cartItems = [
-        ("He Cares", 6000, 1, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4"))
-    ]
+    let shoppingCartViewModel = ShoppingCartViewModel()
+    var cartItems = [(String, Int, Int, UIImage?)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +22,53 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         setupButtons()
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
+        fetchDraftOrders()
     }
+    
+    func fetchDraftOrders() {
+        shoppingCartViewModel.fetchDraftOrders { [weak self] (draftOrders, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching draft orders: \(error.localizedDescription)")
+            } else if let draftOrders = draftOrders {
+                print("Fetched draft orders: \(draftOrders)")
+                self.updateCartItems(with: draftOrders)
+            }
+        }
+    }
+    
+    func updateCartItems(with draftOrders: [DraftOrder]) {
+        var updatedCartItems = cartItems
+        
+        for draftOrder in draftOrders {
+            guard let lineItems = draftOrder.line_items else {
+                continue
+            }
+            
+            for lineItem in lineItems {
+                let title = lineItem.title ?? "Unknown"
+                let quantity = lineItem.quantity ?? 0
+                let price = lineItem.price ?? "0.00"
+                let priceFloat = Float(price) ?? 0.0
+                let priceInt = Int(priceFloat)
+                
+                if let index = updatedCartItems.firstIndex(where: { $0.0 == title }) {
+                    updatedCartItems[index].2 += quantity
+                } else {
+                    updatedCartItems.append((title, priceInt, quantity, nil))
+                }
+            }
+        }
+        
+        cartItems = updatedCartItems
+        
+        print("Updated cart items: \(cartItems)")
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.updateSubtotal()
+        }
+    }
+
     
     func setupButtons() {
         getThemButton.backgroundColor = UIColor(hex: "#FF7D29")
@@ -66,9 +106,9 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 160
-         
+        
     }
     @objc func incrementQuantity(_ sender: UIButton) {
         let row = sender.tag
@@ -77,14 +117,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         updateSubtotal()
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-           return 50
-       }
-       
-       func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-           let footerView = UIView()
-           footerView.backgroundColor = UIColor.clear
-           return footerView
-       }
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        footerView.backgroundColor = UIColor.clear
+        return footerView
+    }
     
     @objc func decrementQuantity(_ sender: UIButton) {
         let row = sender.tag
@@ -101,16 +141,16 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
-            let storyboard = UIStoryboard(name: "Second", bundle: nil)
-            if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
-                selectAddressVC.modalPresentationStyle = .fullScreen
-                present(selectAddressVC, animated: true, completion: nil)
-            }
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+            selectAddressVC.modalPresentationStyle = .fullScreen
+            present(selectAddressVC, animated: true, completion: nil)
         }
-
+    }
+    
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
-
+    
 }
