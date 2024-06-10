@@ -72,17 +72,11 @@ class Navigation {
         }
     
     static func ToALogin(from viewController: UIViewController) {
+        print("in navigation to login")
         let storyboard = UIStoryboard(name: "third", bundle: nil)
          let vc = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-            viewController.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    
-    static func toCollectionView(from viewController: UIViewController) {
-        let storyboard = UIStoryboard(name: "third", bundle: nil)
-         let vc = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-            viewController.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    
+        vc.modalPresentationStyle = .fullScreen
+        viewController.present(vc, animated: true, completion: nil)
+     }
+        
 }
