@@ -24,6 +24,7 @@ class AddressViewModel {
     func addAddress(_ address: Address, completion: @escaping (Swift.Result<Address, Error>) -> Void) {
         
         let urlString =
+        ""
         
         let addressDict: [String: Any] = [
             "address": [
@@ -84,7 +85,7 @@ class AddressViewModel {
     
     func getAllAddresses(completion: @escaping (Swift.Result<[Address], Error>) -> Void) {
        let urlString =
-        
+        ""
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -132,7 +133,7 @@ class AddressViewModel {
         print("Deleting address with ID: \(address.id)")
         
         let urlString =
-        
+        ""
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

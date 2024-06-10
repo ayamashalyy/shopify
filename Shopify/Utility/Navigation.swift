@@ -24,6 +24,13 @@ class Navigation {
          }
      }
 
+    static func ToHome(from viewController: UIViewController) {
+         let storyboard = UIStoryboard(name: "Main", bundle: nil)
+         if let vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
+             vc.modalPresentationStyle = .fullScreen
+             viewController.present(vc, animated: true, completion: nil)
+         }
+     }
     
     static func ToProduct(productId: String, from viewController: UIViewController) {
            let storyboard = UIStoryboard(name: "third", bundle: nil)
