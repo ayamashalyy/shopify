@@ -211,6 +211,19 @@
                                     <action selector="showHideConfirmPassButtonTapped:" destination="WHz-E2-Jte" eventType="touchUpInside" id="9rQ-sT-yba"/>
                                 </connections>
                             </button>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ov-2z-oV2">
+                                <rect key="frame" x="-1" y="59" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="SignUP page" id="MIv-0h-aWA">
+                                        <barButtonItem key="leftBarButtonItem" image="left" id="LyJ-ze-5Y3">
+                                            <connections>
+                                                <action selector="dismis:" destination="WHz-E2-Jte" id="UyR-5J-cBf"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mKS-Kj-Q9y"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>

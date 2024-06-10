@@ -11,10 +11,17 @@ struct DraftOrderResponse: Codable {
     let draft_orders: [DraftOrder]
 }
 
+struct creatingDraftOrderResponse: Codable {
+    let draft_order: DraftOrder
+}
+struct DraftOrderRequest: Codable {
+    let draft_order: DraftOrder
+}
+
 struct DraftOrder: Codable {
     let id: Int?
     let note: String?
-    let email: String
+    let email: String?
     let taxes_included: Bool?
     let currency: String?
     let invoice_sent_at: String?
@@ -56,10 +63,18 @@ struct LineItem: Codable  {
     let tax_lines: [TaxLine]?
     let applied_discount: String?
     let name: String?
-    let properties: [String?]
+  //  let properties: [String?]
     let custom: Bool?
     let price, admin_graphql_api_id: String?
+    let properties: [Property]?
+
 }
+
+struct Property: Codable {
+    let name: String
+    let value: String
+}
+
 
 struct AddressDraftOrder: Codable {
     let first_name, address1: String?
@@ -107,4 +122,10 @@ struct TaxLine: Codable {
     let rate: Double?
     let title: String?
     let price: String?
+}
+
+struct DraftOrderDetails: Codable {
+    let line_items: [LineItem]
+    let customer: CustomerDraftOrder
+    let use_customer_default_address: Bool
 }

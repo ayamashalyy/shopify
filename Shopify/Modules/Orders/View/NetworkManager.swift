@@ -38,7 +38,6 @@ enum Root: String {
 // remove it every time before push 
 
 
-
 class NetworkManager {
     
     static func fetchDataFromApi(endpoint: Endpoint, rootOfJson: Root, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
@@ -48,7 +47,7 @@ class NetworkManager {
             return
         }
         //    print("url in fetching    \(urlString)")
-        print("shopping cart is url \(url)")
+     //   print("shopping cart is url \(url)")
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -59,7 +58,7 @@ class NetworkManager {
                 }
                 //   print("JSON Response:", json)
                 
-                print("Raw JSON: \(json)")
+         //       print("Raw JSON: \(json)")
 
                 var jsonData: Data?
                 
