@@ -19,10 +19,8 @@ class ProductViewModel{
         
         func getProductDetails(id: String) {
             
-            // static id insted of take it from parmeter
-           //  let addition = "\(id).json"
-                  
-            NetworkManager.fetchDataFromApi(endpoint: .specificProduct, rootOfJson: .product, addition: "8575847989496.json") { data , error in
+            let addition = "\(id).json"
+            NetworkManager.fetchDataFromApi(endpoint: .specificProduct, rootOfJson: .product, addition: addition) { data , error in
                 guard let data = data, error == nil else {
                     print("error in data")
                     return
@@ -33,7 +31,6 @@ class ProductViewModel{
                     if let product = product {
                         self.product = product
                     }
-                    
                 }
             }
         }

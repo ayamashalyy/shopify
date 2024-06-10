@@ -1,19 +1,16 @@
-//
-//  ShoppingCartViewController.swift
-//  Shopify
-//
-//  Created by aya on 03/06/2024.
-//
-
 import UIKit
+import Kingfisher
 
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var getThemButton: UIButton!
+    
     let shoppingCartViewModel = ShoppingCartViewModel()
-    var cartItems = [(String, Int, Int, UIImage?)]()
+    var productViewModel = ProductViewModel()
+    
+    var cartItems = [(String, Int, Int,String?)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +20,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
         fetchDraftOrders()
+        
+        productViewModel.bindResultToViewController = { [weak self] in
+            //print("shopping cart in  productViewModel.bindResultToViewController ")
+            DispatchQueue.main.async {
+                guard let self = self, let product = self.productViewModel.product else { return }
+                self.updateCartItemWithImage(for: product)
+            }
+        }
     }
     
     func fetchDraftOrders() {
@@ -38,8 +43,6 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func updateCartItems(with draftOrders: [DraftOrder]) {
-        var updatedCartItems = cartItems
-        
         for draftOrder in draftOrders {
             guard let lineItems = draftOrder.line_items else {
                 continue
@@ -51,24 +54,35 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
                 let price = lineItem.price ?? "0.00"
                 let priceFloat = Float(price) ?? 0.0
                 let priceInt = Int(priceFloat)
+             //   print("shopping cart is ................................\(lineItem.product_id!)")
+                productViewModel.getProductDetails(id: "\(lineItem.product_id!)")
                 
-                if let index = updatedCartItems.firstIndex(where: { $0.0 == title }) {
-                    updatedCartItems[index].2 += quantity
+                if let index = cartItems.firstIndex(where: { $0.0 == title }) {
+                    cartItems[index].2 += quantity
                 } else {
-                    updatedCartItems.append((title, priceInt, quantity, nil))
+                    cartItems.append((title, priceInt, quantity, nil))
                 }
             }
         }
         
-        cartItems = updatedCartItems
         
-        print("Updated cart items: \(cartItems)")
+      //  print("Updated cart items: \(cartItems)")
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.updateSubtotal()
         }
     }
-
+    
+    func updateCartItemWithImage(for product: Product) {
+           if let index = cartItems.firstIndex(where: { $0.0 == product.name }) {
+               if let imageUrl = product.images.first?.url {
+                   cartItems[index].3 = imageUrl
+                   DispatchQueue.main.async {
+                       self.tableView.reloadData()
+                   }
+               }
+           }
+       }
     
     func setupButtons() {
         getThemButton.backgroundColor = UIColor(hex: "#FF7D29")
@@ -96,7 +110,11 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.productNameLabel.text = "\(item.0)"
         cell.productPriceLabel.text = "\(item.1)$"
         cell.quantityLabel.text = "\(item.2)"
-        cell.productImageView.image = item.3
+        if let imageUrl = item.3 {
+            cell.productImageView.kf.setImage(with: URL(string: imageUrl))
+        } else {
+            cell.productImageView.image = nil
+        }
         cell.incrementButton.tag = indexPath.row
         cell.decrementButton.tag = indexPath.row
         cell.incrementButton.addTarget(self, action: #selector(incrementQuantity(_:)), for: .touchUpInside)
@@ -108,14 +126,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 160
-        
     }
+    
     @objc func incrementQuantity(_ sender: UIButton) {
         let row = sender.tag
         cartItems[row].2 += 1
         tableView.reloadData()
         updateSubtotal()
     }
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 50
     }
@@ -148,9 +167,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
-    
 }

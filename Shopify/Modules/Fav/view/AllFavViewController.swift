@@ -26,7 +26,7 @@ class AllFavViewController: UIViewController {
         allFavTable.delegate = self
         allFavTable.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         allFavTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-  
+        
     }
 }
 
@@ -45,24 +45,20 @@ extension AllFavViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return 100
+        return 100
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "third", bundle: nil)
-         let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as! ProductViewController
-        vc.productId = "....."
-            self.navigationController?.pushViewController(vc, animated: true)
-
+        Navigation.ToProduct(productId: "8575847989496", from: self)
     }
     
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-            return 60
-        }
-         
-
-     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        return 60
+    }
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
             // here i shoukd remove from data api or realem
