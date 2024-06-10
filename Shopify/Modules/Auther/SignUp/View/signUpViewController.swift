@@ -18,6 +18,27 @@ class signUpViewController: UIViewController {
     
     @IBOutlet weak var confirmPass: UITextField!
     
+    @IBOutlet weak var showHidePassButton: UIButton!
+        @IBOutlet weak var showHideConfirmPassButton: UIButton!
+        
+        var isPasswordVisible = false
+        var isConfirmPasswordVisible = false
+    
+    @IBAction func showHidePassButtonTapped(_ sender: UIButton) {
+          isPasswordVisible.toggle()
+          let buttonImage = isPasswordVisible ? UIImage(systemName: "eye.fill") : UIImage(systemName: "eye.slash.fill")
+          showHidePassButton.setImage(buttonImage, for: .normal)
+          pass.isSecureTextEntry = !isPasswordVisible
+      }
+      
+      @IBAction func showHideConfirmPassButtonTapped(_ sender: UIButton) {
+          isConfirmPasswordVisible.toggle()
+          let buttonImage = isConfirmPasswordVisible ? UIImage(systemName: "eye.fill") : UIImage(systemName: "eye.slash.fill")
+          showHideConfirmPassButton.setImage(buttonImage, for: .normal)
+          confirmPass.isSecureTextEntry = !isConfirmPasswordVisible
+      }
+      
+       
     @IBAction func signUpBtn(_ sender: UIButton) {
         print("insignin screen after press signup button")
         // Validate fields
@@ -82,6 +103,15 @@ class signUpViewController: UIViewController {
     func setUpUI (){
         signUpButton.backgroundColor = UIColor(hex: "#FF7D29")
         signUpButton.layer.cornerRadius = 8
+        pass.isSecureTextEntry = true
+               confirmPass.isSecureTextEntry = true
+               
+               // Set up show/hide buttons with orange color
+               let orangeColor = UIColor(hex: "#FF7D29") // Orange color
+               showHidePassButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
+               showHideConfirmPassButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
+          
+        
     }
     
     func isValidEmail(_ email: String) -> Bool {

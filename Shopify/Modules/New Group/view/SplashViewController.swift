@@ -14,6 +14,8 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+         // for codding only the next line:
+            Authorize.clearCustomerIDFromUserDefaults()
             self.checkCustomerID()
             
         }
@@ -22,9 +24,13 @@ class SplashViewController: UIViewController {
     
     
     func checkCustomerID() {
-        if let customerID = Authorize.getCustomerIDFromUserDefaults() {
+     var  customerID = Authorize.getCustomerIDFromUserDefaults()
+        if customerID != 0  {
+            print("customerID\(customerID)")
             Navigation.ToHome(from: self)
         } else {
+            print(" nottttt customerID")
+
             Navigation.ToALogin(from: self)
        }
     }

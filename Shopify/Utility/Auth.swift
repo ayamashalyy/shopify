@@ -16,10 +16,12 @@ class Authorize{
         }
         
         static func getCustomerIDFromUserDefaults() -> Int? {
+            // if make get and their is no id will get 0
             return UserDefaults.standard.integer(forKey: customerIDKey)
         }
         
         static func clearCustomerIDFromUserDefaults() {
+            print("clear user key")
             UserDefaults.standard.removeObject(forKey: customerIDKey)
         }
     }
@@ -36,7 +38,7 @@ class Authorize{
  func logout() {
      // Clear the saved customer ID
      Authorize.clearCustomerIDFromUserDefaults()
-     // Perform any additional logout tasks
+ // navigtion to login
  }
 
  */

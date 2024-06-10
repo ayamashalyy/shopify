@@ -26,13 +26,22 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var image: UIImageView!
     
-    
+    @IBOutlet weak var showHideButton: UIButton!
+        
+        var isPasswordVisible = false
     
     @IBAction func signUpBtx(_ sender: UIButton) {
         print("singup")
-        // navigate is done througth storeboard
+        Navigation.toSignUpViewController(from: self)
     }
     
+    
+    @IBAction func showHideButtonTapped(_ sender: UIButton) {
+           isPasswordVisible.toggle()
+           let buttonImage = isPasswordVisible ? UIImage(systemName: "eye.fill") : UIImage(systemName: "eye.slash.fill")
+           showHideButton.setImage(buttonImage, for: .normal)
+           passwordTxt.isSecureTextEntry = !isPasswordVisible
+       }
     @IBAction func loginBtx(_ sender: UIButton) {
             print("loginBtx")
             
@@ -77,6 +86,11 @@ class LoginViewController: UIViewController {
         guestBtn.layer.cornerRadius = 8
         loginButton.backgroundColor = UIColor(hex: "#FF7D29")
         loginButton.layer.cornerRadius = 8
+        passwordTxt.isSecureTextEntry = true
+        let orangeColor = UIColor(hex: "#FFA500")
+               showHideButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
+         
+
     }
     
     func showAlert(message: String) {

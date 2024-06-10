@@ -23,7 +23,15 @@ class Navigation {
              viewController.present(vc, animated: true, completion: nil)
          }
      }
-
+    
+    static func toSignUpViewController(from viewController: UIViewController) {
+         let storyboard = UIStoryboard(name: "third", bundle: nil)
+         if let vc = storyboard.instantiateViewController(withIdentifier: "signUpViewController") as? signUpViewController {
+             vc.modalPresentationStyle = .fullScreen
+             viewController.present(vc, animated: true, completion: nil)
+         }
+     }
+    
     static func ToHome(from viewController: UIViewController) {
          let storyboard = UIStoryboard(name: "Main", bundle: nil)
          if let vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
