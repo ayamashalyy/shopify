@@ -34,7 +34,7 @@ class Navigation {
     
     static func ToHome(from viewController: UIViewController) {
          let storyboard = UIStoryboard(name: "Main", bundle: nil)
-         if let vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
+         if let vc = storyboard.instantiateViewController(withIdentifier: "UITabBarController") as? UITabBarController {
              vc.modalPresentationStyle = .fullScreen
              viewController.present(vc, animated: true, completion: nil)
          }
