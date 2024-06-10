@@ -78,17 +78,20 @@ class signUpViewController: UIViewController {
             return
         }
        
-        // Check if password meets minimum length requirement
          if passText.count < 5 {
              showAlert(message: "Password must be at least 5 characters long")
              return
          }
         
        
-        // make it return response and accrding
-        // show alert what result and if create and clock ok  Navigation.
-        signUPviewModel?.signUp(id: 0, email: emailText, firstName: firstNameText, lastName: lastNameText, verifiedEmail: true, tags: passText)
-
+        signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, verifiedEmail: true, tags: passText) { createdNewCustomer in
+            if createdNewCustomer {
+                print("Is a customer, go to home")
+                Navigation.ToHome(from: self)
+            } else {
+                self.showAlert(message: "Sorry, Try reregiste with different email")
+            }
+        }
     }
     
     @IBOutlet weak var signUpButton: UIButton!
@@ -106,13 +109,13 @@ class signUpViewController: UIViewController {
         pass.isSecureTextEntry = true
                confirmPass.isSecureTextEntry = true
                
-               // Set up show/hide buttons with orange color
-               let orangeColor = UIColor(hex: "#FF7D29") // Orange color
-               showHidePassButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
-               showHideConfirmPassButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
+       let orangeColor = UIColor(hex: "#FF7D29") 
+       showHidePassButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
+       showHideConfirmPassButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
           
-        
+
     }
+    
     
     func isValidEmail(_ email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"

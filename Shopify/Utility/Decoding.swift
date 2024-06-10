@@ -11,7 +11,7 @@ class Decoding {
    
     static func decodeData<T: Codable>(data: Data, objectType: T.Type, completion: @escaping (T?, Error?) -> Void) {
         do {
-         //   print("data before decode \(data)")
+          // print("data before decode \(data)")
             let decodedObject = try JSONDecoder().decode(T.self, from: data)
         //    print("data after decode decodedObject \(decodedObject)")
 
@@ -26,18 +26,19 @@ class Decoding {
     
     static func encodeData<T: Codable>(object: T, completion: @escaping (Data?, Error?) -> Void) {
         do {
-            //    print("data before encodeData decodedObject \(T)")
+//                print("data before encodeData decodedObject \(object)")
 
             let jsonData = try JSONEncoder().encode(object)
-               print("data after encodeData  jsonData \(jsonData)")
+        //       print("data after encodeData  jsonData \(jsonData)")
 
             completion(jsonData, nil)
         } catch {
-               print("failed to encodeData in catch")
-            print("failed to encodeData in catch\(error)")
+//               print("failed to encodeData in catch")
+//            print("failed to encodeData in catch\(error)")
 
             completion(nil, error)
         }
     }
 
 }
+

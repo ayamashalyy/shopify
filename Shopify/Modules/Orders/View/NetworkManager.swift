@@ -22,6 +22,8 @@ enum Root: String {
     case product = "product"
     case products = "products"
     case customers = "customers"
+    case customer = "customer"
+
     
 }
 
@@ -36,30 +38,30 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-    //    print("url in fetching    \(urlString)")
+        //    print("url in fetching    \(urlString)")
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
-            //    print("response is successed ")
+                //    print("response is successed ")
                 guard let json = value as? [String: Any] else {
                     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
                     return
                 }
-             //   print("JSON Response:", json)
-
+                //   print("JSON Response:", json)
+                
                 var jsonData: Data?
-                                
+                
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
                     // Handle single object
                     jsonData = try? JSONSerialization.data(withJSONObject: jsonObject)
-            //        print("is single ")
+                    //        print("is single ")
                 } else if let jsonArray = json[rootOfJson.rawValue] as? [[String: Any]] {
                     // Handle array of objects
                     
-            //        print("is arrary ")
-
+                    //        print("is arrary ")
+                    
                     jsonData = try? JSONSerialization.data(withJSONObject: jsonArray)
-           //             print("jsonData  \(jsonData)")
+                    //             print("jsonData  \(jsonData)")
                 } else {
                     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON root format"]))
                     return
@@ -77,61 +79,41 @@ class NetworkManager {
         }
     }
     
-    
-    static func postDataToApi<T: Codable>(endpoint: Endpoint, rootOfJson: Root, body: T, completion: @escaping (Data?, Error?) -> Void) {
+    static func postDataToApi(endpoint: Endpoint, rootOfJson: Root, body: Data, completion: @escaping (Data?, Error?) -> Void) {
         let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)"
         guard let url = URL(string: urlString) else {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-     //   print("url:  \(urlString)")
         
-        Decoding.encodeData(object: body) { jsonData, error in
-            guard let jsonData = jsonData else {
-                completion(nil, error)
-                return
-            }
-            
-            print("JSON Data: \(jsonData)")
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("JSON Data/jsonString: \(jsonString)")
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = HTTPMethod.post.rawValue
-            request.httpBody = jsonData
-            
-            Alamofire.request(request).responseJSON { response in
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(TOKEN, forHTTPHeaderField: "X-Shopify-Access-Token")
+        request.httpBody = body
+        
+//        // Print request details for debugging
+//        if let jsonString = String(data: body, encoding: .utf8) {
+//            print("Request Body JSON: \(jsonString)")
+//        }
+//        print("Request URL: \(urlString)")
+//        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+//        
+        Alamofire.request(request)
+            .validate()
+            .responseData { response in
                 switch response.result {
-                case .success(let value):
-                    guard let json = value as? [String: Any] else {
-                        completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
-                        return
-                    }
-                    
-                    var jsonData: Data?
-                    if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
-                        jsonData = try? JSONSerialization.data(withJSONObject: jsonObject)
-                    } else if let jsonArray = json[rootOfJson.rawValue] as? [[String: Any]] {
-                        jsonData = try? JSONSerialization.data(withJSONObject: jsonArray)
-                    } else {
-                        completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON root format"]))
-                        return
-                    }
-                    
-                    if let jsonData = jsonData {
-                        completion(jsonData, nil)
-                    } else {
-                        completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Serialization error"]))
-                    }
-                    
+                case .success(let data):
+                    print("Success in post")
+                    completion(data, nil)
                 case .failure(let error):
-                    print("response is failure asssssssssss \(error)")
+                    if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                        print("Response Body: \(jsonString)")
+                    }
+                    print("Network request failed with error: \(error)")
                     completion(nil, error)
                 }
             }
-        }
+        
     }
 }
-    
-    
