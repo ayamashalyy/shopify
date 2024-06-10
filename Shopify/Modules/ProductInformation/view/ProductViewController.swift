@@ -25,7 +25,7 @@ class ProductViewController: UIViewController {
         Navigation.ToAllFavourite(from: self)
     }
     
-    var productId : String? = "8575848153336"
+    var productId : String?
     var productViewModel : ProductViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
     

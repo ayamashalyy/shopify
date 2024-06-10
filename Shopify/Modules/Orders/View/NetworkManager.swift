@@ -31,7 +31,7 @@ enum Root: String {
     
 }
 
-// remove it every time before push
+// remove it every time before push 
 
 
 class NetworkManager {
@@ -42,7 +42,7 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-        
+        print("shopping cart is url \(url)")
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
