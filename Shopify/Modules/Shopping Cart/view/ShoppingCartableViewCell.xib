@@ -21,7 +21,7 @@
                         <rect key="frame" x="20" y="20" width="366" height="111"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZJH-fb-iz5">
-                                <rect key="frame" x="276" y="45" width="34" height="24"/>
+                                <rect key="frame" x="274" y="70" width="34" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="Ynz-qU-MTk"/>
                                     <constraint firstAttribute="width" constant="34" id="m3J-ma-6i1"/>
@@ -31,7 +31,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrn-gm-N0L">
-                                <rect key="frame" x="310" y="45" width="34" height="24"/>
+                                <rect key="frame" x="308" y="70" width="34" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="CQO-iQ-bdN"/>
                                     <constraint firstAttribute="width" constant="34" id="Cou-xX-hRs"/>
@@ -77,18 +77,18 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F0k-JB-dlw">
-                                <rect key="frame" x="140" y="15" width="94" height="26"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F0k-JB-dlw">
+                                <rect key="frame" x="140" y="15" width="200" height="26"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="94" id="5a3-x8-OP1"/>
+                                    <constraint firstAttribute="width" constant="200" id="5a3-x8-OP1"/>
                                     <constraint firstAttribute="height" constant="26" id="FS8-VX-hnO"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYW-cK-Kef">
-                                <rect key="frame" x="242" y="45" width="34" height="24"/>
+                                <rect key="frame" x="240" y="70" width="34" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="6ot-vz-oZI"/>
                                     <constraint firstAttribute="width" constant="34" id="h9e-BI-cRj"/>
@@ -102,10 +102,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ZyZ-FU-Oj0" firstAttribute="top" secondItem="F0k-JB-dlw" secondAttribute="bottom" constant="11" id="1qV-OZ-deZ"/>
-                            <constraint firstItem="fYW-cK-Kef" firstAttribute="top" secondItem="Njp-KJ-8XD" secondAttribute="top" constant="45" id="2e9-UD-Ckx"/>
+                            <constraint firstItem="fYW-cK-Kef" firstAttribute="top" secondItem="Njp-KJ-8XD" secondAttribute="top" constant="70" id="2e9-UD-Ckx"/>
                             <constraint firstItem="rrn-gm-N0L" firstAttribute="leading" secondItem="ZJH-fb-iz5" secondAttribute="trailing" id="4S0-m8-Hbd"/>
                             <constraint firstItem="ZJH-fb-iz5" firstAttribute="leading" secondItem="fYW-cK-Kef" secondAttribute="trailing" id="7FC-A7-YsV"/>
-                            <constraint firstItem="fYW-cK-Kef" firstAttribute="leading" secondItem="F0k-JB-dlw" secondAttribute="trailing" constant="8" symbolic="YES" id="8l9-kz-EIU"/>
+                            <constraint firstItem="fYW-cK-Kef" firstAttribute="leading" secondItem="F0k-JB-dlw" secondAttribute="trailing" constant="-100" id="8l9-kz-EIU"/>
                             <constraint firstItem="ZyZ-FU-Oj0" firstAttribute="leading" secondItem="4lc-or-7uh" secondAttribute="trailing" constant="40" id="ByB-H3-KcM"/>
                             <constraint firstItem="F0k-JB-dlw" firstAttribute="top" secondItem="Njp-KJ-8XD" secondAttribute="top" constant="15" id="PzB-bX-bS4"/>
                             <constraint firstAttribute="height" constant="111" id="ghH-S0-bly"/>
