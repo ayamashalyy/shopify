@@ -30,6 +30,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func signUpBtx(_ sender: UIButton) {
         print("singup")
+        // navigate is done througth storeboard
     }
     
     @IBAction func loginBtx(_ sender: UIButton) {
@@ -56,11 +57,20 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func guestButton(_ sender: UIButton) {
-        print("guestButton")
-       Navigation.ToHome(from: self)
-    }
+            print("guestButton")
+        if let customerID = Authorize.getCustomerIDFromUserDefaults() {
+            print("Customer ID:", customerID)
+        }
+
+            let alertController = UIAlertController(title: "Alert", message: "As A Guest you can not make orders or set products as favourites", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                Navigation.ToHome(from: self)
+            }
+            alertController.addAction(okAction)
+            present(alertController, animated: true, completion: nil)
+   }
+
         
-   
     
     func setUpUI (){
         guestBtn.backgroundColor = UIColor(hex: "#FF7D29")

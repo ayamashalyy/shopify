@@ -15,7 +15,6 @@ enum Endpoint: String {
     case specificProduct = "products/"
     case listOfBrandProducts = "products.json?collection_id="
     case customers = "customers.json"
-    //    8575848153336.json
 }
 
 enum Root: String {
@@ -37,30 +36,30 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-        print("url in fetching    \(urlString)")
+    //    print("url in fetching    \(urlString)")
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
-                print("response is successed ")
+            //    print("response is successed ")
                 guard let json = value as? [String: Any] else {
                     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
                     return
                 }
-                print("JSON Response:", json)
+             //   print("JSON Response:", json)
 
                 var jsonData: Data?
                                 
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
                     // Handle single object
                     jsonData = try? JSONSerialization.data(withJSONObject: jsonObject)
-                    print("is single ")
+            //        print("is single ")
                 } else if let jsonArray = json[rootOfJson.rawValue] as? [[String: Any]] {
                     // Handle array of objects
                     
-                    print("is arrary ")
+            //        print("is arrary ")
 
                     jsonData = try? JSONSerialization.data(withJSONObject: jsonArray)
-                        print("jsonData  \(jsonData)")
+           //             print("jsonData  \(jsonData)")
                 } else {
                     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON root format"]))
                     return
@@ -85,7 +84,7 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-        print("url:  \(urlString)")
+     //   print("url:  \(urlString)")
         
         Decoding.encodeData(object: body) { jsonData, error in
             guard let jsonData = jsonData else {
@@ -135,64 +134,4 @@ class NetworkManager {
     }
 }
     
-    /*
-     static func postDataToApi<T: Codable>(endpoint: Endpoint, rootOfJson: Root, body: T, completion: @escaping (Data?, Error?) -> Void) {
-     let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)"
-     guard let url = URL(string: urlString) else {
-     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
-     return
-     }
-     print("url:  \(urlString)")
-     
-     let encoder = JSONEncoder()
-     encoder.keyEncodingStrategy = .convertToSnakeCase
-     
-     do {
-     let jsonData = try encoder.encode(body)
-     print("JSON Data: \(jsonData)")
-     
-     if let jsonString = String(data: jsonData, encoding: .utf8) {
-     print("JSON Data/jsonString: \(jsonString)")
-     }
-     
-     
-     var request = URLRequest(url: url)
-     request.httpMethod = HTTPMethod.post.rawValue
-     request.httpBody = jsonData
-     
-     Alamofire.request(request).responseJSON { response in
-     switch response.result {
-     case .success(let value):
-     guard let json = value as? [String: Any] else {
-     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
-     return
-     }
-     
-     var jsonData: Data?
-     if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
-     jsonData = try? JSONSerialization.data(withJSONObject: jsonObject)
-     } else if let jsonArray = json[rootOfJson.rawValue] as? [[String: Any]] {
-     jsonData = try? JSONSerialization.data(withJSONObject: jsonArray)
-     } else {
-     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON root format"]))
-     return
-     }
-     
-     if let jsonData = jsonData {
-     completion(jsonData, nil)
-     } else {
-     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Serialization error"]))
-     }
-     
-     case .failure(let error):
-     print("response is failure asssssssssss \(error)")
-     completion(nil, error)
-     }
-     }
-     } catch {
-     completion(nil, error)
-     }
-     }
-     }
-     */
-
+    
