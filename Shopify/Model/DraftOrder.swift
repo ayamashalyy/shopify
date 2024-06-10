@@ -39,7 +39,7 @@ struct DraftOrder: Codable {
     let total_tax: String?
     let payment_terms: String?
     let admin_graphql_api_id: String?
-    let customer: Customer?
+    let customer: CustomerDraftOrder?
     
     enum CodingKeys: String, CodingKey {
         case id, note, email, taxes_included, currency, invoice_sent_at, created_at, updated_at, tax_exempt, completed_at, name, status, line_items, shipping_address, billing_address, invoice_url, applied_discount, order_id, shipping_line, tax_lines, tags, note_attributes, total_price, subtotal_price, total_tax, payment_terms, admin_graphql_api_id, customer
@@ -76,7 +76,7 @@ struct AddressDraftOrder: Codable {
 
 
 
-struct Customer: Codable  {
+struct CustomerDraftOrder: Codable  {
     let id: Int?
     let email: String?
     let created_at, updated_at: String?
