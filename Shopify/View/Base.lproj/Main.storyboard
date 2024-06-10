@@ -301,6 +301,9 @@
                                     <segment title="Kids"/>
                                     <segment title="Sale"/>
                                 </segments>
+                                <connections>
+                                    <action selector="segmentedControlChanged:" destination="2NJ-7v-iDD" eventType="valueChanged" id="oaD-3n-TD8"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eiV-pO-ytK"/>
@@ -319,6 +322,9 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Categories" image="square.grid.3x3.fill" catalog="system" selectedImage="square.grid.3x3.fill" id="MVB-bi-zZU"/>
+                    <connections>
+                        <outlet property="segmentedControl" destination="lNn-8x-aJ3" id="GWU-QV-Ra6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9o-mb-YGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

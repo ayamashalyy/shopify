@@ -10,9 +10,11 @@ import JJFloatingActionButton
 
 class CategoriesViewController: UIViewController {
     
-    let categoriesImgs = ["splash-img.jpg", "splash-img.jpg", "splash-img.jpg", "splash-img.jpg", "splash-img.jpg"]
-    let categoriesNames = ["category1", "category2", "category3", "category4", "category4"]
-    let prices = ["100 $", "200 $" , "180 $" , "220 $", "280 $"]
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    let categoriesViewModel = CategoriesViewModel()
+    
+    var selectedCategory: CategoryId = .men
     
     var categoriesCollectionView: UICollectionView!
     
@@ -26,8 +28,31 @@ class CategoriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //view.backgroundColor = UIColor(hex: "#F5F5F5")
+        setupUI()
+        fetchCategoryProducts(for: selectedCategory)
+        fetchAllProducts()
+    }
+    
+    @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            selectedCategory = .men
+        case 1:
+            selectedCategory = .women
+        case 2:
+            selectedCategory = .kids
+        case 3:
+            selectedCategory = .sale
+        default:
+            break
+        }
+        // Fetch products for the selected category
+        fetchCategoryProducts(for: selectedCategory)
+    }
+    
+    func setupUI(){
         
+        //view.backgroundColor = UIColor(hex: "#F5F5F5")
         let layout = UICollectionViewFlowLayout()
         categoriesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
@@ -117,22 +142,57 @@ class CategoriesViewController: UIViewController {
         }
     }
     
+    func fetchCategoryProducts(for categoryId: CategoryId) {
+        categoriesViewModel.fetchCategoryProducts(categoryId) { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching category products: \(error)")
+            } else {
+                self.categoriesCollectionView.reloadData()
+            }
+        }
+    }
+    
+    func fetchAllProducts() {
+        categoriesViewModel.fetchAllProducts{ [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching brands: \(error)")
+            } else {
+                self.categoriesCollectionView.reloadData()
+            }
+        }
+    }
+    
 }
 
 
 extension CategoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoriesImgs.count
+        return categoriesViewModel.numberOfCategoryProducts()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "categoriesCell", for: indexPath) as! CustomCategoriesCell
         
-        cell.categoriesImgView.image = UIImage(named: categoriesImgs[indexPath.row])
-        cell.nameCategoriesLabel.text = categoriesNames[indexPath.row]
-        cell.priceLabel.text = prices[indexPath.row]
-        cell.heartImageView.image = UIImage(systemName: "heart")
+        if let product = categoriesViewModel.product(at: indexPath.item){
+            cell.nameCategoriesLabel.text = product.title
+            
+            // Find the price from the allProducts list
+            if let matchingProduct = categoriesViewModel.findProductInAllProducts(by: "\(product.id)") {
+                cell.priceLabel.text = matchingProduct.variants.first?.price
+                print("\(matchingProduct.variants.first?.price ?? "")")
+            }
+            
+            if let imageUrlString = product.images.first?.src, let imageUrl = URL(string: imageUrlString) {
+                cell.categoriesImgView.kf.setImage(with: imageUrl)
+            } else {
+                cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
+            }
+            
+            cell.heartImageView.image = UIImage(systemName: "heart")
+        }
         
         return cell
     }
