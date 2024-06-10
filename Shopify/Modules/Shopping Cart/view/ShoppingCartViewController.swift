@@ -1,11 +1,5 @@
-//
-//  ShoppingCartViewController.swift
-//  Shopify
-//
-//  Created by aya on 03/06/2024.
-//
-
 import UIKit
+import Kingfisher
 
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -13,13 +7,10 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var getThemButton: UIButton!
     
-    var cartItems = [
-        ("He Cares", 6000, 1, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4")),
-        ("God Day", 6000, 2, UIImage(named: "4"))
-    ]
+    let shoppingCartViewModel = ShoppingCartViewModel()
+    var productViewModel = ProductViewModel()
+    
+    var cartItems = [(String, Int, Int,String?)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +19,70 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         setupButtons()
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
+        fetchDraftOrders()
+        
+        productViewModel.bindResultToViewController = { [weak self] in
+            //print("shopping cart in  productViewModel.bindResultToViewController ")
+            DispatchQueue.main.async {
+                guard let self = self, let product = self.productViewModel.product else { return }
+                self.updateCartItemWithImage(for: product)
+            }
+        }
     }
+    
+    func fetchDraftOrders() {
+        shoppingCartViewModel.fetchDraftOrders { [weak self] (draftOrders, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching draft orders: \(error.localizedDescription)")
+            } else if let draftOrders = draftOrders {
+                print("Fetched draft orders: \(draftOrders)")
+                self.updateCartItems(with: draftOrders)
+            }
+        }
+    }
+    
+    func updateCartItems(with draftOrders: [DraftOrder]) {
+        for draftOrder in draftOrders {
+            guard let lineItems = draftOrder.line_items else {
+                continue
+            }
+            
+            for lineItem in lineItems {
+                let title = lineItem.title ?? "Unknown"
+                let quantity = lineItem.quantity ?? 0
+                let price = lineItem.price ?? "0.00"
+                let priceFloat = Float(price) ?? 0.0
+                let priceInt = Int(priceFloat)
+             //   print("shopping cart is ................................\(lineItem.product_id!)")
+                productViewModel.getProductDetails(id: "\(lineItem.product_id!)")
+                
+                if let index = cartItems.firstIndex(where: { $0.0 == title }) {
+                    cartItems[index].2 += quantity
+                } else {
+                    cartItems.append((title, priceInt, quantity, nil))
+                }
+            }
+        }
+        
+        
+      //  print("Updated cart items: \(cartItems)")
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.updateSubtotal()
+        }
+    }
+    
+    func updateCartItemWithImage(for product: Product) {
+           if let index = cartItems.firstIndex(where: { $0.0 == product.name }) {
+               if let imageUrl = product.images.first?.url {
+                   cartItems[index].3 = imageUrl
+                   DispatchQueue.main.async {
+                       self.tableView.reloadData()
+                   }
+               }
+           }
+       }
     
     func setupButtons() {
         getThemButton.backgroundColor = UIColor(hex: "#FF7D29")
@@ -56,7 +110,11 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.productNameLabel.text = "\(item.0)"
         cell.productPriceLabel.text = "\(item.1)$"
         cell.quantityLabel.text = "\(item.2)"
-        cell.productImageView.image = item.3
+        if let imageUrl = item.3 {
+            cell.productImageView.kf.setImage(with: URL(string: imageUrl))
+        } else {
+            cell.productImageView.image = nil
+        }
         cell.incrementButton.tag = indexPath.row
         cell.decrementButton.tag = indexPath.row
         cell.incrementButton.addTarget(self, action: #selector(incrementQuantity(_:)), for: .touchUpInside)
@@ -66,25 +124,26 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 160
-         
     }
+    
     @objc func incrementQuantity(_ sender: UIButton) {
         let row = sender.tag
         cartItems[row].2 += 1
         tableView.reloadData()
         updateSubtotal()
     }
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-           return 50
-       }
-       
-       func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-           let footerView = UIView()
-           footerView.backgroundColor = UIColor.clear
-           return footerView
-       }
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        footerView.backgroundColor = UIColor.clear
+        return footerView
+    }
     
     @objc func decrementQuantity(_ sender: UIButton) {
         let row = sender.tag
@@ -101,16 +160,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
-            let storyboard = UIStoryboard(name: "Second", bundle: nil)
-            if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
-                selectAddressVC.modalPresentationStyle = .fullScreen
-                present(selectAddressVC, animated: true, completion: nil)
-            }
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+            selectAddressVC.modalPresentationStyle = .fullScreen
+            present(selectAddressVC, animated: true, completion: nil)
         }
-
+    }
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
-
 }

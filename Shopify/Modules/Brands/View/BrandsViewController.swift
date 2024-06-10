@@ -11,15 +11,18 @@ class BrandsViewController: UIViewController {
     
     @IBOutlet weak var sliderFilter: UISlider!
 
+
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
+
     @IBOutlet weak var searchBar: UISearchBar!
     var brandProductsViewModel = BrandProductsViewModel()
     
     var categoriesCollectionView: UICollectionView!
     var valueLabel: UILabel!
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.indicator.startAnimating()
         setupUI()
         fetchProducts()
         
@@ -34,7 +37,7 @@ class BrandsViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         categoriesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
+        
         view.addSubview(categoriesCollectionView)
         
         categoriesCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -73,6 +76,8 @@ class BrandsViewController: UIViewController {
     func fetchProducts() {
         brandProductsViewModel.fetchProducts{ [weak self] error in
             guard let self = self else { return }
+            self.indicator.stopAnimating()
+            self.indicator.isHidden = true
             if let error = error {
                 print("Error fetching products: \(error)")
             } else {
@@ -110,7 +115,7 @@ class BrandsViewController: UIViewController {
             print("Reloaded collection view with filtered products.")
         }
     }
-
+    
 }
 
 extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
@@ -124,15 +129,14 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         
         if let product = brandProductsViewModel.product(at: indexPath.row) {
             print("Displaying product: \(product.name) with price: \(product.variants.first?.price ?? "N/A")")
-
             cell.nameCategoriesLabel.text = product.name
             cell.priceLabel.text = product.variants.first?.price
             
             if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
-                 cell.categoriesImgView.kf.setImage(with: imageUrl)
-             } else {
-                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
-             }
+                cell.categoriesImgView.kf.setImage(with: imageUrl)
+            } else {
+                cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
+            }
         }
         
         cell.heartImageView.image = UIImage(systemName: "heart")
@@ -145,18 +149,12 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-         
-      //  Navigation.ToProduct(productId: <#T##String#>, from: <#T##UIViewController#>)
-        let storyboard = UIStoryboard(name: "third", bundle: nil)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as? ProductViewController {
-            print("to product")
-        //    vc.productId = productId
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: true, completion: nil)
-        }else {
-            print("to product")
+        
+        if let product = brandProductsViewModel.product(at: indexPath.row)
+        {
+            Navigation.ToProduct(productId: "\(product.id)", from: self)
+            
         }
-
     }
     
 }

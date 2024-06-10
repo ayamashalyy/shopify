@@ -15,6 +15,13 @@ enum Endpoint: String {
     case specificProduct = "products/"
     case listOfBrandProducts = "products.json?collection_id="
     case customers = "customers.json"
+
+    //case productsByCategory = "collections/"
+    case allProduct = "products.json"
+
+    case draftOrder = "draft_orders.json"
+
+    //    8575848153336.json
 }
 
 enum Root: String {
@@ -24,10 +31,12 @@ enum Root: String {
     case customers = "customers"
     case customer = "customer"
 
+    case draftOrderRoot = "draft_orders"
     
 }
 
-// remove it every time before push
+// remove it every time before push 
+
 
 
 class NetworkManager {
@@ -39,6 +48,7 @@ class NetworkManager {
             return
         }
         //    print("url in fetching    \(urlString)")
+        print("shopping cart is url \(url)")
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -49,6 +59,8 @@ class NetworkManager {
                 }
                 //   print("JSON Response:", json)
                 
+                print("Raw JSON: \(json)")
+
                 var jsonData: Data?
                 
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
