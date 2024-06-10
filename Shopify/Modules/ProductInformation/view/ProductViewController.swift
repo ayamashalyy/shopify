@@ -14,6 +14,17 @@ import Kingfisher
 
 class ProductViewController: UIViewController {
     
+    @IBAction func back(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
+    @IBAction func goToCard(_ sender: UIBarButtonItem) {
+        Navigation.ToOrders(from: self)
+    }
+    @IBAction func goToAllFaviourt(_ sender: UIBarButtonItem) {
+        Navigation.ToAllFavourite(from: self)
+    }
+    
     var productId : String? = "8575848153336"
     var productViewModel : ProductViewModel?
     let indicator = UIActivityIndicatorView(style: .large)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="E5f-H2-jlz">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -111,7 +111,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="bUd-Fq-dr5"/>
                     <connections>
-                        <segue destination="Tx8-Le-g1L" kind="presentation" identifier="OpenSplash" modalPresentationStyle="fullScreen" id="yvS-B9-3Ob"/>
+                        <segue destination="TTf-jm-vjX" kind="presentation" identifier="OpenSplash" modalPresentationStyle="fullScreen" id="DKc-7i-W1i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="thy-PD-mXq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -127,22 +127,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veq-b7-qsu">
-                                <rect key="frame" x="0.0" y="-1" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="58" width="393" height="44"/>
                                 <items>
                                     <navigationItem id="MZw-qb-5cr">
                                         <rightBarButtonItems>
                                             <barButtonItem image="heart.fill" catalog="system" id="Ctz-BY-Zpx">
                                                 <connections>
-                                                    <segue destination="WBw-X9-L8X" kind="presentation" modalPresentationStyle="fullScreen" id="MPs-ov-9SP"/>
+                                                    <action selector="goToFav:" destination="iVh-rI-z8y" id="zk1-2x-6zQ"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem image="cart.fill" catalog="system" id="D3N-EX-Ja0"/>
+                                            <barButtonItem image="cart.fill" catalog="system" id="D3N-EX-Ja0">
+                                                <connections>
+                                                    <action selector="goToCard:" destination="iVh-rI-z8y" id="Npm-PM-1Nh"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-6V-BPT">
-                                <rect key="frame" x="0.0" y="43" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="102" width="393" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
@@ -179,7 +183,7 @@
                                 <rect key="frame" x="0.0" y="50" width="393" height="44"/>
                                 <items>
                                     <navigationItem title="Products" id="DVz-gN-GXg">
-                                        <barButtonItem key="leftBarButtonItem" image="arrowshape.turn.up.backward.fill" catalog="system" id="vFx-pr-d1L">
+                                        <barButtonItem key="leftBarButtonItem" image="left" id="vFx-pr-d1L">
                                             <connections>
                                                 <action selector="backButton:" destination="WBw-X9-L8X" id="GPz-y2-GEJ"/>
                                             </connections>
@@ -229,6 +233,14 @@
             </objects>
             <point key="canvasLocation" x="5309.160305343511" y="-627.46478873239437"/>
         </scene>
+        <!--thirdNavigstion-->
+        <scene sceneID="J3N-PY-M11">
+            <objects>
+                <viewControllerPlaceholder storyboardName="third" referencedIdentifier="thirdNavigstion" id="TTf-jm-vjX" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AF3-P7-YQf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2960" y="-346"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Xv2-aB-WT7">
             <objects>
@@ -259,18 +271,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ia7-LF-Udd">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                                 <items>
                                     <navigationItem id="Fb6-Ic-b3x">
                                         <rightBarButtonItems>
-                                            <barButtonItem image="heart.fill" catalog="system" id="DlD-56-85b"/>
+                                            <barButtonItem image="heart.fill" catalog="system" id="DlD-56-85b">
+                                                <connections>
+                                                    <action selector="goToAllFav:" destination="2NJ-7v-iDD" id="wNF-Zw-VEk"/>
+                                                </connections>
+                                            </barButtonItem>
                                             <barButtonItem image="cart.fill" catalog="system" id="5oh-kL-4wk"/>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c7o-8O-5Vr">
-                                <rect key="frame" x="0.0" y="44" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="56"/>
                                 <offsetWrapper key="searchFieldBackgroundPositionAdjustment" horizontal="0.0" vertical="0.0"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -278,7 +294,7 @@
                                 </connections>
                             </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lNn-8x-aJ3">
-                                <rect key="frame" x="5" y="100" width="383" height="32"/>
+                                <rect key="frame" x="5" y="159" width="383" height="32"/>
                                 <segments>
                                     <segment title="Men"/>
                                     <segment title="Women"/>
@@ -317,7 +333,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="5pl-CX-fZK">
-                                <rect key="frame" x="16" y="50" width="60" height="60"/>
+                                <rect key="frame" x="16" y="109" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="cFI-fc-oRk"/>
                                     <constraint firstAttribute="width" constant="60" id="vHI-bU-xzD"/>
@@ -329,7 +345,7 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aya" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TnP-ac-Y3B">
-                                <rect key="frame" x="108" y="60" width="229" height="34"/>
+                                <rect key="frame" x="108" y="119" width="229" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="dz0-uE-5tk"/>
                                 </constraints>
@@ -338,7 +354,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="EEY-B4-vdU">
-                                <rect key="frame" x="0.0" y="168.66666666666663" width="393" height="600"/>
+                                <rect key="frame" x="0.0" y="227.66666666666663" width="393" height="600"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="600" id="9hw-3J-J2D"/>
@@ -355,7 +371,7 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rdX-jY-G5R">
-                                <rect key="frame" x="0.0" y="770.66666666666663" width="393" height="1"/>
+                                <rect key="frame" x="0.0" y="829.66666666666663" width="393" height="1"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="393" id="Okg-0K-fjK"/>
@@ -378,12 +394,12 @@
                                 <items>
                                     <navigationItem id="qjM-XP-I8v">
                                         <rightBarButtonItems>
-                                            <barButtonItem title="Item" image="gearshape" catalog="system" id="Fik-ka-m8H">
+                                            <barButtonItem title="Item" image="gearshape.fill" catalog="system" id="Fik-ka-m8H">
                                                 <connections>
                                                     <action selector="navToSettings:" destination="ok0-8O-MHZ" id="vBX-qv-oHz"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem title="Item" image="cart" catalog="system" id="Bvz-hL-4qG">
+                                            <barButtonItem title="Item" image="cart.fill" catalog="system" id="Bvz-hL-4qG">
                                                 <connections>
                                                     <action selector="navToShoppingCart:" destination="ok0-8O-MHZ" id="Ws8-BM-UXk"/>
                                                 </connections>
@@ -393,13 +409,13 @@
                                 </items>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Orders" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HfD-Iy-5xs">
-                                <rect key="frame" x="16" y="140" width="77" height="28.666666666666657"/>
+                                <rect key="frame" x="16" y="199" width="77" height="28.666666666666657"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wB7-3d-xCQ">
-                                <rect key="frame" x="288" y="140" width="97" height="35"/>
+                                <rect key="frame" x="288" y="199" width="97" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="See More"/>
                                 <connections>
@@ -460,12 +476,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrowshape.turn.up.backward.fill" catalog="system" width="128" height="104"/>
-        <image name="cart" catalog="system" width="128" height="102"/>
         <image name="cart.fill" catalog="system" width="128" height="102"/>
-        <image name="gearshape" catalog="system" width="128" height="123"/>
+        <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="left" width="24" height="24"/>
         <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="profile" width="1200" height="1200"/>

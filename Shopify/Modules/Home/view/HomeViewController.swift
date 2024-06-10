@@ -17,6 +17,20 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let coponesImages = ["coupon2.jpg", "coupon2.jpg"]
     var couponsCollectionView: UICollectionView!
     
+    
+    @IBAction func goToFav(_ sender: UIBarButtonItem) {
+        print("go to favss from home")
+        Navigation.ToAllFavourite(from: self)
+        print("go to favss from home after")
+        
+    }
+    
+    @IBAction func goToCard(_ sender: UIBarButtonItem) {
+        Navigation.ToOrders(from: self)
+
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

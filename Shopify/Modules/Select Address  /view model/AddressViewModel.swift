@@ -83,7 +83,7 @@ class AddressViewModel {
     }
     
     func getAllAddresses(completion: @escaping (Swift.Result<[Address], Error>) -> Void) {
-        let urlString =
+       let urlString =
         
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "GET"

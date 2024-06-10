@@ -144,4 +144,19 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         return CGSize(width: view.frame.width / 2 - 20 , height: 260)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+         
+      //  Navigation.ToProduct(productId: <#T##String#>, from: <#T##UIViewController#>)
+        let storyboard = UIStoryboard(name: "third", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as? ProductViewController {
+            print("to product")
+        //    vc.productId = productId
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true, completion: nil)
+        }else {
+            print("to product")
+        }
+
+    }
+    
 }
