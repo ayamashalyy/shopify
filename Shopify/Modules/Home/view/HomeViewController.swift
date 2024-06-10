@@ -10,6 +10,7 @@ import Kingfisher
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
         
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     var brandsCollectionView: UICollectionView!
     let homeViewModel = HomeViewModel()
     let brandProductsViewModel = BrandProductsViewModel()
@@ -33,7 +34,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.indicator.startAnimating()
         setupUI()
         fetchBrands()
         
@@ -41,6 +43,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     func fetchBrands() {
         homeViewModel.fetchBrands { [weak self] error in
             guard let self = self else { return }
+            self.indicator.stopAnimating()
+            self.indicator.isHidden = true
             if let error = error {
                 print("Error fetching brands: \(error)")
             } else {

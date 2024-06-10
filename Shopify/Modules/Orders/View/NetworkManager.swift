@@ -15,7 +15,7 @@ enum Endpoint: String {
     case specificProduct = "products/"
     case listOfBrandProducts = "products.json?collection_id="
 
-    case productsByCategory = "collections/"
+    //case productsByCategory = "collections/"
     case allProduct = "products.json"
 
     case draftOrder = "draft_orders.json"

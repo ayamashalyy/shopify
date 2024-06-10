@@ -146,19 +146,26 @@
                                 </items>
                             </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-6V-BPT">
-                                <rect key="frame" x="0.0" y="102" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="102" width="393" height="91"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
                                 </connections>
                             </searchBar>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UL9-Wu-rbR">
+                                <rect key="frame" x="172" y="621" width="48" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cC5-Qy-GXr"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="cC5-Qy-GXr" firstAttribute="trailing" secondItem="UL9-Wu-rbR" secondAttribute="trailing" constant="173" id="17T-tx-MpD"/>
+                            <constraint firstItem="UL9-Wu-rbR" firstAttribute="top" secondItem="LDp-6V-BPT" secondAttribute="bottom" constant="428" id="1IX-iZ-zQ9"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="top" secondItem="vKb-bV-J6O" secondAttribute="topMargin" constant="-1" id="6Jd-V5-WNi"/>
+                            <constraint firstItem="cC5-Qy-GXr" firstAttribute="bottom" secondItem="UL9-Wu-rbR" secondAttribute="bottom" constant="128" id="AFX-Lf-ggL"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="trailing" secondItem="cC5-Qy-GXr" secondAttribute="trailing" id="DmI-lt-NrZ"/>
+                            <constraint firstItem="UL9-Wu-rbR" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" constant="172" id="Pg7-nz-EmQ"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" id="U79-90-XWY"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="leading" secondItem="LDp-6V-BPT" secondAttribute="leading" id="ac6-Bl-k8e"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="top" secondItem="veq-b7-qsu" secondAttribute="bottom" id="hNu-NT-NsE"/>
@@ -166,10 +173,13 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="IZz-Kb-ty7"/>
+                    <connections>
+                        <outlet property="indicator" destination="UL9-Wu-rbR" id="5fW-wN-tLd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mAt-Gm-4q2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4543" y="-627"/>
+            <point key="canvasLocation" x="4542.7480916030536" y="-627.46478873239437"/>
         </scene>
         <!--Brands View Controller-->
         <scene sceneID="Bjb-oH-iBU">
@@ -209,22 +219,30 @@
                                     <constraint firstAttribute="width" constant="223" id="AU8-5H-Z4J"/>
                                 </constraints>
                             </slider>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="3n2-yp-Hmy">
+                                <rect key="frame" x="168" y="468" width="56" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="KRT-99-nkg"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="3n2-yp-Hmy" secondAttribute="trailing" constant="169" id="38R-4H-8aH"/>
                             <constraint firstAttribute="trailing" secondItem="I3B-R0-kGE" secondAttribute="trailing" id="9Mq-qq-0mi"/>
+                            <constraint firstItem="3n2-yp-Hmy" firstAttribute="top" secondItem="DXp-vs-0dF" secondAttribute="bottom" constant="288" id="Ehu-AZ-VcM"/>
+                            <constraint firstItem="3n2-yp-Hmy" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" constant="168" id="Ep2-R0-faa"/>
                             <constraint firstItem="UY5-N1-Yj9" firstAttribute="trailing" secondItem="KRT-99-nkg" secondAttribute="trailing" id="Ete-ig-uzw"/>
                             <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="DXp-vs-0dF" secondAttribute="trailing" constant="5" id="JsO-TX-cZO"/>
                             <constraint firstItem="I3B-R0-kGE" firstAttribute="top" secondItem="ef1-T1-4bc" secondAttribute="top" constant="50" id="PBD-6k-QRy"/>
                             <constraint firstItem="DXp-vs-0dF" firstAttribute="top" secondItem="UY5-N1-Yj9" secondAttribute="bottom" id="RZE-he-khg"/>
                             <constraint firstItem="I3B-R0-kGE" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="VFc-vV-0Ff"/>
+                            <constraint firstItem="KRT-99-nkg" firstAttribute="bottom" secondItem="3n2-yp-Hmy" secondAttribute="bottom" constant="330" id="euD-SC-y1l"/>
                             <constraint firstItem="UY5-N1-Yj9" firstAttribute="top" secondItem="I3B-R0-kGE" secondAttribute="bottom" id="hzw-OL-xnH"/>
                             <constraint firstItem="UY5-N1-Yj9" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="ula-da-2x3"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="indicator" destination="3n2-yp-Hmy" id="xUu-Et-EYV"/>
                         <outlet property="searchBar" destination="UY5-N1-Yj9" id="0iF-2M-J15"/>
                         <outlet property="sliderFilter" destination="DXp-vs-0dF" id="Gcc-jZ-0oD"/>
                     </connections>
@@ -305,6 +323,9 @@
                                     <action selector="segmentedControlChanged:" destination="2NJ-7v-iDD" eventType="valueChanged" id="oaD-3n-TD8"/>
                                 </connections>
                             </segmentedControl>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="sxN-O5-kh7">
+                                <rect key="frame" x="165" y="434" width="63" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="eiV-pO-ytK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -318,17 +339,22 @@
                             <constraint firstItem="lNn-8x-aJ3" firstAttribute="top" secondItem="c7o-8O-5Vr" secondAttribute="bottom" id="aFq-QW-xfV"/>
                             <constraint firstAttribute="trailing" secondItem="lNn-8x-aJ3" secondAttribute="trailing" constant="5" id="aij-VK-Fmr"/>
                             <constraint firstItem="Ia7-LF-Udd" firstAttribute="top" secondItem="eiV-pO-ytK" secondAttribute="top" id="cNm-23-ZWK"/>
+                            <constraint firstItem="sxN-O5-kh7" firstAttribute="leading" secondItem="eiV-pO-ytK" secondAttribute="leading" constant="165" id="pI4-uw-knk"/>
                             <constraint firstItem="lNn-8x-aJ3" firstAttribute="leading" secondItem="eiV-pO-ytK" secondAttribute="leading" constant="5" id="r3r-dy-PxI"/>
+                            <constraint firstItem="eiV-pO-ytK" firstAttribute="bottom" secondItem="sxN-O5-kh7" secondAttribute="bottom" constant="315" id="s1P-Es-Rf1"/>
+                            <constraint firstItem="eiV-pO-ytK" firstAttribute="trailing" secondItem="sxN-O5-kh7" secondAttribute="trailing" constant="165" id="tks-Jd-B2C"/>
+                            <constraint firstItem="sxN-O5-kh7" firstAttribute="top" secondItem="lNn-8x-aJ3" secondAttribute="bottom" constant="244" id="u24-bq-Bb6"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Categories" image="square.grid.3x3.fill" catalog="system" selectedImage="square.grid.3x3.fill" id="MVB-bi-zZU"/>
                     <connections>
+                        <outlet property="indicator" destination="sxN-O5-kh7" id="jdW-77-ICP"/>
                         <outlet property="segmentedControl" destination="lNn-8x-aJ3" id="GWU-QV-Ra6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9o-mb-YGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4531" y="27"/>
+            <point key="canvasLocation" x="4530.5343511450383" y="26.760563380281692"/>
         </scene>
         <!--Me-->
         <scene sceneID="2DY-lX-s99">

@@ -12,14 +12,18 @@ class CategoriesViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    
     let categoriesViewModel = CategoriesViewModel()
     
     var selectedCategory: CategoryId = .men
+    var selectedProductType: ProductType = .all
     
     var categoriesCollectionView: UICollectionView!
     
     var fabButton: JJFloatingActionButton!
     var additionalFABsVisible = false
+    var blurEffectView: UIVisualEffectView?
     
     @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
         Navigation.ToAllFavourite(from: self)
@@ -28,9 +32,10 @@ class CategoriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.indicator.startAnimating()
+        
         setupUI()
-        fetchCategoryProducts(for: selectedCategory)
-        fetchAllProducts()
+        fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -47,7 +52,7 @@ class CategoriesViewController: UIViewController {
             break
         }
         // Fetch products for the selected category
-        fetchCategoryProducts(for: selectedCategory)
+        fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
     }
     
     func setupUI(){
@@ -82,10 +87,22 @@ class CategoriesViewController: UIViewController {
         ])
     }
     
-    func createAdditionalFABButton(imageName: String) -> JJFloatingActionButton {
+    func createLabel(withText text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .black
+        return label
+    }
+    
+    func createAdditionalFABButton(imageName: String, action: @escaping () -> Void) -> JJFloatingActionButton {
         let fab = JJFloatingActionButton()
         fab.buttonImage = UIImage(systemName: imageName)
         fab.buttonColor = UIColor(hex: "#FF7D29")
+        fab.addItem { _ in
+            action()
+            self.hideAdditionalFABs()
+        }
         return fab
     }
     
@@ -99,18 +116,48 @@ class CategoriesViewController: UIViewController {
     }
     
     func showAdditionalFABs() {
-        let option1Fab = createAdditionalFABButton(imageName: "arrow.uturn.backward")
-        let option2Fab = createAdditionalFABButton(imageName: "shoe")
-        let option3Fab = createAdditionalFABButton(imageName: "tshirt")
+        let option1Fab = createAdditionalFABButton(imageName: "arrow.uturn.backward") {
+            self.selectedProductType = .all
+            self.fetchCategoryProducts(for: self.selectedCategory, productType: self.selectedProductType)
+        }
+        let option2Fab = createAdditionalFABButton(imageName: "shoe") {
+            self.selectedProductType = .shoes
+            self.fetchCategoryProducts(for: self.selectedCategory, productType: self.selectedProductType)
+        }
+        let option3Fab = createAdditionalFABButton(imageName: "tshirt") {
+            self.selectedProductType = .t_shirt
+            self.fetchCategoryProducts(for: self.selectedCategory, productType: self.selectedProductType)
+        }
+        let option4Fab = createAdditionalFABButton(imageName: "paperclip") {
+            self.selectedProductType = .accessories
+            self.fetchCategoryProducts(for: self.selectedCategory, productType: self.selectedProductType)
+        }
+        
+        let option1Label = createLabel(withText: "All")
+        let option2Label = createLabel(withText: "Shoes")
+        let option3Label = createLabel(withText: "T-Shirt")
+        let option4Label = createLabel(withText: "Accessories")
         
         view.addSubview(option1Fab)
         view.addSubview(option2Fab)
         view.addSubview(option3Fab)
+        view.addSubview(option4Fab)
+        
+        view.addSubview(option1Label)
+        view.addSubview(option2Label)
+        view.addSubview(option3Label)
+        view.addSubview(option4Label)
         
         // Adjust the positions of the additional FABs relative to the main FAB button
         option1Fab.translatesAutoresizingMaskIntoConstraints = false
         option2Fab.translatesAutoresizingMaskIntoConstraints = false
         option3Fab.translatesAutoresizingMaskIntoConstraints = false
+        option4Fab.translatesAutoresizingMaskIntoConstraints = false
+        
+        option1Label.translatesAutoresizingMaskIntoConstraints = false
+        option2Label.translatesAutoresizingMaskIntoConstraints = false
+        option3Label.translatesAutoresizingMaskIntoConstraints = false
+        option4Label.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             option1Fab.trailingAnchor.constraint(equalTo: fabButton.trailingAnchor),
@@ -118,19 +165,33 @@ class CategoriesViewController: UIViewController {
             option2Fab.trailingAnchor.constraint(equalTo: fabButton.trailingAnchor),
             option2Fab.bottomAnchor.constraint(equalTo: option1Fab.topAnchor, constant: -16),
             option3Fab.trailingAnchor.constraint(equalTo: fabButton.trailingAnchor),
-            option3Fab.bottomAnchor.constraint(equalTo: option2Fab.topAnchor, constant: -16)
+            option3Fab.bottomAnchor.constraint(equalTo: option2Fab.topAnchor, constant: -16),
+            option4Fab.trailingAnchor.constraint(equalTo: fabButton.trailingAnchor),
+            option4Fab.bottomAnchor.constraint(equalTo: option3Fab.topAnchor, constant: -16),
+            
+            option1Label.trailingAnchor.constraint(equalTo: option1Fab.leadingAnchor, constant: -8),
+            option1Label.centerYAnchor.constraint(equalTo: option1Fab.centerYAnchor),
+            option2Label.trailingAnchor.constraint(equalTo: option2Fab.leadingAnchor, constant: -8),
+            option2Label.centerYAnchor.constraint(equalTo: option2Fab.centerYAnchor),
+            option3Label.trailingAnchor.constraint(equalTo: option3Fab.leadingAnchor, constant: -8),
+            option3Label.centerYAnchor.constraint(equalTo: option3Fab.centerYAnchor),
+            option4Label.trailingAnchor.constraint(equalTo: option4Fab.leadingAnchor, constant: -8),
+            option4Label.centerYAnchor.constraint(equalTo: option4Fab.centerYAnchor)
         ])
-        
+        applyBlurEffect()
         additionalFABsVisible = true
     }
     
     func hideAdditionalFABs() {
-        // Remove only the additional FABs from the superview
         for view in view.subviews {
             if let fab = view as? JJFloatingActionButton, fab != fabButton {
                 fab.removeFromSuperview()
             }
+            if let label = view as? UILabel, label.text != nil {
+                label.removeFromSuperview()
+            }
         }
+        removeBlurEffect()
         additionalFABsVisible = false
     }
     
@@ -142,9 +203,11 @@ class CategoriesViewController: UIViewController {
         }
     }
     
-    func fetchCategoryProducts(for categoryId: CategoryId) {
-        categoriesViewModel.fetchCategoryProducts(categoryId) { [weak self] error in
+    func fetchCategoryProducts(for categoryId: CategoryId , productType: ProductType) {
+        categoriesViewModel.fetchCategoryProducts(categoryId , productType) { [weak self] error in
             guard let self = self else { return }
+            self.indicator.stopAnimating()
+            self.indicator.isHidden = true
             if let error = error {
                 print("Error fetching category products: \(error)")
             } else {
@@ -156,12 +219,29 @@ class CategoriesViewController: UIViewController {
     func fetchAllProducts() {
         categoriesViewModel.fetchAllProducts{ [weak self] error in
             guard let self = self else { return }
+            self.indicator.stopAnimating()
+            self.indicator.isHidden = true
             if let error = error {
                 print("Error fetching brands: \(error)")
             } else {
                 self.categoriesCollectionView.reloadData()
             }
         }
+    }
+    
+    func applyBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .extraLight)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView?.frame = view.bounds
+        blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        if let blurEffectView = blurEffectView {
+            view.insertSubview(blurEffectView, belowSubview: fabButton)
+        }
+    }
+    
+    func removeBlurEffect() {
+        blurEffectView?.removeFromSuperview()
+        blurEffectView = nil
     }
     
 }
@@ -177,15 +257,17 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "categoriesCell", for: indexPath) as! CustomCategoriesCell
         
         if let product = categoriesViewModel.product(at: indexPath.item){
-            cell.nameCategoriesLabel.text = product.title
+            cell.nameCategoriesLabel.text = product.name
             
             // Find the price from the allProducts list
-            if let matchingProduct = categoriesViewModel.findProductInAllProducts(by: "\(product.id)") {
-                cell.priceLabel.text = matchingProduct.variants.first?.price
-                print("\(matchingProduct.variants.first?.price ?? "")")
-            }
+//            if let matchingProduct = categoriesViewModel.findProductInAllProducts(by: "\(product.id)") {
+//                cell.priceLabel.text = matchingProduct.variants.first?.price
+//                print("\(matchingProduct.variants.first?.price ?? "")")
+//            }
             
-            if let imageUrlString = product.images.first?.src, let imageUrl = URL(string: imageUrlString) {
+            cell.priceLabel.text = product.variants.first?.price
+            
+            if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
                 cell.categoriesImgView.kf.setImage(with: imageUrl)
             } else {
                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")

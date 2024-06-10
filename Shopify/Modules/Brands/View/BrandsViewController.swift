@@ -11,6 +11,7 @@ class BrandsViewController: UIViewController {
     
     @IBOutlet weak var sliderFilter: UISlider!
 
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     var brandProductsViewModel = BrandProductsViewModel()
     
@@ -19,7 +20,8 @@ class BrandsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.indicator.startAnimating()
         setupUI()
         fetchProducts()
         
@@ -73,6 +75,8 @@ class BrandsViewController: UIViewController {
     func fetchProducts() {
         brandProductsViewModel.fetchProducts{ [weak self] error in
             guard let self = self else { return }
+            self.indicator.stopAnimating()
+            self.indicator.isHidden = true
             if let error = error {
                 print("Error fetching products: \(error)")
             } else {

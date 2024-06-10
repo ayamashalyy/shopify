@@ -9,26 +9,27 @@ import Foundation
 
 class CategoriesViewModel{
     
-    var categoryProducts: [CategoryProducts] = []
+    var categoryProducts: [Product] = []
     var allProducts: [Product] = []
 
-    func fetchCategoryProducts(_ categoryId: CategoryId ,completion: @escaping (Error?) -> Void) {
+    func fetchCategoryProducts(_ categoryId: CategoryId, _ productType: ProductType ,completion: @escaping (Error?) -> Void) {
            
         let categoryId = categoryId.id
+        let productType = productType.type
            
-           let additionalParams = "\(categoryId)/products.json"
+           let additionalParams = "\(categoryId)&product_type=\(productType)"
         
-        let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(Endpoint.productsByCategory.rawValue)\(additionalParams)"
+        let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(Endpoint.listOfBrandProducts.rawValue)\(additionalParams)"
             print("Request URL: \(urlString)")
 
            
-           NetworkManager.fetchDataFromApi(endpoint: .productsByCategory, rootOfJson:.products, addition: additionalParams) { data, error in
+           NetworkManager.fetchDataFromApi(endpoint: .listOfBrandProducts, rootOfJson:.products, addition: additionalParams) { data, error in
                guard let data = data, error == nil else {
                    completion(error)
                    return
                }
                
-               Decoding.decodeData(data: data, objectType: [CategoryProducts].self) { [weak self] (products, decodeError) in
+               Decoding.decodeData(data: data, objectType: [Product].self) { [weak self] (products, decodeError) in
                    guard let self = self else { return }
                    if let products = products {
                        self.categoryProducts = products
@@ -46,7 +47,7 @@ class CategoriesViewModel{
         return categoryProducts.count
     }
 
-    func product(at index: Int) -> CategoryProducts? {
+    func product(at index: Int) -> Product? {
         guard index >= 0 && index < categoryProducts.count else {
             return nil
         }
@@ -97,6 +98,17 @@ enum CategoryId: Int {
     case sale = 429707591928
     
     var id: Int {
+        return self.rawValue
+    }
+}
+
+enum ProductType: String {
+    case shoes = "SHOES"
+    case accessories = "ACCESSORIES"
+    case t_shirt = "T-SHIRTS"
+    case all = ""
+    
+    var type: String {
         return self.rawValue
     }
 }
