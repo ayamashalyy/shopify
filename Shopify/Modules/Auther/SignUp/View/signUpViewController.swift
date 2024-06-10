@@ -9,7 +9,7 @@ import UIKit
 
 class signUpViewController: UIViewController {
 
-    var signUPviewModel : SignUPViewModel?
+    var signUPviewModel : ViewModel?
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var secondName: UITextField!
@@ -100,7 +100,7 @@ class signUpViewController: UIViewController {
     override func viewDidLoad() {
             super.viewDidLoad()
             setUpUI()
-            signUPviewModel = SignUPViewModel()
+            signUPviewModel = ViewModel()
         }
         
     func setUpUI (){
