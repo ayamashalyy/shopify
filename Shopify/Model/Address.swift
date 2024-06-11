@@ -26,13 +26,13 @@ struct Address: Codable {
     let countryName: String?
     let defaultAddress: Bool?
 
-    init(address1: String, phone: String, city: String, country: String, zip: String) {
+    init(id: Int, address1: String, phone: String, city: String, country: String, zip: String) {
+        self.id = id
         self.address1 = address1
         self.phone = phone
         self.city = city
         self.country = country
         self.zip = zip
-        self.id = 0
         self.customerId = nil
         self.firstName = nil
         self.lastName = nil
