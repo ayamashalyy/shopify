@@ -6,11 +6,12 @@
 //
 
 import Foundation
-
 class ShoppingCartViewModel {
     
-    func fetchDraftOrders(completion: @escaping ([DraftOrder]?, Error?) -> Void) {
-        NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .draftOrderRoot) { (data, error) in
+    func fetchDraftOrders(completion: @escaping (DraftOrder?, Error?) -> Void) {
+        let additionDraftOrder = "1184699220216.json"
+
+        NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .draftOrderRoot,addition: additionDraftOrder) { (data, error) in
             if let error = error {
                 completion(nil, error)
                 return
@@ -22,7 +23,8 @@ class ShoppingCartViewModel {
             }
             
             do {
-                let draftOrders = try JSONDecoder().decode([DraftOrder].self, from: data)
+                let draftOrders = try JSONDecoder().decode(DraftOrder.self, from: data)
+                print("deaftOrder: \(draftOrders)")
                 completion(draftOrders, nil)
             } catch let decodingError {
                 print("Decoding error: \(decodingError)")
@@ -30,10 +32,6 @@ class ShoppingCartViewModel {
             }
         }
     }
-    
-
-
-
     
 }
 
