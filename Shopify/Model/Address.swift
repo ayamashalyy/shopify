@@ -24,9 +24,9 @@ struct Address: Codable {
     let provinceCode: String?
     let countryCode: String?
     let countryName: String?
-    let defaultAddress: Bool?
-
-    init(id: Int, address1: String, phone: String, city: String, country: String, zip: String) {
+    let isDefault: Bool?
+    
+    init(id: Int, address1: String, phone: String, city: String, country: String, zip: String, isDefault: Bool) {
         self.id = id
         self.address1 = address1
         self.phone = phone
@@ -43,8 +43,27 @@ struct Address: Codable {
         self.provinceCode = nil
         self.countryCode = nil
         self.countryName = nil
-        self.defaultAddress = nil
+        self.isDefault = isDefault
     }
+    enum CodingKeys: String, CodingKey {
+            case id
+            case customerId = "customer_id"
+            case firstName = "first_name"
+            case lastName = "last_name"
+            case company
+            case address1
+            case address2
+            case city
+            case province
+            case country
+            case zip
+            case phone
+            case name
+            case provinceCode = "province_code"
+            case countryCode = "country_code"
+            case countryName = "country_name"
+            case isDefault = "default"
+        }
 }
 
 struct AddressListResponse: Codable

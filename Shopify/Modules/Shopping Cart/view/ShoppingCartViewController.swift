@@ -42,10 +42,9 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func updateCartItems(with draftOrders: [DraftOrder]) {
-        for draftOrder in draftOrders {
-            guard let lineItems = draftOrder.line_items else {
-                continue
+    func updateCartItems(with draftOrders: DraftOrder) {
+            guard let lineItems = draftOrders.line_items else {
+                return
             }
             
             for lineItem in lineItems {
@@ -63,7 +62,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
                     cartItems.append((title, priceInt, quantity, nil))
                 }
             }
-        }
+        
         
         
       //  print("Updated cart items: \(cartItems)")

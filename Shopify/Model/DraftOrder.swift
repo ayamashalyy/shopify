@@ -9,6 +9,7 @@ import Foundation
 
 struct DraftOrderResponse: Codable {
     let draft_orders: [DraftOrder]
+    
 }
 
 struct DraftOrder: Codable {

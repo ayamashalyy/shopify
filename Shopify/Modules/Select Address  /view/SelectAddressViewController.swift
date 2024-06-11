@@ -14,7 +14,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navToPlaceOrder: UIButton!
-
+    
     init(viewModel: AddressViewModel) {
         self.viewModel = viewModel
         super.init(nibName: "SelectAddressViewController", bundle: nil)
@@ -44,8 +44,10 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
             textField.placeholder = "City"
         }
         
-        alert.addTextField { (textField) in
+        alert.addTextField { textField in
             textField.placeholder = "Country"
+            textField.text = "Egypt"
+            textField.isUserInteractionEnabled = false
         }
         
         alert.addTextField { (textField) in
@@ -55,7 +57,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let addAction = UIAlertAction(title: "Add Address", style: .default) { (_) in
             guard let address = alert.textFields?.first?.text,!address.isEmpty,
-                  let phone = alert.textFields?[1].text,!phone.isEmpty,
+                  let phone = alert.textFields?[1].text, !phone.isEmpty,
                   let city = alert.textFields?[2].text,!city.isEmpty,
                   let country = alert.textFields?[3].text,!country.isEmpty,
                   let zip = alert.textFields?[4].text,!zip.isEmpty else {
@@ -65,8 +67,15 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
                 self.present(emptyFieldAlert, animated: true, completion: nil)
                 return
             }
+            if !self.isValidEgyptianPhone(phone) {
+                let invalidPhoneAlert = UIAlertController(title: "Invalid Phone Number", message: "Please enter a valid Egyptian phone number (+20xxxxxxxxx).", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                invalidPhoneAlert.addAction(okAction)
+                self.present(invalidPhoneAlert, animated: true, completion: nil)
+                return
+            }
             HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-            let newAddress = Address(id: self.viewModel.addresses.count + 1, address1: address, phone: phone, city: city, country: country, zip: zip)
+            let newAddress = Address(id: self.viewModel.addresses.count + 1, address1: address, phone: phone, city: city, country: country, zip: zip, isDefault: false)
             self.viewModel.addAddress(newAddress) { result in
                 switch result {
                 case .success(let address):
@@ -103,6 +112,11 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         navToPlaceOrder.layer.cornerRadius = 8
         
     }
+    func isValidEgyptianPhone(_ phone: String) -> Bool {
+        let phoneRegex = "^\\+20[0-9]{9}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
+        return phoneTest.evaluate(with: phone)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -138,7 +152,25 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         cell.cityLabel.text = address.city
         cell.countryLabel.text = address.country
         cell.zipCodeLabel.text = address.zip
-        
+        if address.isDefault ?? true {
+            cell.containerView.backgroundColor = UIColor.white
+            cell.containerView.layer.borderColor = UIColor(hex: "#FF7D29").cgColor
+            cell.containerView.layer.borderWidth = 1.0
+            cell.containerView.layer.cornerRadius = 10.0
+            cell.containerView.layer.shadowColor = UIColor.black.cgColor
+            cell.containerView.layer.shadowOpacity = 0.25
+            cell.containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+            cell.containerView.layer.shadowRadius = 2.0
+        } else {
+            cell.containerView.backgroundColor = UIColor.white
+            cell.containerView.layer.borderColor = UIColor.clear.cgColor
+            cell.containerView.layer.borderWidth = 1.0
+            cell.containerView.layer.cornerRadius = 10.0
+            cell.containerView.layer.shadowColor = UIColor.clear.cgColor
+            cell.containerView.layer.shadowOpacity = 0.25
+            cell.containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+            cell.containerView.layer.shadowRadius = 2.0
+        }
         return cell
     }
     
@@ -204,7 +236,8 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         
         alert.addTextField { textField in
             textField.placeholder = "Country"
-            textField.text = address.country
+            textField.text = "Egypt"
+            textField.isUserInteractionEnabled = false
         }
         
         alert.addTextField { textField in
@@ -222,8 +255,15 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
                 self.showAlert(title: "Error", message: "Please fill in all fields")
                 return
             }
+            if !self.isValidEgyptianPhone(phone) {
+                let invalidPhoneAlert = UIAlertController(title: "Invalid Phone Number", message: "Please enter a valid Egyptian phone number (+20xxxxxxxxx).", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                invalidPhoneAlert.addAction(okAction)
+                self.present(invalidPhoneAlert, animated: true, completion: nil)
+                return
+            }
             
-            let updatedAddress = Address(id: address.id, address1: address1, phone: phone, city: city, country: country, zip: zip)
+            let updatedAddress = Address(id: address.id, address1: address1, phone: phone, city: city, country: country, zip: zip, isDefault: address.isDefault ?? false)
             
             self.viewModel.updateAddress(updatedAddress) { result in
                 switch result {
@@ -242,7 +282,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         alert.addAction(updateAction)
         present(alert, animated: true, completion: nil)
     }
-
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 210
