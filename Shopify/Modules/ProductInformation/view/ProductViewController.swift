@@ -79,8 +79,29 @@ class ProductViewController: UIViewController {
     }
     
     @IBAction func addCartAction(_ sender: UIButton) {
-        print("show add to cart")
+           var selectedVariants: [String] = []
+
+        for subview in stack.arrangedSubviews {
+            if let variantStackView = subview as? UIStackView,
+               let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
+               let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
+               !checkmarkImageView.isHidden {
+                if let variantText = variantButton.titleLabel?.text {
+                    selectedVariants.append(variantText)
+                }
+            }
+        }
+
+        // Now selectedVariants array contains the titles of all selected variantButtons
+        print("Selected Variants: \(selectedVariants)")
+        print("Selected Variants: \(selectedVariants.count)")
+
+        // Add your code to proceed to the card with the selected variants
+        // For example:
+        // Navigation.ToCard(with: selectedVariants, from: self)
     }
+
+    
     
     func setUpUI() {
         addToCart.backgroundColor = UIColor(hex: "#FF7D29")
