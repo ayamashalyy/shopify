@@ -76,8 +76,9 @@ class ViewModel {
             Property(name: "case", value: " card")
         ]
         let lineItem2 = LineItem(id: nil, variant_id: 45293446398200, product_id: nil, title: nil, variant_title: nil, sku: nil, vendor: nil, quantity: 1, requires_shipping: nil, taxable: nil, gift_card: nil, fulfillment_service: nil, grams: nil, tax_lines: nil, applied_discount: nil, name: nil, custom: false, price: nil, admin_graphql_api_id: nil, properties: lineItemProperties2)
+        // the old is bu line item so dave fav
         
-        let draftOrderDetails2 = DraftOrder(id: nil, note: nil, email: nil, taxes_included: nil, currency: nil, invoice_sent_at: nil, created_at: nil, updated_at: nil, tax_exempt: nil, completed_at: nil, name: nil, status: nil, line_items: [lineItem], shipping_address: nil, billing_address: nil, invoice_url: nil, applied_discount: nil, order_id: nil, shipping_line: nil, tax_lines: nil, tags:nil, note_attributes: [], total_price: nil, subtotal_price: nil, total_tax: nil, payment_terms: nil, admin_graphql_api_id: nil, customer: customer)
+        let draftOrderDetails2 = DraftOrder(id: nil, note: nil, email: nil, taxes_included: nil, currency: nil, invoice_sent_at: nil, created_at: nil, updated_at: nil, tax_exempt: nil, completed_at: nil, name: nil, status: nil, line_items: [lineItem2], shipping_address: nil, billing_address: nil, invoice_url: nil, applied_discount: nil, order_id: nil, shipping_line: nil, tax_lines: nil, tags:nil, note_attributes: [], total_price: nil, subtotal_price: nil, total_tax: nil, payment_terms: nil, admin_graphql_api_id: nil, customer: customer)
         
         let draftOrderRequest1 = DraftOrderRequest(draft_order: draftOrderDetails1)
         let draftOrderRequest2 = DraftOrderRequest(draft_order: draftOrderDetails2)
@@ -100,21 +101,13 @@ class ViewModel {
                             if let decodeError = decodeError {
                             //    print("Failed to decode draft order response: \(decodeError)")
                             } else if let response = response {
-                                
-//                                print("Draft order created successfully: \(response)")
-//                                print(" id of response response.draft_order.id")
-//                                
+                                        
                                 let draftOrderID = response.draft_order.id
-                             //   print(" id of draftOrderID\(draftOrderID)")
                                 if firsrtTime {
-                             //       print(" firsrtTime id of draftOrderID\(draftOrderID)")
-
+                                    // first is fav
                                     Authorize.favDraftOrder(draftOrderIDOne: draftOrderID!)
                                     firsrtTime = false
                                 }else{
-//                                    print("print fac draft\(Authorize.favDraftOrder())")
-//                                    print(" firsrtTime is false id of draftOrderID\(draftOrderID)")
-
                                     Authorize.cardDraftOrderId(draftOrderIDTwo: draftOrderID!)
                                     }
                             } else {

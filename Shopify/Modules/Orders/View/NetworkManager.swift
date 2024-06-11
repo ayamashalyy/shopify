@@ -39,7 +39,8 @@ enum Root: String {
     case specificDraftOrder = "draft_order"
 }
 
-// remove it every time before push 
+// remove it every time before push
+
 
 class NetworkManager {
     
