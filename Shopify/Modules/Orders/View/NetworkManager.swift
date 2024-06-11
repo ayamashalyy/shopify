@@ -131,6 +131,19 @@ class NetworkManager {
         
     }
     
+
+    static func fetchExchangeRates(completion: @escaping (Data?, Error?) -> Void) {
+        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
+        Alamofire.request(urlString).responseData { response in
+            switch response.result {
+            case .success(let data):
+                completion(data, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+
     static func updateResource(endpoint: Endpoint, rootOfJson: Root, body: Data, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
         let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"
         guard let url = URL(string: urlString) else {
@@ -162,4 +175,5 @@ class NetworkManager {
             }
     }
     
+
 }

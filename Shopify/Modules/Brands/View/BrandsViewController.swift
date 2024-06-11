@@ -16,6 +16,7 @@ class BrandsViewController: UIViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     var brandProductsViewModel = BrandProductsViewModel()
+    let settingsViewModel = SettingsViewModel()
     
     var categoriesCollectionView: UICollectionView!
     var valueLabel: UILabel!
@@ -25,6 +26,7 @@ class BrandsViewController: UIViewController {
         self.indicator.startAnimating()
         setupUI()
         fetchProducts()
+        fetchExchangeRates()
         
         valueLabel.text = "50.0"
         
@@ -116,6 +118,17 @@ class BrandsViewController: UIViewController {
         }
     }
     
+    func fetchExchangeRates(){
+        settingsViewModel.fetchExchangeRates { [weak self] error in
+            if let error = error {
+                print("Error fetching exchange rates: \(error)")
+            } else {
+                // Reload data once exchange rates are fetched
+                self?.categoriesCollectionView.reloadData()
+            }
+        }
+    }
+    
 }
 
 extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
@@ -130,7 +143,14 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         if let product = brandProductsViewModel.product(at: indexPath.row) {
             print("Displaying product: \(product.name) with price: \(product.variants.first?.price ?? "N/A")")
             cell.nameCategoriesLabel.text = product.name
-            cell.priceLabel.text = product.variants.first?.price
+            //cell.priceLabel.text = product.variants.first?.price
+            
+            if let selectedCurrency = settingsViewModel.getSelectedCurrency(),
+               let convertedPrice = settingsViewModel.convertPrice(product.variants.first?.price ?? "N/A", to: selectedCurrency) {
+                cell.priceLabel.text = convertedPrice
+            } else {
+                cell.priceLabel.text = product.variants.first?.price
+            }
             
             if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
                 cell.categoriesImgView.kf.setImage(with: imageUrl)

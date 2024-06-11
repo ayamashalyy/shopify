@@ -58,6 +58,8 @@
 		518B837E2C132F5D001DD3A4 /* CustomBrandCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B837D2C132F5D001DD3A4 /* CustomBrandCell.swift */; };
 		518B83802C132FF9001DD3A4 /* CustomCouponCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B837F2C132FF9001DD3A4 /* CustomCouponCell.swift */; };
 		518B83842C134CE0001DD3A4 /* CustomCategoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B83832C134CE0001DD3A4 /* CustomCategoriesCell.swift */; };
+		51A9B0322C17AA5C00394EFD /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A9B0312C17AA5C00394EFD /* SettingsViewModel.swift */; };
+		51A9B0342C17AC6800394EFD /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A9B0332C17AC6800394EFD /* Currency.swift */; };
 		51D8D7FA2C110D9600F49A0B /* OrdersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D8D7F92C110D9600F49A0B /* OrdersViewController.swift */; };
 		7D1D32722C14D36B005C0FEF /* UserReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D32712C14D36B005C0FEF /* UserReview.swift */; };
 		7D2B98532C15D28C0029BB08 /* Customer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B98522C15D28C0029BB08 /* Customer.swift */; };
@@ -156,6 +158,8 @@
 		518B837D2C132F5D001DD3A4 /* CustomBrandCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBrandCell.swift; sourceTree = "<group>"; };
 		518B837F2C132FF9001DD3A4 /* CustomCouponCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCouponCell.swift; sourceTree = "<group>"; };
 		518B83832C134CE0001DD3A4 /* CustomCategoriesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategoriesCell.swift; sourceTree = "<group>"; };
+		51A9B0312C17AA5C00394EFD /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsViewModel.swift; path = Shopify/Model/SettingsViewModel.swift; sourceTree = SOURCE_ROOT; };
+		51A9B0332C17AC6800394EFD /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		51D8D7F92C110D9600F49A0B /* OrdersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersViewController.swift; sourceTree = "<group>"; };
 		75244E20E1F9E8DDADB573A0 /* Pods_ShopifyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShopifyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75A1868325D2BBC64C5D3B5D /* Pods-Shopify-ShopifyUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shopify-ShopifyUITests.debug.xcconfig"; path = "Target Support Files/Pods-Shopify-ShopifyUITests/Pods-Shopify-ShopifyUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -261,6 +265,7 @@
 		035167192C0D3E3800B208A8 /* view model */ = {
 			isa = PBXGroup;
 			children = (
+				51A9B0312C17AA5C00394EFD /* SettingsViewModel.swift */,
 			);
 			path = "view model";
 			sourceTree = "<group>";
@@ -385,6 +390,7 @@
 				03EAA8092C14337600A60BDA /* Address.swift */,
 				7D2B98522C15D28C0029BB08 /* Customer.swift */,
 				517F92652C167633006200C2 /* CategoryProducts.swift */,
+				51A9B0332C17AC6800394EFD /* Currency.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1088,6 +1094,7 @@
 				0337F1FB2C0E0C3B00D97CBD /* ShoppingCartableViewCell.swift in Sources */,
 				037955D42C0E7715003A3AF9 /* SelectAddressViewController.swift in Sources */,
 				03D35C852C0CEC1300523AF7 /* AppDelegate.swift in Sources */,
+				51A9B0342C17AC6800394EFD /* Currency.swift in Sources */,
 				518B83842C134CE0001DD3A4 /* CustomCategoriesCell.swift in Sources */,
 				037955D92C0E8144003A3AF9 /* PlaceOrderViewController.swift in Sources */,
 				03EFE7782C0F120800B2F51E /* PaymentViewController.swift in Sources */,
@@ -1107,6 +1114,7 @@
 				7DC25B5D2C13A9F800D046D7 /* Decoding.swift in Sources */,
 				518B837E2C132F5D001DD3A4 /* CustomBrandCell.swift in Sources */,
 				03D35CC12C0CED0B00523AF7 /* HomeViewModel.swift in Sources */,
+				51A9B0322C17AA5C00394EFD /* SettingsViewModel.swift in Sources */,
 				517F92642C165044006200C2 /* CategoriesViewModel.swift in Sources */,
 				517E826A2C1277D0004FBD00 /* NetworkManager.swift in Sources */,
 				03CF26F02C15166C005A89D1 /* Common Methods.swift in Sources */,
