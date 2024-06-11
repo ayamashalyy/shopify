@@ -24,6 +24,7 @@ class CategoriesViewController: UIViewController {
     var fabButton: JJFloatingActionButton!
     var additionalFABsVisible = false
     var blurEffectView: UIVisualEffectView?
+    var settingsViewModel = SettingsViewModel()
     
     @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
         Navigation.ToAllFavourite(from: self)
@@ -36,6 +37,7 @@ class CategoriesViewController: UIViewController {
         
         setupUI()
         fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
+        fetchExchangeRates()
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -229,6 +231,17 @@ class CategoriesViewController: UIViewController {
         }
     }
     
+    func fetchExchangeRates(){
+        settingsViewModel.fetchExchangeRates { [weak self] error in
+            if let error = error {
+                print("Error fetching exchange rates: \(error)")
+            } else {
+                // Reload data once exchange rates are fetched
+                self?.categoriesCollectionView.reloadData()
+            }
+        }
+    }
+    
     func applyBlurEffect() {
         let blurEffect = UIBlurEffect(style: .extraLight)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -259,13 +272,12 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         if let product = categoriesViewModel.product(at: indexPath.item){
             cell.nameCategoriesLabel.text = product.name
             
-            // Find the price from the allProducts list
-//            if let matchingProduct = categoriesViewModel.findProductInAllProducts(by: "\(product.id)") {
-//                cell.priceLabel.text = matchingProduct.variants.first?.price
-//                print("\(matchingProduct.variants.first?.price ?? "")")
-//            }
-            
-            cell.priceLabel.text = product.variants.first?.price
+            if let selectedCurrency = settingsViewModel.getSelectedCurrency(),
+               let convertedPrice = settingsViewModel.convertPrice(product.variants.first?.price ?? "N/A", to: selectedCurrency) {
+                cell.priceLabel.text = convertedPrice
+            } else {
+                cell.priceLabel.text = product.variants.first?.price
+            }
             
             if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
                 cell.categoriesImgView.kf.setImage(with: imageUrl)

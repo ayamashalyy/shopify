@@ -9,7 +9,6 @@ import Foundation
 import Alamofire 
 
 
-
 enum Endpoint: String {
     case smartCollections = "smart_collections.json"
     case specificProduct = "products/"
@@ -127,5 +126,17 @@ class NetworkManager {
                 }
             }
         
+    }
+    
+    static func fetchExchangeRates(completion: @escaping (Data?, Error?) -> Void) {
+        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
+        Alamofire.request(urlString).responseData { response in
+            switch response.result {
+            case .success(let data):
+                completion(data, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
     }
 }
