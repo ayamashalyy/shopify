@@ -140,7 +140,7 @@
                                 </items>
                             </navigationBar>
                             <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-6V-BPT">
-                                <rect key="frame" x="0.0" y="102" width="393" height="91"/>
+                                <rect key="frame" x="0.0" y="102" width="393" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
@@ -155,7 +155,6 @@
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cC5-Qy-GXr" firstAttribute="trailing" secondItem="UL9-Wu-rbR" secondAttribute="trailing" constant="173" id="17T-tx-MpD"/>
-                            <constraint firstItem="UL9-Wu-rbR" firstAttribute="top" secondItem="LDp-6V-BPT" secondAttribute="bottom" constant="428" id="1IX-iZ-zQ9"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="top" secondItem="vKb-bV-J6O" secondAttribute="topMargin" constant="-1" id="6Jd-V5-WNi"/>
                             <constraint firstItem="cC5-Qy-GXr" firstAttribute="bottom" secondItem="UL9-Wu-rbR" secondAttribute="bottom" constant="128" id="AFX-Lf-ggL"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="trailing" secondItem="cC5-Qy-GXr" secondAttribute="trailing" id="DmI-lt-NrZ"/>
@@ -163,6 +162,7 @@
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" id="U79-90-XWY"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="leading" secondItem="LDp-6V-BPT" secondAttribute="leading" id="ac6-Bl-k8e"/>
                             <constraint firstItem="LDp-6V-BPT" firstAttribute="top" secondItem="veq-b7-qsu" secondAttribute="bottom" id="hNu-NT-NsE"/>
+                            <constraint firstItem="UL9-Wu-rbR" firstAttribute="top" secondItem="LDp-6V-BPT" secondAttribute="bottom" constant="463" id="nvq-Zu-2zb"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="trailing" secondItem="LDp-6V-BPT" secondAttribute="trailing" id="tyq-To-i1b"/>
                         </constraints>
                     </view>

@@ -14,7 +14,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navToPlaceOrder: UIButton!
-    
+
     init(viewModel: AddressViewModel) {
         self.viewModel = viewModel
         super.init(nibName: "SelectAddressViewController", bundle: nil)
@@ -66,7 +66,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
                 return
             }
             HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-            let newAddress = Address(address1: address, phone: phone, city: city, country: country, zip: zip)
+            let newAddress = Address(id: self.viewModel.addresses.count + 1, address1: address, phone: phone, city: city, country: country, zip: zip)
             self.viewModel.addAddress(newAddress) { result in
                 switch result {
                 case .success(let address):
@@ -181,8 +181,68 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected Address: \(viewModel.addresses[indexPath.row].address1)")
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let address = viewModel.addresses[indexPath.row]
+        
+        let alert = UIAlertController(title: "Edit Address", message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Address"
+            textField.text = address.address1
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Phone"
+            textField.text = address.phone
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "City"
+            textField.text = address.city
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Country"
+            textField.text = address.country
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Zip Code"
+            textField.text = address.zip
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let updateAction = UIAlertAction(title: "Update", style: .default) { _ in
+            guard let address1 = alert.textFields?[0].text, !address1.isEmpty,
+                  let phone = alert.textFields?[1].text, !phone.isEmpty,
+                  let city = alert.textFields?[2].text, !city.isEmpty,
+                  let country = alert.textFields?[3].text, !country.isEmpty,
+                  let zip = alert.textFields?[4].text, !zip.isEmpty else {
+                self.showAlert(title: "Error", message: "Please fill in all fields")
+                return
+            }
+            
+            let updatedAddress = Address(id: address.id, address1: address1, phone: phone, city: city, country: country, zip: zip)
+            
+            self.viewModel.updateAddress(updatedAddress) { result in
+                switch result {
+                case .success(let updatedAddress):
+                    print("Address updated successfully: \(updatedAddress)")
+                    self.tableView.reloadData()
+                    self.showAlert(title: "Success", message: "Address updated successfully")
+                case .failure(let error):
+                    print("Failed to update address: \(error)")
+                    self.showAlert(title: "Error", message: "Failed to update address: \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(updateAction)
+        present(alert, animated: true, completion: nil)
     }
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 210

@@ -15,6 +15,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     @IBOutlet weak var logoutButton: UIButton!
     
     let settings = ["Currency", "Address", "About Us","Contact Us"]
+    let viewModel = SettingsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,12 +52,49 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if settings[indexPath.row] == "Currency" {
+            presentCurrencySelectionAlert()
+        }
+    }
+    
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
         print("Log out tapped")
     }
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
+    }
+    
+    func presentCurrencySelectionAlert() {
+        let alert = UIAlertController(title: "Select Currency", message: nil, preferredStyle: .alert)
+        
+        let usdAction = UIAlertAction(title: "USD", style: .default) { _ in
+            self.viewModel.saveCurrencySelection(.USD)
+            print("USD selected")
+        }
+        let egpAction = UIAlertAction(title: "EGP", style: .default) { _ in
+            self.viewModel.saveCurrencySelection(.EGP)
+            print("EGP selected")
+        }
+        
+        alert.addAction(usdAction)
+        alert.addAction(egpAction)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        // Check the currently selected currency and add a checkmark to it
+        if let selectedCurrency = viewModel.getSelectedCurrency() {
+            switch selectedCurrency {
+            case .USD:
+                usdAction.setValue(true, forKey: "checked")
+            case .EGP:
+                egpAction.setValue(true, forKey: "checked")
+            }
+        }
+        
+        present(alert, animated: true, completion: nil)
     }
     
 }

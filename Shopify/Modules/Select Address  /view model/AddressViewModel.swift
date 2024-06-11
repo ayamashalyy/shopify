@@ -22,9 +22,9 @@ class AddressViewModel {
     
     
     func addAddress(_ address: Address, completion: @escaping (Swift.Result<Address, Error>) -> Void) {
-        
-        let urlString =
-        ""
+        let customerID = Authorize.getCustomerIDFromUserDefaults()
+        print("customerID: \(customerID!)")
+        let urlString = ""
         
         let addressDict: [String: Any] = [
             "address": [
@@ -84,8 +84,9 @@ class AddressViewModel {
     }
     
     func getAllAddresses(completion: @escaping (Swift.Result<[Address], Error>) -> Void) {
-       let urlString =
-        ""
+        let customerID = Authorize.getCustomerIDFromUserDefaults()
+        print("customerID: \(customerID!)")
+        let urlString = ""
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -131,9 +132,10 @@ class AddressViewModel {
     
     func deleteAddress(_ address: Address, completion: @escaping (Swift.Result<Void, Error>) -> Void) {
         print("Deleting address with ID: \(address.id)")
-              
+        let customerID = Authorize.getCustomerIDFromUserDefaults()
+        print("customerID: \(customerID!)")
         let urlString = ""
-        var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
+        var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -153,4 +155,99 @@ class AddressViewModel {
                 }
             }
     }
+    
+    func updateAddress(_ address: Address, completion: @escaping (Swift.Result<AddressResponse, Error>) -> Void) {
+        guard let customerID = Authorize.getCustomerIDFromUserDefaults() else {
+            let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Customer ID is nil"])
+            print("Error: Customer ID is nil")
+            completion(.failure(error))
+            return
+        }
+        
+        guard address.id != 0 else {
+            let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Address ID is invalid"])
+            print("Error: Address ID is invalid")
+            completion(.failure(error))
+            return
+        }
+        
+        let addressDict: [String: Any] = [
+            "address": [
+                "address1": address.address1,
+                "phone": address.phone ?? "",
+                "city": address.city,
+                "country": address.country,
+                "zip": address.zip ?? ""
+            ]
+        ]
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: addressDict, options: [])
+            let additionParam = "\(customerID)/addresses/\(address.id).json"
+            
+            NetworkManager.updateResource(endpoint: .addressCastomer, rootOfJson: .address, body: jsonData, addition: additionParam) { data, error in
+                if let error = error {
+                    print("Failed to update address: \(error.localizedDescription)")
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let responseData = data else {
+                    let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data in response"])
+                    print("Error: No data in response")
+                    completion(.failure(error))
+                    return
+                }
+                
+                do {
+                    let decoder = JSONDecoder()
+                    let response = try decoder.decode(AddressResponse.self, from: responseData)
+                    
+                    if let index = self.addresses.firstIndex(where: { $0.id == response.customer_address.id }) {
+                        self.addresses[index] = response.customer_address
+                    }
+                    
+                    completion(.success(response))
+                } catch {
+                    print("Failed to decode response: \(error)")
+                    completion(.failure(error))
+                }
+            }
+        } catch {
+            print("Failed to serialize address dictionary: \(error)")
+            completion(.failure(error))
+        }
+    }
+    
+    
+    
+    
+    //    func addAddress(_ address: Address, completion: @escaping (Swift.Result<Address, Error>) -> Void) {
+    //
+    //            let addressDict: [String: Any] = [
+    //                "address": [
+    //                    "address1": address.address1,
+    //                    "phone": address.phone,
+    //                    "city": address.city,
+    //                    "country": address.country,
+    //                    "zip": address.zip
+    //                ]
+    //            ]
+    //
+    //            NetworkManager.postDataToApi(endpoint: .customers, rootOfJson: .customer, body: try! JSONSerialization.data(withJSONObject: addressDict)) { data, error in
+    //                if let error = error {
+    //                    completion(.failure(error))
+    //                } else if let data = data {
+    //                    do {
+    //                        let decoder = JSONDecoder()
+    //                        let addressResponse = try decoder.decode(AddressResponse.self, from: data)
+    //                        let newAddress = addressResponse.customer_address
+    //                        self.addresses.append(newAddress)
+    //                        completion(.success(newAddress))
+    //                    } catch {
+    //                        completion(.failure(error))
+    //                    }
+    //                }
+    //            }
+    //        }
 }

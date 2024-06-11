@@ -9,18 +9,19 @@ import Foundation
 import Alamofire 
 
 
-
 enum Endpoint: String {
     case smartCollections = "smart_collections.json"
     case specificProduct = "products/"
     case listOfBrandProducts = "products.json?collection_id="
     case customers = "customers.json"
-
+    case addressCastomer = "customers/"
+    
+    
     //case productsByCategory = "collections/"
     case allProduct = "products.json"
-
+    
     case draftOrder = "draft_orders.json"
-
+    
     //    8575848153336.json
 }
 
@@ -30,7 +31,8 @@ enum Root: String {
     case products = "products"
     case customers = "customers"
     case customer = "customer"
-
+    case address = "addresses"
+    
     case draftOrderRoot = "draft_orders"
     
 }
@@ -58,6 +60,7 @@ class NetworkManager {
                 //   print("JSON Response:", json)
                 
          //       print("Raw JSON: \(json)")
+
 
                 var jsonData: Data?
                 
@@ -102,13 +105,13 @@ class NetworkManager {
         request.setValue(TOKEN, forHTTPHeaderField: "X-Shopify-Access-Token")
         request.httpBody = body
         
-//        // Print request details for debugging
-//        if let jsonString = String(data: body, encoding: .utf8) {
-//            print("Request Body JSON: \(jsonString)")
-//        }
-//        print("Request URL: \(urlString)")
-//        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
-//        
+        //        // Print request details for debugging
+        //        if let jsonString = String(data: body, encoding: .utf8) {
+        //            print("Request Body JSON: \(jsonString)")
+        //        }
+        //        print("Request URL: \(urlString)")
+        //        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+        //
         Alamofire.request(request)
             .validate()
             .responseData { response in
@@ -126,4 +129,50 @@ class NetworkManager {
             }
         
     }
+    
+
+    static func fetchExchangeRates(completion: @escaping (Data?, Error?) -> Void) {
+        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
+        Alamofire.request(urlString).responseData { response in
+            switch response.result {
+            case .success(let data):
+                completion(data, nil)
+            case .failure(let error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    static func updateResource(endpoint: Endpoint, rootOfJson: Root, body: Data, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
+        let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"
+        guard let url = URL(string: urlString) else {
+            completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL: \(urlString)"]))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(TOKEN, forHTTPHeaderField: "X-Shopify-Access-Token")
+        request.httpBody = body
+        
+        Alamofire.request(request)
+            .validate()
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    print("Success in PUT request")
+                    completion(data, nil)
+                case .failure(let error):
+                    if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                        print("Response Body: \(jsonString)")
+                    }
+                    print("Network request failed with error: \(error.localizedDescription)")
+                    completion(nil, error)
+                    
+                }
+            }
+    }
+    
+
 }
