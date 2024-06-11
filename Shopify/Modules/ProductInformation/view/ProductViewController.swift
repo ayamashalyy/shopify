@@ -27,7 +27,7 @@ class ProductViewController: UIViewController {
     var productId: String?
     var productViewModel: ProductViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
-    
+    var firstImageURL : String?
     override func viewDidLoad() {
             super.viewDidLoad()
             
@@ -40,6 +40,7 @@ class ProductViewController: UIViewController {
                 DispatchQueue.main.async {
                     guard let self = self, let product = self.productViewModel?.product else { return }
                     let imageUrl = product.images
+                    self.firstImageURL =  product.images.first?.url
                     self.setupStackView(name: product.name,
                                         price: "$\(product.variants.first?.price ?? "")",
                                         description: product.description,
@@ -76,6 +77,18 @@ class ProductViewController: UIViewController {
     
     @IBAction func productFavBtn(_ sender: UIButton) {
         print("show add to fav")
+        // Assuming `productId` and `firstImageURL` are properties of your class
+          guard let productIdString = productId, let firstImageURL = firstImageURL else {
+              showAlert(message: "The product not loaded yet")
+              return
+          }
+          
+          // Convert productId to an integer
+          if let productIdInt = Int(productIdString) {
+              productViewModel?.addToFavDraftOrders(selectedVariantsData: [(productIdInt, firstImageURL)])
+          } else {
+              showAlert(message: "Invalid product ID")
+          }
     }
     
     @IBOutlet weak var addToCard: UIButton!
@@ -115,7 +128,10 @@ class ProductViewController: UIViewController {
                }
         
       print("In view controller \(selectedVariantsIDsAndImageUrl)")
-        productViewModel?.addToCartDraftOrders( selectedVariantsData: selectedVariantsIDsAndImageUrl)
+     productViewModel?.addToCartDraftOrders( selectedVariantsData: selectedVariantsIDsAndImageUrl)
+//        if isAddedToCard! {
+//            showAlert(message: "Added to your card")
+//        }
     }
 
     
@@ -230,6 +246,12 @@ class ProductViewController: UIViewController {
         reviewsVC.modalPresentationStyle = .fullScreen
         present(reviewsVC, animated: true, completion: nil)
     }
+    
+    private func showAlert(message: String) {
+           let alertController = UIAlertController(title: "Validation Error", message: message, preferredStyle: .alert)
+           alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+           present(alertController, animated: true, completion: nil)
+       }
 }
 
 

@@ -21,7 +21,8 @@ enum Endpoint: String {
     case allProduct = "products.json"
     
     case draftOrder = "draft_orders.json"
-    
+    case specficDraftOeder = "draft_orders/"
+
     //    8575848153336.json
 }
 
@@ -35,6 +36,7 @@ enum Root: String {
     
     case draftOrderRoot = "draft_orders"
     
+    case specificDraftOrder = "draft_order"
 }
 
 // remove it every time before push 
@@ -47,8 +49,8 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-        //    print("url in fetching    \(urlString)")
-     //   print("shopping cart is url \(url)")
+       print("url in fetching    \(urlString)")
+
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -149,7 +151,7 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL: \(urlString)"]))
             return
         }
-        
+        print("in updateResource urlString\(urlString)")
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

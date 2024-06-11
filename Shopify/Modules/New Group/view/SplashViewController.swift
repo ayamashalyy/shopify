@@ -15,7 +15,7 @@ class SplashViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
          // for codding only the next line:
-         //   Authorize.clearCustomerIDFromUserDefaults()
+          //  Authorize.logout()
             self.checkCustomerID()
             
         }
