@@ -31,14 +31,14 @@ class Product: Codable {
 
 // MARK: - Variant
 class Variant: Codable {
-    var id : Int = 0
+    let id: Int
     let price: String
     let size: String
     let color: String?
-    var isSelected: Bool = false // New property to track selection status
-
+    var isSelected: Bool = false
 
     enum CodingKeys: String, CodingKey {
+        case id
         case price
         case size = "option1"
         case color = "option2"

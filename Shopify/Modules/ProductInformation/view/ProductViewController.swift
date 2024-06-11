@@ -78,27 +78,44 @@ class ProductViewController: UIViewController {
         print("show add to fav")
     }
     
+    @IBOutlet weak var addToCard: UIButton!
+    var isButtonClicked = false
+
+    
     @IBAction func addCartAction(_ sender: UIButton) {
-           var selectedVariants: [String] = []
+        
+        if isButtonClicked {
+                   return
+               }
+        isButtonClicked = true
+        addToCard.isEnabled = false
+        
+        
+        var selectedVariants: [String] = []
+        var selectedVariantsIDsAndImageUrl: [(Int ,String)] = []
 
         for subview in stack.arrangedSubviews {
-            if let variantStackView = subview as? UIStackView,
-               let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
-               let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
-               !checkmarkImageView.isHidden {
-                if let variantText = variantButton.titleLabel?.text {
-                    selectedVariants.append(variantText)
-                }
-            }
-        }
+            
+                   if let variantStackView = subview as? UIStackView,
+                      let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
+                      let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
+                      !checkmarkImageView.isHidden {
+                       if let variantText = variantButton.titleLabel?.text {
+                           selectedVariants.append(variantText)
 
-        // Now selectedVariants array contains the titles of all selected variantButtons
-        print("Selected Variants: \(selectedVariants)")
-        print("Selected Variants: \(selectedVariants.count)")
-
-        // Add your code to proceed to the card with the selected variants
-        // For example:
-        // Navigation.ToCard(with: selectedVariants, from: self)
+                           for variant in productViewModel?.product?.variants ?? [] {
+                            if ("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText) {
+                                if let imageUrl = productViewModel?.product?.images.first?.url {
+                                 selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl))
+                                     }
+                                }
+                                }
+                       }
+                   }
+               }
+        
+      print("In view controller \(selectedVariantsIDsAndImageUrl)")
+        productViewModel?.addToCartDraftOrders( selectedVariantsData: selectedVariantsIDsAndImageUrl)
     }
 
     
@@ -159,6 +176,11 @@ class ProductViewController: UIViewController {
             
             let variantButton = UIButton(type: .system)
             variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
+            
+            print ("0000Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$")
+            
+            print("Size varianmt \(variant.id)")
+            
             variantButton.setTitleColor(.black, for: .normal)
             variantButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
 
@@ -210,6 +232,8 @@ class ProductViewController: UIViewController {
     }
 }
 
+
+
 extension ProductViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -230,6 +254,8 @@ extension ProductViewController: UICollectionViewDelegate, UICollectionViewDataS
         pageContoller.currentPage = currentPage
     }
 }
+
+
 
 extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
     
