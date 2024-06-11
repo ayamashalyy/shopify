@@ -93,7 +93,7 @@ class ViewModel {
                     return
                 }
                 
-                NetworkManager.postDataToApi(endpoint: .draftOrder, rootOfJson: .draftOrderRoot, body: data) { responseData, responseError in
+                NetworkManager.postDataToApi(endpoint: .draftOrder, rootOfJson: .allDraftOrderRoot, body: data) { responseData, responseError in
                     if let responseError = responseError {
                         print("Failed to create draft order: \(responseError)")
                     } else if let responseData = responseData {

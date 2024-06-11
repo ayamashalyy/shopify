@@ -24,7 +24,6 @@ enum Endpoint: String {
     case specficDraftOeder = "draft_orders/"
 
 
-    case draftOrder = "draft_orders/"
     
     //    8575848153336.json
 }
@@ -37,13 +36,12 @@ enum Root: String {
     case customer = "customer"
     case address = "addresses"
     
-    case draftOrderRoot = "draft_order"
+   case allDraftOrderRoot = "draft_orders"
     
     case specificDraftOrder = "draft_order"
 }
 
 // remove it every time before push
-
 
 class NetworkManager {
     

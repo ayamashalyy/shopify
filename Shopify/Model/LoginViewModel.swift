@@ -49,7 +49,7 @@ class LoginViewModel {
     func getDraftOrdersIdsByCustomerId(customerID: Int, email: String) {
         var allCustomerDraftOrders: [DraftOrder] = []
 
-        NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .draftOrderRoot) { data, error in
+        NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .allDraftOrderRoot) { data, error in
             guard let data = data, error == nil else {
                 print("Error in data: \(error?.localizedDescription ?? "Unknown error")")
                 return

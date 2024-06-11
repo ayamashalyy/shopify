@@ -120,9 +120,9 @@ class ProductViewController: UIViewController {
                             if ("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText) {
                                 if let imageUrl = productViewModel?.product?.images.first?.url {
                                  selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl))
-                                     }
                                 }
-                                }
+                          }
+                       }
                        }
                    }
                }
