@@ -45,6 +45,7 @@ class ViewModel {
                 Decoding.decodeData(data: data, objectType: CustomerResponse.self) { customerResponse, decodeError in
                     if let customerResponse = customerResponse {
                         print("New customer created with ID: \(customerResponse.customer.id ?? -1)")
+                        Authorize.saveCustomerIDToUserDefaults(customerID: customerResponse.customer.id! )
                         self.createTwoDraftOrdersForThisCustomer(customerId: customerResponse.customer.id ?? 0 )
                         completion(true)
                     } else {

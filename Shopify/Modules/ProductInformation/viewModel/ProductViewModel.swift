@@ -35,40 +35,36 @@ class ProductViewModel{
             }
         }
     
-    
-    func addToCartDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)]) {
+    func addToCartDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)], completion: @escaping (Bool) -> Void) {
         getuPdataDraftOrder(selectedVariantsData) { draftOrderRequest in
-            if let draftOrderRequest = draftOrderRequest {
+            guard let draftOrderRequest = draftOrderRequest else {
+                completion(false)
+                return
+            }
+            
+            Decoding.encodeData(object: draftOrderRequest) { jsonData, encodeError in
+                guard let jsonData = jsonData, encodeError == nil else {
+                    print("Error encoding data:", encodeError?.localizedDescription ?? "Unknown error")
+                    completion(false)
+                    return
+                }
                 
+                let addition = "\(Authorize.cardDraftOrderId()!).json"
                 
-                Decoding.encodeData(object: draftOrderRequest){ jsonData, encodeError in
-                    guard let jsonData = jsonData, encodeError == nil else {
-                        print("Error encoding  data:", encodeError?.localizedDescription ?? "Unknown error")
+                NetworkManager.updateResource(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, body: jsonData, addition: addition) { data, error in
+                    guard let data = data, error == nil else {
+                        print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
+                        completion(false)
                         return
                     }
-                    let addition = "\(Authorize.cardDraftOrderId()!).json"
-
-                    // Print request details for debugging
-                    if let jsonString = String(data: jsonData, encoding: .utf8) {
-                        print("Request Body JSON: \(jsonString)")
-                    }
-                    NetworkManager.updateResource(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, body: jsonData ,addition: addition ){ data , error in
-                        guard let data = data, error == nil else {
-                            print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
-                            return
-                        }
-                        if let jsonString = String(data: data, encoding: .utf8) {
-                            print("Raw JSON response: \(jsonString)")
-                            
-                        } else {
-                            print("Failed to create Draft Order")
-                        }
-                    }
                     
+                    completion(true)
                 }
             }
         }
     }
+
+    
     func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)]) {
         getuPdataDraftOrder(selectedVariantsData) { draftOrderRequest in
             if let draftOrderRequest = draftOrderRequest {
