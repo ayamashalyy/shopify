@@ -12,6 +12,8 @@ import Kingfisher
 
 class ProductViewController: UIViewController {
     
+    let settingsViewModel = SettingsViewModel()
+    
     @IBAction func back(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
@@ -30,6 +32,7 @@ class ProductViewController: UIViewController {
     var firstImageURL : String?
     override func viewDidLoad() {
             super.viewDidLoad()
+        fetchExchangeRates()
             
             print("in product the id \(productId ?? "")")
             setUpUI()
@@ -191,7 +194,15 @@ class ProductViewController: UIViewController {
          
             
             let variantButton = UIButton(type: .system)
-            variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
+//            variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
+            
+            //Handle the currency 
+            if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
+                let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
+                variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)", for: .normal)
+            } else {
+                variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
+            }
             
             print ("0000Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$")
             
@@ -252,6 +263,18 @@ class ProductViewController: UIViewController {
            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
            present(alertController, animated: true, completion: nil)
        }
+    
+    func fetchExchangeRates(){
+        settingsViewModel.fetchExchangeRates { [weak self] error in
+            if let error = error {
+                print("Error fetching exchange rates: \(error)")
+            } else {
+                // Reload data once exchange rates are fetched
+                //self?.categoriesCollectionView.reloadData()
+            }
+        }
+    }
+    
 }
 
 
