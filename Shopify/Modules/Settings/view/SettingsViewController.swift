@@ -58,10 +58,23 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         if settings[indexPath.row] == "Currency" {
             presentCurrencySelectionAlert()
         }
+        if settings[indexPath.row] == "Address" {
+            navToSelectAddress()
+        }
     }
     
+    func navToSelectAddress(){
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+            selectAddressVC.modalPresentationStyle = .fullScreen
+            present(selectAddressVC, animated: true, completion: nil)
+        }
+    }
+    
+    
+    
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
-        print("Log out tapped")
+        Authorize.clearCustomerIDFromUserDefaults()
     }
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {

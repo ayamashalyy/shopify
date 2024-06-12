@@ -17,7 +17,7 @@ class ShoppingCartableViewCell: UITableViewCell {
     @IBOutlet weak var decrementButton: UIButton!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var productView: UIView!
-    
+   
     
     override func awakeFromNib() {
         super.awakeFromNib()

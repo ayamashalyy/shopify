@@ -34,6 +34,8 @@
 		03D35CC12C0CED0B00523AF7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D35CC02C0CED0B00523AF7 /* HomeViewModel.swift */; };
 		03D35CC32C0CED2300523AF7 /* Second.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D35CC22C0CED2300523AF7 /* Second.storyboard */; };
 		03D35CC52C0CED3700523AF7 /* third.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03D35CC42C0CED3700523AF7 /* third.storyboard */; };
+		03E3E5B32C1905DF00F0164C /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3E5B22C1905DF00F0164C /* AboutUsViewController.swift */; };
+		03E3E5B52C19071200F0164C /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E3E5B42C19071200F0164C /* ContactUsViewController.swift */; };
 		03E40D972C10C29B00489854 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E40D962C10C29B00489854 /* ProfileViewController.swift */; };
 		03E40D9A2C10C31500489854 /* OrderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E40D982C10C31500489854 /* OrderViewCell.swift */; };
 		03E40D9B2C10C31500489854 /* OrderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03E40D992C10C31500489854 /* OrderViewCell.xib */; };
@@ -134,6 +136,8 @@
 		03D35CC02C0CED0B00523AF7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		03D35CC22C0CED2300523AF7 /* Second.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Second.storyboard; sourceTree = "<group>"; };
 		03D35CC42C0CED3700523AF7 /* third.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = third.storyboard; sourceTree = "<group>"; };
+		03E3E5B22C1905DF00F0164C /* AboutUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUsViewController.swift; sourceTree = "<group>"; };
+		03E3E5B42C19071200F0164C /* ContactUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		03E40D962C10C29B00489854 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		03E40D982C10C31500489854 /* OrderViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewCell.swift; sourceTree = "<group>"; };
 		03E40D992C10C31500489854 /* OrderViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OrderViewCell.xib; sourceTree = "<group>"; };
@@ -433,11 +437,13 @@
 		03D35CBC2C0CECC400523AF7 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				51D8D7F62C110D5700F49A0B /* Orders */,
+				03E3E5B02C19039200F0164C /* Contact Us */,
+				03E3E5AE2C19037100F0164C /* About Us */,
 				7D30296B2C12980400B235B4 /* Fav */,
 				7D3029682C1290E300B235B4 /* Search */,
 				7DC183C82C1256BF00ECE7CD /* ProductInformation */,
 				7DEFA68F2C11DCA000DBD777 /* Auther */,
-				51D8D7F62C110D5700F49A0B /* Orders */,
 				03E40D932C10C24D00489854 /* Profile */,
 				03EFE7742C0F118B00B2F51E /* Payment */,
 				037955D52C0E80F7003A3AF9 /* Place Order */,
@@ -478,6 +484,38 @@
 				03D35CC02C0CED0B00523AF7 /* HomeViewModel.swift */,
 			);
 			path = "view model";
+			sourceTree = "<group>";
+		};
+		03E3E5AE2C19037100F0164C /* About Us */ = {
+			isa = PBXGroup;
+			children = (
+				03E3E5AF2C19038A00F0164C /* view */,
+			);
+			path = "About Us";
+			sourceTree = "<group>";
+		};
+		03E3E5AF2C19038A00F0164C /* view */ = {
+			isa = PBXGroup;
+			children = (
+				03E3E5B22C1905DF00F0164C /* AboutUsViewController.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		03E3E5B02C19039200F0164C /* Contact Us */ = {
+			isa = PBXGroup;
+			children = (
+				03E3E5B12C1903A000F0164C /* view */,
+			);
+			path = "Contact Us";
+			sourceTree = "<group>";
+		};
+		03E3E5B12C1903A000F0164C /* view */ = {
+			isa = PBXGroup;
+			children = (
+				03E3E5B42C19071200F0164C /* ContactUsViewController.swift */,
+			);
+			path = view;
 			sourceTree = "<group>";
 		};
 		03E40D932C10C24D00489854 /* Profile */ = {
@@ -1098,6 +1136,7 @@
 				518B83842C134CE0001DD3A4 /* CustomCategoriesCell.swift in Sources */,
 				037955D92C0E8144003A3AF9 /* PlaceOrderViewController.swift in Sources */,
 				03EFE7782C0F120800B2F51E /* PaymentViewController.swift in Sources */,
+				03E3E5B32C1905DF00F0164C /* AboutUsViewController.swift in Sources */,
 				03ED90F82C0DD2E400EE0A50 /* Color.swift in Sources */,
 				7DC25B512C1379C600D046D7 /* ProductViewModel.swift in Sources */,
 				7D7CA1EA2C168355003D8013 /* LoginViewModel.swift in Sources */,
@@ -1121,6 +1160,7 @@
 				03D35C872C0CEC1300523AF7 /* SceneDelegate.swift in Sources */,
 				7D30296D2C12981400B235B4 /* AllFavViewController.swift in Sources */,
 				03ED90ED2C0DCCC700EE0A50 /* HomeViewController.swift in Sources */,
+				03E3E5B52C19071200F0164C /* ContactUsViewController.swift in Sources */,
 				0351671B2C0D3E6C00B208A8 /* SettingsViewController.swift in Sources */,
 				03EAA80C2C1434F500A60BDA /* AddressViewModel.swift in Sources */,
 				7DEFA6932C11EDE900DBD777 /* signUpViewController.swift in Sources */,

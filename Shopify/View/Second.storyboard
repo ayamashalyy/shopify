@@ -610,6 +610,36 @@
             </objects>
             <point key="canvasLocation" x="3290.8396946564885" y="-24.647887323943664"/>
         </scene>
+        <!--About Us View Controller-->
+        <scene sceneID="POA-Gh-uE4">
+            <objects>
+                <viewController id="fsH-3Q-3wM" customClass="AboutUsViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="beW-N5-bHv">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Fav-5d-AFN"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lEl-n2-Rca" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2647" y="679"/>
+        </scene>
+        <!--Contact Us View Controller-->
+        <scene sceneID="OOE-8c-wLG">
+            <objects>
+                <viewController id="8Me-Sx-Fkg" customClass="ContactUsViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1Lf-bB-aOc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Jai-TW-mdY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6lS-IH-8Fb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3402" y="679"/>
+        </scene>
         <!--Payment Successful View Controller-->
         <scene sceneID="7Cm-bZ-pZh">
             <objects>

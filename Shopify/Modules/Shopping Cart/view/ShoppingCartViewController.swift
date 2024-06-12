@@ -2,15 +2,12 @@ import UIKit
 import Kingfisher
 
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var getThemButton: UIButton!
     
     let shoppingCartViewModel = ShoppingCartViewModel()
-    var productViewModel = ProductViewModel()
-    
-    var cartItems = [(String, Int, Int,String?)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,67 +18,23 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
         fetchDraftOrders()
         
-        productViewModel.bindResultToViewController = { [weak self] in
-            //print("shopping cart in  productViewModel.bindResultToViewController ")
-            DispatchQueue.main.async {
-                guard let self = self, let product = self.productViewModel.product else { return }
-                self.updateCartItemWithImage(for: product)
-            }
+        shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
+            self?.tableView.reloadData()
+            self?.updateSubtotal()
         }
     }
     
     func fetchDraftOrders() {
-        shoppingCartViewModel.fetchDraftOrders { [weak self] (draftOrders, error) in
-            guard let self = self else { return }
+        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
             if let error = error {
                 print("Error fetching draft orders: \(error.localizedDescription)")
-            } else if let draftOrders = draftOrders {
-                print("Fetched draft orders: \(draftOrders)")
-                self.updateCartItems(with: draftOrders)
+            } else {
+                self?.tableView.reloadData()
+                self?.updateSubtotal()
             }
         }
     }
     
-    func updateCartItems(with draftOrders: DraftOrder) {
-            guard let lineItems = draftOrders.line_items else {
-                return
-            }
-            
-            for lineItem in lineItems {
-                let title = lineItem.title ?? "Unknown"
-                let quantity = lineItem.quantity ?? 0
-                let price = lineItem.price ?? "0.00"
-                let priceFloat = Float(price) ?? 0.0
-                let priceInt = Int(priceFloat)
-             //   print("shopping cart is ................................\(lineItem.product_id!)")
-                productViewModel.getProductDetails(id: "\(lineItem.product_id!)")
-                
-                if let index = cartItems.firstIndex(where: { $0.0 == title }) {
-                    cartItems[index].2 += quantity
-                } else {
-                    cartItems.append((title, priceInt, quantity, nil))
-                }
-            }
-        
-        
-        
-      //  print("Updated cart items: \(cartItems)")
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.updateSubtotal()
-        }
-    }
-    
-    func updateCartItemWithImage(for product: Product) {
-           if let index = cartItems.firstIndex(where: { $0.0 == product.name }) {
-               if let imageUrl = product.images.first?.url {
-                   cartItems[index].3 = imageUrl
-                   DispatchQueue.main.async {
-                       self.tableView.reloadData()
-                   }
-               }
-           }
-       }
     
     func setupButtons() {
         getThemButton.backgroundColor = UIColor(hex: "#FF7D29")
@@ -98,14 +51,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cartItems.count
+        return shoppingCartViewModel.cartItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ShoppingCartableViewCell", for: indexPath) as? ShoppingCartableViewCell else {
             fatalError("The dequeued cell is not an instance of ShoppingCartableViewCell.")
         }
-        let item = cartItems[indexPath.row]
+        let item = shoppingCartViewModel.cartItems[indexPath.row]
         cell.productNameLabel.text = "\(item.0)"
         cell.productPriceLabel.text = "\(item.1)$"
         cell.quantityLabel.text = "\(item.2)"
@@ -129,7 +82,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     @objc func incrementQuantity(_ sender: UIButton) {
         let row = sender.tag
-        cartItems[row].2 += 1
+        shoppingCartViewModel.cartItems[row].2 += 1
         tableView.reloadData()
         updateSubtotal()
     }
@@ -146,15 +99,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     @objc func decrementQuantity(_ sender: UIButton) {
         let row = sender.tag
-        if cartItems[row].2 > 0 {
-            cartItems[row].2 -= 1
+        if shoppingCartViewModel.cartItems[row].2 > 0 {
+            shoppingCartViewModel.cartItems[row].2 -= 1
             tableView.reloadData()
             updateSubtotal()
         }
     }
     
     func updateSubtotal() {
-        let subtotal = cartItems.reduce(0) { $0 + $1.1 * $1.2 }
+        let subtotal = shoppingCartViewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
         subtotalLabel.text = "\(subtotal)$"
     }
     
