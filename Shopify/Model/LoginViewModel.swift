@@ -32,7 +32,7 @@ class LoginViewModel {
                         if let customerID = allCustomers.first(where: { $0.email == email && $0.tags == password })?.id {
                             print("customerID\(customerID)")
                             Authorize.saveCustomerIDToUserDefaults(customerID: customerID)
-                            self.getDraftOrdersIdsByCustomerId(customerID: customerID, email:email)
+                            self.getDraftOrdersIdsByCustomerEmail(email:email)
                         }
                     }
                     completion(isCustomer)
@@ -44,9 +44,7 @@ class LoginViewModel {
         }
     }
     
-    
-    
-    func getDraftOrdersIdsByCustomerId(customerID: Int, email: String) {
+    func getDraftOrdersIdsByCustomerEmail( email: String) {
         var allCustomerDraftOrders: [DraftOrder] = []
 
         NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .allDraftOrderRoot) { data, error in
@@ -66,22 +64,21 @@ class LoginViewModel {
                     }
                 }
 
-                if let firstDraftOrderId = allCustomerDraftOrders[0].id {
+                if let firstDraftOrderId = allCustomerDraftOrders[0].id{
+                    print("after login fav draft is \(firstDraftOrderId)")
                     Authorize.favDraftOrder(draftOrderIDOne: firstDraftOrderId)
                 } else {
                     print("First draft order ID is nil")
                 }
 
                 if let secondDraftOrderId = allCustomerDraftOrders[1].id {
+                    print("after login secondDraftOrderId \(secondDraftOrderId)")
+
                     Authorize.cardDraftOrderId(draftOrderIDTwo: secondDraftOrderId)
                 } else {
                     print("Second draft order ID is nil")
                 }
             }
-            
-            print("draftorders fav : \(Authorize.favDraftOrder())")
-            print("draftorders card : \(Authorize.cardDraftOrderId())")
-
         }
     }
 

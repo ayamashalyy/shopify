@@ -35,41 +35,37 @@ class ProductViewModel{
             }
         }
     
-    
-    func addToCartDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)]) {
+    func addToCartDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)], completion: @escaping (Bool) -> Void) {
         getuPdataDraftOrder(selectedVariantsData) { draftOrderRequest in
-            if let draftOrderRequest = draftOrderRequest {
+            guard let draftOrderRequest = draftOrderRequest else {
+                completion(false)
+                return
+            }
+            
+            Decoding.encodeData(object: draftOrderRequest) { jsonData, encodeError in
+                guard let jsonData = jsonData, encodeError == nil else {
+                    print("Error encoding data:", encodeError?.localizedDescription ?? "Unknown error")
+                    completion(false)
+                    return
+                }
                 
+                let addition = "\(Authorize.cardDraftOrderId()!).json"
                 
-                Decoding.encodeData(object: draftOrderRequest){ jsonData, encodeError in
-                    guard let jsonData = jsonData, encodeError == nil else {
-                        print("Error encoding  data:", encodeError?.localizedDescription ?? "Unknown error")
+                NetworkManager.updateResource(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, body: jsonData, addition: addition) { data, error in
+                    guard let data = data, error == nil else {
+                        print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
+                        completion(false)
                         return
                     }
-                    let addition = "\(Authorize.cardDraftOrderId()!).json"
-
-                    // Print request details for debugging
-                    if let jsonString = String(data: jsonData, encoding: .utf8) {
-                        print("Request Body JSON: \(jsonString)")
-                    }
-                    NetworkManager.updateResource(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, body: jsonData ,addition: addition ){ data , error in
-                        guard let data = data, error == nil else {
-                            print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
-                            return
-                        }
-                        if let jsonString = String(data: data, encoding: .utf8) {
-                            print("Raw JSON response: \(jsonString)")
-                            
-                        } else {
-                            print("Failed to create Draft Order")
-                        }
-                    }
                     
+                    completion(true)
                 }
             }
         }
     }
-    func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)]) {
+
+    
+    func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)]) {
         getuPdataDraftOrder(selectedVariantsData) { draftOrderRequest in
             if let draftOrderRequest = draftOrderRequest {
                 
@@ -103,12 +99,12 @@ class ProductViewModel{
         }
     }
     
-     func getuPdataDraftOrder(_ selectedVariantsData: [(id: Int, imageUrl: String)], completion: @escaping (DraftOrderRequest?) -> Void) {
+     func getuPdataDraftOrder(_ selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)], completion: @escaping (DraftOrderRequest?) -> Void) {
         var allLineItems: [LineItem] = []
 
         // Create LineItem objects from the selected variants data
         for data in selectedVariantsData {
-            print("Adding to cart with ID: \(data.id) and Image URL: \(data.imageUrl)")
+        //    print("Adding to cart with ID: \(data.id) and Image URL: \(data.imageUrl)")
             let lineItem = LineItem(
                 id: nil,
                 variant_id: data.id,
@@ -129,7 +125,7 @@ class ProductViewModel{
                 custom: false,
                 price: nil,
                 admin_graphql_api_id: nil,
-                properties: [Property(name: "imageUrl", value: data.imageUrl)]
+                properties: [Property(name: "imageUrl", value: data.imageUrl),Property(name: "quantityInString", value:String(data.quantity))]
             )
             
             allLineItems.append(lineItem)
@@ -157,7 +153,7 @@ class ProductViewModel{
                     print("No line items found in the fetched data")
                 }
                 let updatedDraftOrder = self.rearrangeTheDraftOrder(allLineItems: allLineItems)
-                print("updatedDraftOrder\(updatedDraftOrder)")
+            //    print("updatedDraftOrder\(updatedDraftOrder)")
                 completion(updatedDraftOrder)
             }
         }

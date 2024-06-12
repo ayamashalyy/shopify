@@ -26,8 +26,9 @@ class Authorize{
     
     
     static let draftOrderIDOneSting = "draftOrderIDOne"
-    
     static func favDraftOrder(draftOrderIDOne: Int) {
+        print("favDraftOrder seeeet   \(draftOrderIDOne) ")
+
         UserDefaults.standard.set(draftOrderIDOne, forKey: draftOrderIDOneSting )
     }
     static  func favDraftOrder() -> Int? {
@@ -40,8 +41,8 @@ class Authorize{
     
     
     static let draftOrderIDTwoSting = "draftOrderIDTwo"
-    
     static func cardDraftOrderId(draftOrderIDTwo: Int) {
+        print("cardDraftOrderId seeeet  \(draftOrderIDTwo) ")
         UserDefaults.standard.set(draftOrderIDTwo, forKey: draftOrderIDTwoSting )
     }
     
