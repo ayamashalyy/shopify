@@ -112,7 +112,6 @@ class ProductViewController: UIViewController {
         var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
 
         
-        
         for subview in stack.arrangedSubviews {
             
                    if let variantStackView = subview as? UIStackView,
