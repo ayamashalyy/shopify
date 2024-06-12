@@ -36,8 +36,10 @@ class Variant: Codable {
     let size: String
     let color: String?
     var isSelected: Bool = false
-
+    let inventory_quantity : Int?
+    
     enum CodingKeys: String, CodingKey {
+        case inventory_quantity
         case id
         case price
         case size = "option1"

@@ -35,7 +35,7 @@ class ProductViewModel{
             }
         }
     
-    func addToCartDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)], completion: @escaping (Bool) -> Void) {
+    func addToCartDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)], completion: @escaping (Bool) -> Void) {
         getuPdataDraftOrder(selectedVariantsData) { draftOrderRequest in
             guard let draftOrderRequest = draftOrderRequest else {
                 completion(false)
@@ -65,7 +65,7 @@ class ProductViewModel{
     }
 
     
-    func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String)]) {
+    func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)]) {
         getuPdataDraftOrder(selectedVariantsData) { draftOrderRequest in
             if let draftOrderRequest = draftOrderRequest {
                 
@@ -99,12 +99,12 @@ class ProductViewModel{
         }
     }
     
-     func getuPdataDraftOrder(_ selectedVariantsData: [(id: Int, imageUrl: String)], completion: @escaping (DraftOrderRequest?) -> Void) {
+     func getuPdataDraftOrder(_ selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)], completion: @escaping (DraftOrderRequest?) -> Void) {
         var allLineItems: [LineItem] = []
 
         // Create LineItem objects from the selected variants data
         for data in selectedVariantsData {
-            print("Adding to cart with ID: \(data.id) and Image URL: \(data.imageUrl)")
+        //    print("Adding to cart with ID: \(data.id) and Image URL: \(data.imageUrl)")
             let lineItem = LineItem(
                 id: nil,
                 variant_id: data.id,
@@ -125,7 +125,7 @@ class ProductViewModel{
                 custom: false,
                 price: nil,
                 admin_graphql_api_id: nil,
-                properties: [Property(name: "imageUrl", value: data.imageUrl)]
+                properties: [Property(name: "imageUrl", value: data.imageUrl),Property(name: "quantityInString", value:String(data.quantity))]
             )
             
             allLineItems.append(lineItem)
@@ -153,7 +153,7 @@ class ProductViewModel{
                     print("No line items found in the fetched data")
                 }
                 let updatedDraftOrder = self.rearrangeTheDraftOrder(allLineItems: allLineItems)
-                print("updatedDraftOrder\(updatedDraftOrder)")
+            //    print("updatedDraftOrder\(updatedDraftOrder)")
                 completion(updatedDraftOrder)
             }
         }

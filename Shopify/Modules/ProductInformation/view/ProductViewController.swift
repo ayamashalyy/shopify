@@ -89,7 +89,7 @@ class ProductViewController: UIViewController {
           
           // Convert productId to an integer
           if let productIdInt = Int(productIdString) {
-              productViewModel?.addToFavDraftOrders(selectedVariantsData: [(productIdInt, firstImageURL)])
+         //     productViewModel?.addToFavDraftOrders(selectedVariantsData: [(productIdInt, firstImageURL)])
           } else {
               showAlert(message: "Invalid product ID")
           }
@@ -109,7 +109,7 @@ class ProductViewController: UIViewController {
         
         
         var selectedVariants: [String] = []
-        var selectedVariantsIDsAndImageUrl: [(Int ,String)] = []
+        var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
 
         
         
@@ -133,7 +133,7 @@ class ProductViewController: UIViewController {
                                    if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
                                        print("in sign match")
                                        if let imageUrl = productViewModel?.product?.images.first?.url {
-                                        selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl))
+                                           selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
                                        }
                                    }
                                } else {
@@ -142,7 +142,7 @@ class ProductViewController: UIViewController {
                                        print("in defualt match")
 
                                        if let imageUrl = productViewModel?.product?.images.first?.url {
-                                        selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl))
+                                           selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity : variant.inventory_quantity!))
                                        }
                                    }
                                }
