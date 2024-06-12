@@ -111,48 +111,52 @@ class AllFavViewController: UIViewController {
     }
 }
 
-extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
-           func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            let count = myfavLineItem.count
-            if count == 0 {
+    extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            let count = myfavLineItem.count - 1
+            if count <= 0 {
                 tableView.backgroundView = createNoDataBackgroundView()
             } else {
                 tableView.backgroundView = nil
             }
-            return count
+            return max(count, 0)
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "WishListViewCell", for: indexPath) as! WishListViewCell
-            let favItem = myfavLineItem[indexPath.row]
-            cell.productName.text = favItem.name
-            cell.productPrice.text = favItem.price
-            print("URL(string: favItem.image)\(URL(string: favItem.image))")
-            cell.favImage.kf.setImage(with: URL(string: favItem.image))
-
-            return cell
+               guard myfavLineItem.count > indexPath.row + 1 else {
+                   return cell
+               }
+               let favItem = myfavLineItem[indexPath.row + 1]
+               cell.productName.text = favItem.name
+               cell.productPrice.text = favItem.price
+               cell.favImage.kf.setImage(with: URL(string: favItem.image))
+               return cell
         }
         
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var currentProduct = myfavLineItem[indexPath.row]
-        Navigation.ToProduct(productId: String(currentProduct.productId), from: self)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Remove the item from your data source (e.g., API or Realm)
-            myfavLineItem.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            checkIfNoData()
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 100
+        }
+        
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            let productId = myfavLineItem[indexPath.row + 1].productId
+            Navigation.ToProduct(productId: String(productId), from: self)
+        }
+        
+        func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+            return 60
+        }
+        
+        func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+            if editingStyle == .delete {
+                
+                favViewModel?.removeLineItem(index: (indexPath.row + 1))// increase by 1 as we do not show first item
+                myfavLineItem.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                checkIfNoData()
+            }
         }
     }
-}
+
+        
+

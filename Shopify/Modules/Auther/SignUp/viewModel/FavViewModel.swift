@@ -22,7 +22,6 @@ class FavViewModel {
        // let addition = "\(Authorize.favDraftOrder()!).json"
      
         // for testin the get and show but real should be the above
-        
        let addition = "1184814104824.json"
         print( "additon in fav Authorize.favDraftOrder \(addition)")
 
@@ -40,6 +39,13 @@ class FavViewModel {
                 }
             }
         }
+    }
+    
+    func removeLineItem(index:Int){
+        print("index is \(index)")
+        
+        
+        
     }
 
     
