@@ -17,20 +17,20 @@ class ProductViewController: UIViewController {
     var productViewModel: ProductViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
     var firstImageURL : String?
+    var firstVariantId : Int?
+    var isComeFromFaviourts: Bool?
     
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var addToCart: UIButton!
     @IBOutlet weak var productFavButton: UIButton!
     @IBOutlet weak var basket: UIButton!
-    @IBOutlet weak var allBasketButton: UIBarButtonItem!
     @IBOutlet weak var myCollectionOfImages: UICollectionView!
     
-
     override func viewDidLoad() {
             super.viewDidLoad()
         fetchExchangeRates()
-            
+        
             print("in product the id \(productId ?? "")")
             setUpUI()
             myCollectionOfImages.delegate = self
@@ -46,6 +46,19 @@ class ProductViewController: UIViewController {
                                         description: product.description,
                                         variants: product.variants)
 
+                    if self.isComeFromFaviourts == true
+                    {
+                        print("is come from fav")
+                        self.updateFavButton(isFav: true)
+
+                    }
+                    else{
+                        print("is noooooot come from fav")
+
+                        self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isFav in
+                            self.updateFavButton(isFav: isFav)
+                        }
+                    }
                     self.myCollectionOfImages.reloadData()
                     self.pageContoller.numberOfPages = product.images.count
 
@@ -55,44 +68,43 @@ class ProductViewController: UIViewController {
             productViewModel?.getProductDetails(id: productId!)
         }
     
+    func updateFavButton(isFav: Bool) {
+        if isFav {
+            productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            productFavButton.tintColor = .red
+        } else {
+            productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            productFavButton.tintColor = .gray
+        }
+    }
     
     @IBAction func back(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
     
-    @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        Navigation.ToOrders(from: self)
-    }
-    
-    @IBAction func goToAllFaviourt(_ sender: UIBarButtonItem) {
-        Navigation.ToAllFavourite(from: self)
-    }
-    
-    @IBAction func showFaviourts(_ sender: UIButton) {
-        print("show all fav")
-        Navigation.ToAllFavourite(from: self)
-    }
+ 
     
     @IBOutlet weak var pageContoller: UIPageControl!
-    @IBAction func allBasketProduct(_ sender: UIButton) {
-        print("show all basket")
-        Navigation.ToOrders(from: self)
-    }
+  
     
     @IBAction func productFavBtn(_ sender: UIButton) {
-        print("show add to fav")
-        // Assuming `productId` and `firstImageURL` are properties of your class
           guard let productIdString = productId, let firstImageURL = firstImageURL else {
               showAlert(message: "The product not loaded yet")
               return
           }
+          // i need variant id not product id
+        productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
+            DispatchQueue.main.async {
+                if isSuccess {
+                    self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                    
+                    } else {
+                        self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
+               }
+            }
+        }
           
-          // Convert productId to an integer
-          if let productIdInt = Int(productIdString) {
-         //     productViewModel?.addToFavDraftOrders(selectedVariantsData: [(productIdInt, firstImageURL)])
-          } else {
-              showAlert(message: "Invalid product ID")
-          }
     }
     
     @IBOutlet weak var addToCard: UIButton!
@@ -125,21 +137,16 @@ class ProductViewController: UIViewController {
                                
                                
                                if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
-                                   print("in sign")
 
                                    let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
                                    
                                    if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
-                                       print("in sign match")
                                        if let imageUrl = productViewModel?.product?.images.first?.url {
                                            selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
                                        }
                                    }
                                } else {
-                                   print("default $ ")
                                    if("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText){
-                                       print("in defualt match")
-
                                        if let imageUrl = productViewModel?.product?.images.first?.url {
                                            selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity : variant.inventory_quantity!))
                                        }
@@ -154,11 +161,13 @@ class ProductViewController: UIViewController {
         productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
                  DispatchQueue.main.async {
                      if isSuccess {
-                        print("Successfully added to cart")
                          self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
+                      //   self.addToCard.isEnabled = true
+
                          } else {
-                       print("Failed to add to cart")
-                        self.showAlert(message: "Failed to add to cart" ) 
+                        self.showAlert(message: "Failed to add to cart" )
+                         // self.addToCard.isEnabled = true
+
                     }
                  }
              }
@@ -213,6 +222,13 @@ class ProductViewController: UIViewController {
         stack.addArrangedSubview(descriptionTextView)
         stack.addArrangedSubview(availableSizeAndColorLabel)
         
+        
+        
+        // get it to save product to fav by it
+        firstVariantId = variants.first?.id
+        
+        
+        
         for variant in variants {
             let variantStackView = UIStackView()
             variantStackView.axis = .horizontal
@@ -220,7 +236,6 @@ class ProductViewController: UIViewController {
          
             
             let variantButton = UIButton(type: .system)
-//            variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
             
             //Handle the currency 
             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {

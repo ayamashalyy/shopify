@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -19,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oev-ZH-AMF">
-                                <rect key="frame" x="30" y="436" width="330" height="33"/>
+                                <rect key="frame" x="30" y="436" width="333" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="330" id="GxQ-Ui-exl"/>
                                     <constraint firstAttribute="height" constant="33" id="bUL-vd-NEY"/>
@@ -28,7 +29,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vct-gn-mPK">
-                                <rect key="frame" x="30" y="494" width="330" height="33"/>
+                                <rect key="frame" x="30" y="494" width="333" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="330" id="lZg-MO-L8z"/>
                                     <constraint firstAttribute="height" constant="33" id="maK-c3-Sky"/>
@@ -49,7 +50,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2rf-Ps-poK">
-                                <rect key="frame" x="295.66666666666669" y="64" width="69.333333333333314" height="22"/>
+                                <rect key="frame" x="298.66666666666669" y="64" width="69.333333333333314" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="G0Q-Wj-KgK"/>
                                 </constraints>
@@ -61,7 +62,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ijr-Zq-Cav">
-                                <rect key="frame" x="16" y="86" width="320" height="277"/>
+                                <rect key="frame" x="16" y="86" width="323" height="277"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXd-Xe-Iy7">
                                 <rect key="frame" x="162" y="751" width="80" height="35"/>
@@ -73,7 +74,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x8u-MV-0bQ">
-                                <rect key="frame" x="312" y="494" width="31" height="33"/>
+                                <rect key="frame" x="312" y="494" width="34" height="33"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                 <color key="tintColor" systemColor="systemBackgroundColor"/>
                                 <state key="normal" title="Button"/>
@@ -349,10 +350,13 @@
                                 <rect key="frame" x="0.0" y="753" width="393" height="70"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C4E-5S-qhL">
-                                        <rect key="frame" x="9.9999999999999964" y="10" width="50.666666666666657" height="34.333333333333336"/>
+                                        <rect key="frame" x="50" y="10" width="52" height="34.333333333333336"/>
                                         <color key="tintColor" systemColor="systemPinkColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system"/>
+                                        <buttonConfiguration key="configuration" style="plain">
+                                            <imageReference key="image" image="heart" catalog="system" symbolScale="large"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="heavy"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="productFavBtn:" destination="CI3-Be-L5h" eventType="touchUpInside" id="4oG-15-9Vc"/>
                                         </connections>
@@ -374,7 +378,7 @@
                                     <constraint firstItem="Wbj-uI-j0v" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="10" id="Npp-jI-gcF"/>
                                     <constraint firstItem="C4E-5S-qhL" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="10" id="VMT-Wb-k4l"/>
                                     <constraint firstAttribute="trailing" secondItem="Wbj-uI-j0v" secondAttribute="trailing" constant="25" id="WR3-mR-kmH"/>
-                                    <constraint firstItem="C4E-5S-qhL" firstAttribute="leading" secondItem="Lqq-Mx-qj1" secondAttribute="leading" constant="10" id="nzz-pk-jhs"/>
+                                    <constraint firstItem="C4E-5S-qhL" firstAttribute="leading" secondItem="Lqq-Mx-qj1" secondAttribute="leading" constant="50" id="nzz-pk-jhs"/>
                                     <constraint firstAttribute="height" constant="70" id="vXM-aG-RKb"/>
                                 </constraints>
                             </view>
@@ -387,26 +391,12 @@
                                 <rect key="frame" x="0.0" y="38" width="393" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem id="Mm6-0F-oBf">
+                                    <navigationItem title="Shopify" id="Mm6-0F-oBf">
                                         <barButtonItem key="leftBarButtonItem" image="left" id="DeA-Gy-S9Q">
                                             <connections>
                                                 <action selector="back:" destination="CI3-Be-L5h" id="d6s-Q1-8Ri"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem image="heart.fill" catalog="system" id="VF9-2L-tfd">
-                                                <color key="tintColor" systemColor="systemOrangeColor"/>
-                                                <connections>
-                                                    <action selector="goToAllFaviourt:" destination="CI3-Be-L5h" id="BFo-Rx-xmv"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem image="cart.fill" catalog="system" id="36o-ot-Ypw">
-                                                <color key="tintColor" systemColor="systemOrangeColor"/>
-                                                <connections>
-                                                    <action selector="goToCard:" destination="CI3-Be-L5h" id="jG6-6x-TjO"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -437,13 +427,7 @@
                                     <color key="tintColor" systemColor="systemRedColor"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" image="heart.fill" catalog="system"/>
-                                    <connections>
-                                        <action selector="showFaviourts:" destination="CI3-Be-L5h" eventType="touchUpInside" id="fJZ-hc-zXy"/>
-                                    </connections>
                                 </button>
-                                <connections>
-                                    <action selector="showAllFavouirts:" destination="CI3-Be-L5h" id="OS0-0a-adc"/>
-                                </connections>
                             </barButtonItem>
                             <barButtonItem style="plain" id="dXB-dC-lYj">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="4Yn-D9-FtM">
@@ -451,9 +435,6 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" image="cart.fill" catalog="system" title=""/>
-                                    <connections>
-                                        <action selector="allBasketProduct:" destination="CI3-Be-L5h" eventType="touchUpInside" id="obR-PJ-CcD"/>
-                                    </connections>
                                 </button>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -461,7 +442,6 @@
                     <connections>
                         <outlet property="addToCard" destination="Wbj-uI-j0v" id="BcX-f7-Wq3"/>
                         <outlet property="addToCart" destination="Wbj-uI-j0v" id="Drh-WO-yJZ"/>
-                        <outlet property="allBasketButton" destination="dXB-dC-lYj" id="qUu-Yp-nFx"/>
                         <outlet property="basket" destination="4Yn-D9-FtM" id="zqP-Wj-ma6"/>
                         <outlet property="myCollectionOfImages" destination="0nB-v7-E6T" id="Qow-Y7-AaS"/>
                         <outlet property="pageContoller" destination="zkS-v6-Nc5" id="BYL-LN-YMQ"/>
@@ -724,16 +704,16 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

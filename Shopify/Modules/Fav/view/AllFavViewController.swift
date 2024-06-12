@@ -39,7 +39,7 @@ class AllFavViewController: UIViewController {
         favViewModel = FavViewModel()
         checkIfNoData()
         setUpUI()
-        fetchExchangeRates()
+      //  fetchExchangeRates()
         
         favViewModel?.bindResultToViewController = { [weak self] in
             DispatchQueue.main.async {
@@ -158,7 +158,14 @@ class AllFavViewController: UIViewController {
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             let productId = myfavLineItem[indexPath.row + 1].productId
-            Navigation.ToProduct(productId: String(productId), from: self)
+            
+            let storyboard = UIStoryboard(name: "third", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as! ProductViewController
+                vc.productId =  String(productId)
+                vc.isComeFromFaviourts = true
+                vc.modalPresentationStyle = .fullScreen
+
+                present(vc, animated: true, completion: nil)
         }
         
         func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
