@@ -211,6 +211,19 @@
                                     <action selector="showHideConfirmPassButtonTapped:" destination="WHz-E2-Jte" eventType="touchUpInside" id="9rQ-sT-yba"/>
                                 </connections>
                             </button>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ov-2z-oV2">
+                                <rect key="frame" x="-1" y="59" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="SignUP page" id="MIv-0h-aWA">
+                                        <barButtonItem key="leftBarButtonItem" image="left" id="LyJ-ze-5Y3">
+                                            <connections>
+                                                <action selector="dismis:" destination="WHz-E2-Jte" id="UyR-5J-cBf"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mKS-Kj-Q9y"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -446,6 +459,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addToCard" destination="Wbj-uI-j0v" id="BcX-f7-Wq3"/>
                         <outlet property="addToCart" destination="Wbj-uI-j0v" id="Drh-WO-yJZ"/>
                         <outlet property="allBasketButton" destination="dXB-dC-lYj" id="qUu-Yp-nFx"/>
                         <outlet property="basket" destination="4Yn-D9-FtM" id="zqP-Wj-ma6"/>
@@ -513,7 +527,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cUv-sp-4hK">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="99" width="393" height="719"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReviewCell" textLabel="Pdh-hT-lJD" detailTextLabel="rrA-9j-hnr" style="IBUITableViewCellStyleSubtitle" id="zOt-4c-srG">
@@ -542,6 +556,19 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Om6-zz-juO">
+                                <rect key="frame" x="0.0" y="47" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Products Reviews:" id="Y2Q-OF-IJI">
+                                        <barButtonItem key="leftBarButtonItem" title="Product Reviews:" image="left" id="1bQ-Oy-edA">
+                                            <connections>
+                                                <action selector="back:" destination="LB1-zs-60u" id="mMi-Im-DRJ"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Xb4-Yo-x3e"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -549,7 +576,7 @@
                             <constraint firstItem="cUv-sp-4hK" firstAttribute="leading" secondItem="Xb4-Yo-x3e" secondAttribute="leading" id="0sS-3E-hCB"/>
                             <constraint firstItem="cUv-sp-4hK" firstAttribute="trailing" secondItem="Xb4-Yo-x3e" secondAttribute="trailing" id="64u-bh-fKA"/>
                             <constraint firstItem="Xb4-Yo-x3e" firstAttribute="bottom" secondItem="cUv-sp-4hK" secondAttribute="bottom" id="COQ-mi-IZc"/>
-                            <constraint firstItem="cUv-sp-4hK" firstAttribute="top" secondItem="Xb4-Yo-x3e" secondAttribute="top" id="hiY-Ch-b9t"/>
+                            <constraint firstItem="cUv-sp-4hK" firstAttribute="top" secondItem="Xb4-Yo-x3e" secondAttribute="top" constant="40" id="hiY-Ch-b9t"/>
                         </constraints>
                     </view>
                     <connections>
@@ -559,6 +586,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K0u-Y5-Voz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3423.6641221374043" y="-34.507042253521128"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Puv-5x-tPd">
+            <objects>
+                <viewController id="ZmC-51-iH2" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wnu-aw-dyW">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="0Kw-8h-kaS"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zpV-Dc-Wx0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4581" y="-33"/>
         </scene>
         <!--draft My Favorite Products-->
         <scene sceneID="gb1-Rh-PIX">
@@ -682,16 +724,16 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

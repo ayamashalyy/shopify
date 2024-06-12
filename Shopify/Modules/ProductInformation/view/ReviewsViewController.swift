@@ -12,36 +12,19 @@ class ReviewsViewController: UIViewController {
 
     @IBOutlet weak var reviewsTableView: UITableView!
     
-        var reviews = [(reviewer: String, reviewText: String)]()
+    var reviews = [(reviewer: String, reviewText: String, ourImage :String)]()
         
         override func viewDidLoad() {
             super.viewDidLoad()
             reviewsTableView.delegate = self
             reviewsTableView.dataSource = self
             reviewsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ReviewCell")
-            setupTableHeader()
         }
     
-     func setupTableHeader() {
-         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: reviewsTableView.frame.width, height: 44))
-         headerView.backgroundColor = .systemGray6
+    @IBAction func back(_ sender: Any) {
+        dismiss(animated: true)
+    }
 
-         let label = UILabel()
-         label.text = "Product Reviews:"
-         label.font = UIFont.boldSystemFont(ofSize: 18)
-         label.translatesAutoresizingMaskIntoConstraints = false
-
-         headerView.addSubview(label)
-         
-         NSLayoutConstraint.activate([
-             label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-             label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-             label.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
-             label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
-         ])
-         
-         reviewsTableView.tableHeaderView = headerView
-     }
     }
 
     extension ReviewsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -58,6 +41,7 @@ class ReviewsViewController: UIViewController {
             var content = cell.defaultContentConfiguration()
             content.text = review.1
             content.secondaryText = review.0
+          //  content.image = UIImage(named: review.2)
             cell.contentConfiguration = content
             
             return cell

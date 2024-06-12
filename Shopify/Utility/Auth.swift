@@ -10,7 +10,6 @@ import Foundation
 class Authorize{
 
     static let customerIDKey = "CustomerID"
-        
         static func saveCustomerIDToUserDefaults(customerID: Int) {
             UserDefaults.standard.set(customerID, forKey: customerIDKey)
         }
@@ -24,7 +23,44 @@ class Authorize{
             print("clear user key")
             UserDefaults.standard.removeObject(forKey: customerIDKey)
         }
+    
+    
+    static let draftOrderIDOneSting = "draftOrderIDOne"
+    static func favDraftOrder(draftOrderIDOne: Int) {
+        print("favDraftOrder seeeet   \(draftOrderIDOne) ")
+
+        UserDefaults.standard.set(draftOrderIDOne, forKey: draftOrderIDOneSting )
     }
+    static  func favDraftOrder() -> Int? {
+        return UserDefaults.standard.integer(forKey: draftOrderIDOneSting)
+    }
+    static  func clearFavDraftOrder() {
+        UserDefaults.standard.removeObject(forKey: draftOrderIDOneSting)
+    }
+    
+    
+    
+    static let draftOrderIDTwoSting = "draftOrderIDTwo"
+    static func cardDraftOrderId(draftOrderIDTwo: Int) {
+        print("cardDraftOrderId seeeet  \(draftOrderIDTwo) ")
+        UserDefaults.standard.set(draftOrderIDTwo, forKey: draftOrderIDTwoSting )
+    }
+    
+    static  func cardDraftOrderId() -> Int? {
+        return UserDefaults.standard.integer(forKey: draftOrderIDTwoSting)
+    }
+    static  func clearCardDraftOrderId() {
+        UserDefaults.standard.removeObject(forKey: draftOrderIDTwoSting)
+    }
+
+    // the function that call it also should go to navigation to login
+    static func logout (){
+        Authorize.clearCardDraftOrderId()
+        Authorize.clearCustomerIDFromUserDefaults()
+        Authorize.clearFavDraftOrder()
+                
+    }
+}
 
 
 /*

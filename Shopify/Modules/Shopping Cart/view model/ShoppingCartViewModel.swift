@@ -1,5 +1,6 @@
 import Foundation
 
+
 class ShoppingCartViewModel {
     var cartItems = [(String, Int, Int, String?)]()
     var updateCartItemsHandler: (() -> Void)?
@@ -9,7 +10,10 @@ class ShoppingCartViewModel {
     func fetchDraftOrders(completion: @escaping (Error?) -> Void) {
         let additionDraftOrder = "1184699220216.json"
         
-        NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .draftOrderRoot, addition: additionDraftOrder) { (data, error) in
+//        NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .draftOrderRoot, addition: additionDraftOrder) { (data, error) in
+
+        NetworkManager.fetchDataFromApi(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder,addition: additionDraftOrder) { (data, error) in
+
             if let error = error {
                 completion(error)
                 return

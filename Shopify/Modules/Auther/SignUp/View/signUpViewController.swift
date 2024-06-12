@@ -9,6 +9,10 @@ import UIKit
 
 class signUpViewController: UIViewController {
 
+    @IBAction func dismis(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
     var signUPviewModel : ViewModel?
     @IBOutlet weak var firstName: UITextField!
     @IBOutlet weak var email: UITextField!

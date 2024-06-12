@@ -9,12 +9,12 @@ import Foundation
 
 class UserReview {
 
-      static func getReviews() -> [(String, String)] {
+      static func getReviews() -> [(String, String,String)] {
           return [
-              ("John Doe", "Great product!"),
-              ("Mohamed Saleh", "worth the price."),
-              ("Ahmed Mohamed", "good"),
-              ("Mostafa Ahmed", "Average quality.")
+              ("Aya Ibrahuim", "This is great product","a"),
+              ("Rewan Mohamed", "Worth the price.","r"),
+              ("Somai Amar", "good","s"),
+              ("Mayar Saleh", "Average quality.","m")
           ]
       }
 }

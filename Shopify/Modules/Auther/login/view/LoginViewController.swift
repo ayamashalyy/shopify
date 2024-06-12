@@ -14,6 +14,8 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         setUpUI()
         loginViewModel = LoginViewModel()
+        
+     
     }
     
     

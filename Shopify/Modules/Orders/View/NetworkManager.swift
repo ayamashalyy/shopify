@@ -20,7 +20,10 @@ enum Endpoint: String {
     //case productsByCategory = "collections/"
     case allProduct = "products.json"
     
-    case draftOrder = "draft_orders/"
+    case draftOrder = "draft_orders.json"
+    case specficDraftOeder = "draft_orders/"
+
+
     
     //    8575848153336.json
 }
@@ -33,13 +36,12 @@ enum Root: String {
     case customer = "customer"
     case address = "addresses"
     
-    case draftOrderRoot = "draft_order"
+   case allDraftOrderRoot = "draft_orders"
     
+    case specificDraftOrder = "draft_order"
 }
 
-// remove it every time before push 
-
-
+// remove it every time before push
 
 class NetworkManager {
     
@@ -49,8 +51,8 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-        //    print("url in fetching    \(urlString)")
-        print("shopping cart is url \(url)")
+       print("url in fetching    \(urlString)")
+
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -61,8 +63,9 @@ class NetworkManager {
                 }
                 //   print("JSON Response:", json)
                 
-                print("Raw JSON: \(json)")
-                
+         //       print("Raw JSON: \(json)")
+
+
                 var jsonData: Data?
                 
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
@@ -132,8 +135,8 @@ class NetworkManager {
     }
     
 
-    static func fetchExchangeRates(completion: @escaping (Data?, Error?) -> Void) {
-        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
+    static func fetchExchangeRates(urlString: String ,completion: @escaping (Data?, Error?) -> Void) {
+//        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
         Alamofire.request(urlString).responseData { response in
             switch response.result {
             case .success(let data):
@@ -150,7 +153,7 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL: \(urlString)"]))
             return
         }
-        
+        print("in updateResource urlString\(urlString)")
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
