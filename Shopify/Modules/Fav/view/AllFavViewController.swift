@@ -20,6 +20,7 @@ class AllFavViewController: UIViewController {
     var favViewModel : FavViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
     var myfavLineItem : [FavLineItem] = []
+    let settingsViewModel = SettingsViewModel()
 
     
     @IBOutlet weak var allFavTable: UITableView!
@@ -38,6 +39,7 @@ class AllFavViewController: UIViewController {
         favViewModel = FavViewModel()
         checkIfNoData()
         setUpUI()
+        fetchExchangeRates()
         
         favViewModel?.bindResultToViewController = { [weak self] in
             DispatchQueue.main.async {
@@ -71,6 +73,16 @@ class AllFavViewController: UIViewController {
         }
     }
     
+    func fetchExchangeRates(){
+        settingsViewModel.fetchExchangeRates { [weak self] error in
+            if let error = error {
+                print("Error fetching exchange rates: \(error)")
+            } else {
+                // Reload data once exchange rates are fetched
+                self?.allFavTable.reloadData()
+            }
+        }
+    }
     
     func setUpUI() {
         indicator.center = self.view.center
@@ -129,7 +141,13 @@ class AllFavViewController: UIViewController {
                }
                let favItem = myfavLineItem[indexPath.row + 1]
                cell.productName.text = favItem.name
-               cell.productPrice.text = favItem.price
+            
+                // Convert price using SettingsViewModel
+               let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+               let convertedPriceString = settingsViewModel.convertPrice(favItem.price, to: selectedCurrency) ?? "\(favItem.price)$"
+               cell.productPrice.text = convertedPriceString
+            
+               //cell.productPrice.text = favItem.price
                cell.favImage.kf.setImage(with: URL(string: favItem.image))
                return cell
         }

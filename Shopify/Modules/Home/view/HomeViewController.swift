@@ -73,7 +73,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             couponsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 160),
             couponsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             couponsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            couponsCollectionView.heightAnchor.constraint(equalToConstant: 210)
+            couponsCollectionView.heightAnchor.constraint(equalToConstant: 190)
         ])
 
         couponsCollectionView.backgroundColor = UIColor.clear
@@ -99,7 +99,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         //Setup BrandsCollectionView
         brandsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        brandsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 430).isActive = true
+        brandsCollectionView.topAnchor.constraint(equalTo: brandsTitleLabel.bottomAnchor, constant: 10).isActive = true
         brandsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor , constant: -100).isActive = true
         brandsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         brandsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true

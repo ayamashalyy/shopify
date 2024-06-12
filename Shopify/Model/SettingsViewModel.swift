@@ -23,6 +23,7 @@ class SettingsViewModel{
     
     let currencyKey = "selectedCurrency"
     var currencyConversionRates: [String: Double] = [:]
+    let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
     
     // save the selected currency to UserDefaults
     func saveCurrencySelection(_ currency: CurrencySelected) {
@@ -38,7 +39,7 @@ class SettingsViewModel{
     }
     
     func fetchExchangeRates(completion: @escaping (Error?) -> Void) {
-        NetworkManager.fetchExchangeRates { [weak self] data, error in
+        NetworkManager.fetchExchangeRates(urlString: urlString) { [weak self] data, error in
             guard let self = self else { return }
             if let error = error {
                 completion(error)

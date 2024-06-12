@@ -135,8 +135,8 @@ class NetworkManager {
     }
     
 
-    static func fetchExchangeRates(completion: @escaping (Data?, Error?) -> Void) {
-        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
+    static func fetchExchangeRates(urlString: String ,completion: @escaping (Data?, Error?) -> Void) {
+//        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
         Alamofire.request(urlString).responseData { response in
             switch response.result {
             case .success(let data):

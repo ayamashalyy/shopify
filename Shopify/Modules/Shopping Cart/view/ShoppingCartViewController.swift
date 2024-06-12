@@ -9,6 +9,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     let shoppingCartViewModel = ShoppingCartViewModel()
     var productViewModel = ProductViewModel()
+    let settingsViewModel = SettingsViewModel()
     
     var cartItems = [(String, Int, Int,String?)]()
     
@@ -20,6 +21,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
         fetchDraftOrders()
+        fetchExchangeRates()
         
         productViewModel.bindResultToViewController = { [weak self] in
             //print("shopping cart in  productViewModel.bindResultToViewController ")
@@ -38,6 +40,17 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             } else if let draftOrders = draftOrders {
                 print("Fetched draft orders: \(draftOrders)")
                 self.updateCartItems(with: draftOrders)
+            }
+        }
+    }
+    
+    func fetchExchangeRates(){
+        settingsViewModel.fetchExchangeRates { [weak self] error in
+            if let error = error {
+                print("Error fetching exchange rates: \(error)")
+            } else {
+                // Reload data once exchange rates are fetched
+                self?.tableView.reloadData()
             }
         }
     }
@@ -107,7 +120,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
         let item = cartItems[indexPath.row]
         cell.productNameLabel.text = "\(item.0)"
-        cell.productPriceLabel.text = "\(item.1)$"
+        //cell.productPriceLabel.text = "\(item.1)$"
+        
+        // Convert price using SettingsViewModel
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        let convertedPriceString = settingsViewModel.convertPrice(String(item.1), to: selectedCurrency) ?? "\(item.1)$"
+        cell.productPriceLabel.text = convertedPriceString
+        
         cell.quantityLabel.text = "\(item.2)"
         if let imageUrl = item.3 {
             cell.productImageView.kf.setImage(with: URL(string: imageUrl))
@@ -155,7 +174,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     func updateSubtotal() {
         let subtotal = cartItems.reduce(0) { $0 + $1.1 * $1.2 }
-        subtotalLabel.text = "\(subtotal)$"
+        //subtotalLabel.text = "\(subtotal)$"
+        
+        // Convert subtotal using SettingsViewModel
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        let convertedSubtotalString = settingsViewModel.convertPrice(String(subtotal), to: selectedCurrency) ?? "\(subtotal)$"
+        
+        subtotalLabel.text = convertedSubtotalString
     }
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {

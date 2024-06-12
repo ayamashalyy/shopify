@@ -295,4 +295,12 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         return CGSize(width: view.frame.width / 2 - 20 , height: 260)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if let product = categoriesViewModel.product(at: indexPath.row)
+        {
+            Navigation.ToProduct(productId: "\(product.id)", from: self)
+        }
+    }
+    
 }
