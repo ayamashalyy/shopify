@@ -93,7 +93,35 @@ class ProductViewModel{
     func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)],completion: @escaping (Bool) -> Void) {
         getuPdataDraftOrder(selectedVariantsData,isCardIsTrueAndFavIsFAV: false) { draftOrderRequest in
             if let draftOrderRequest = draftOrderRequest {
-                
+                                
+                Decoding.encodeData(object: draftOrderRequest){ jsonData, encodeError in
+                    guard let jsonData = jsonData, encodeError == nil else {
+                        print("Error encoding  data:", encodeError?.localizedDescription ?? "Unknown error")
+                        completion(false)
+
+                        return
+                    }
+                    let addition = "\(Authorize.favDraftOrder()!).json"
+                    NetworkManager.updateResource(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, body: jsonData ,addition: addition ){ data , error in
+                        guard let data = data, error == nil else {
+                            print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
+                            completion(false)
+
+                            return
+                        }
+                        completion(true)
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    
+    func removeFromFavDraftOrders (VariantsId:Int,completion:@escaping(Bool)-> Void){
+        
+        removeFromDraftOrder(VariantsId: VariantsId) { draftOrderRequest in
+            if let draftOrderRequest = draftOrderRequest {
                 
                 Decoding.encodeData(object: draftOrderRequest){ jsonData, encodeError in
                     guard let jsonData = jsonData, encodeError == nil else {
@@ -108,6 +136,7 @@ class ProductViewModel{
                    if let jsonString = String(data: jsonData, encoding: .utf8) {
                        print("Request Body JSON: \(jsonString)")
                     }
+                    
                     NetworkManager.updateResource(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, body: jsonData ,addition: addition ){ data , error in
                         guard let data = data, error == nil else {
                             print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
@@ -119,6 +148,43 @@ class ProductViewModel{
                     }
                     
                 }
+            }
+        }
+        
+    }
+    
+    func removeFromDraftOrder(VariantsId:Int , completion: @escaping (DraftOrderRequest?) -> Void){
+        
+        var lineItemsAfterRemove: [LineItem] = []
+
+        let addition =  "\(Authorize.favDraftOrder()!).json"
+        
+
+        NetworkManager.fetchDataFromApi(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, addition: addition) { data, error in
+            guard let data = data, error == nil else {
+                print("Error in data: \(error?.localizedDescription ?? "Unknown error")")
+                completion(nil)
+                return
+            }
+
+            Decoding.decodeData(data: data, objectType: DraftOrder.self) { cardDraftOrder, decodeError in
+                guard decodeError == nil else {
+                    print("Decoding error: \(decodeError?.localizedDescription ?? "Unknown error")")
+                    completion(nil)
+                    return
+                }
+                
+                if let lineItems = cardDraftOrder?.line_items {
+                    for item in lineItems {
+                        if (item.variant_id != VariantsId){
+                            lineItemsAfterRemove.append(item)
+                        }
+                    }
+                } else {
+                    print("No line items found in the fetched data")
+                }
+                let updatedDraftOrder = self.rearrangeTheDraftOrder(allLineItems: lineItemsAfterRemove, isCardIsTrueAndFavIsFAV: false)
+                completion(updatedDraftOrder)
             }
         }
     }
