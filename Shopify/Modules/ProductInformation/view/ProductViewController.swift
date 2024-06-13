@@ -19,6 +19,7 @@ class ProductViewController: UIViewController {
     var firstImageURL : String?
     var firstVariantId : Int?
     var isComeFromFaviourts: Bool?
+    var selectedVarientId : Int?
     
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
@@ -142,18 +143,11 @@ class ProductViewController: UIViewController {
     }
     
     @IBOutlet weak var addToCard: UIButton!
-    var isButtonClicked = false
     
     
     @IBAction func addCartAction(_ sender: UIButton) {
-        
-        if isButtonClicked {
-            return
-        }
-        isButtonClicked = true
         addToCard.isEnabled = false
-        
-        
+                
         var selectedVariants: [String] = []
         var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
         
@@ -196,17 +190,25 @@ class ProductViewController: UIViewController {
             DispatchQueue.main.async {
                 if isSuccess {
                     self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
-                    //   self.addToCard.isEnabled = true
-                    
+                     self.addToCard.isEnabled = true
+                    self.hideAllCheckmarkImages()
                 } else {
                     self.showAlert(message: "Failed to add to cart" )
-                    // self.addToCard.isEnabled = true
+                    self.addToCard.isEnabled = true
                     
                 }
             }
         }
     }
     
+    func hideAllCheckmarkImages() {
+        for subview in stack.arrangedSubviews {
+            if let variantStackView = subview as? UIStackView,
+               let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView {
+                checkmarkImageView.isHidden = true
+            }
+        }
+    }
     
     func setUpUI() {
         addToCart.backgroundColor = UIColor(hex: "#FF7D29")
@@ -288,6 +290,16 @@ class ProductViewController: UIViewController {
             checkmarkImageView.tintColor = .orange
             checkmarkImageView.contentMode = .scaleAspectFit
             checkmarkImageView.isHidden = true
+            
+            
+            // Highlight the selected variant
+                 if selectedVarientId == variant.id {
+                     // You can change the background color or add a border to highlight the selected variant
+                     variantStackView.layer.borderWidth = 2.0
+                     variantStackView.layer.borderColor = UIColor.orange.cgColor
+                     variantStackView.layer.cornerRadius = 8.0
+                 }
+                 
             
             variantStackView.addArrangedSubview(variantButton)
             variantStackView.addArrangedSubview(checkmarkImageView)
