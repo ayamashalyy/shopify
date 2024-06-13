@@ -54,46 +54,6 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    func updateCartItems(with draftOrders: DraftOrder) {
-            guard let lineItems = draftOrders.line_items else {
-                return
-            }
-            
-            for lineItem in lineItems {
-                let title = lineItem.title ?? "Unknown"
-                let quantity = lineItem.quantity ?? 0
-                let price = lineItem.price ?? "0.00"
-                let priceFloat = Float(price) ?? 0.0
-                let priceInt = Int(priceFloat)
-             //   print("shopping cart is ................................\(lineItem.product_id!)")
-                productViewModel.getProductDetails(id: "\(lineItem.product_id!)")
-                
-                if let index = cartItems.firstIndex(where: { $0.0 == title }) {
-                    cartItems[index].2 += quantity
-                } else {
-                    cartItems.append((title, priceInt, quantity, nil))
-                }
-            }
-        
-        
-        
-      //  print("Updated cart items: \(cartItems)")
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.updateSubtotal()
-        }
-    }
-    
-    func updateCartItemWithImage(for product: Product) {
-           if let index = cartItems.firstIndex(where: { $0.0 == product.name }) {
-               if let imageUrl = product.images.first?.url {
-                   cartItems[index].3 = imageUrl
-                   DispatchQueue.main.async {
-                       self.tableView.reloadData()
-                   }
-               }
-           }
-       }
 
     
     func setupButtons() {
@@ -120,7 +80,6 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
         let item = shoppingCartViewModel.cartItems[indexPath.row]
         cell.productNameLabel.text = "\(item.0)"
-        //cell.productPriceLabel.text = "\(item.1)$"
         
         // Convert price using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
@@ -128,11 +87,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.productPriceLabel.text = convertedPriceString
         
         cell.quantityLabel.text = "\(item.2)"
+        cell.sizeLable.text = "\(item.6)"
+        
         if let imageUrl = item.3 {
             cell.productImageView.kf.setImage(with: URL(string: imageUrl))
         } else {
             cell.productImageView.image = nil
         }
+
         cell.incrementButton.tag = indexPath.row
         cell.decrementButton.tag = indexPath.row
         cell.incrementButton.addTarget(self, action: #selector(incrementQuantity(_:)), for: .touchUpInside)
@@ -143,42 +105,70 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 160
+        return 200
     }
-    
-    @objc func incrementQuantity(_ sender: UIButton) {
-        let row = sender.tag
-        shoppingCartViewModel.cartItems[row].2 += 1
-        tableView.reloadData()
-        updateSubtotal()
-    }
+        
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 50
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var productId = shoppingCartViewModel.cartItems[indexPath.row].7
+        
+        
+        Navigation.ToProduct(productId: "\(productId)", from: self)
+    }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
         footerView.backgroundColor = UIColor.clear
         return footerView
     }
     
-    @objc func decrementQuantity(_ sender: UIButton) {
-        let row = sender.tag
-        if shoppingCartViewModel.cartItems[row].2 > 0 {
-            shoppingCartViewModel.cartItems[row].2 -= 1
-            tableView.reloadData()
-            updateSubtotal()
+    @objc func incrementQuantity(_ sender: UIButton) {
+           let row = sender.tag
+           let item = shoppingCartViewModel.cartItems[row]
+           let newQuantity = item.2 + 1
+           let maxQuantity = item.5 / 2
+           if newQuantity > maxQuantity {
+               showAlert(message: "You cannot order more than half of the available quantity.")
+           } else {
+               shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
+                   if let error = error {
+                       print("Error updating item quantity: \(error.localizedDescription)")
+                   } else {
+                       self.updateSubtotal()
+                   }
+               }
+           }
+       }
+       
+       @objc func decrementQuantity(_ sender: UIButton) {
+           let row = sender.tag
+           let item = shoppingCartViewModel.cartItems[row]
+           let newQuantity = max(0, item.2 - 1)
+
+           shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
+               if let error = error {
+                   print("Error updating item quantity: \(error.localizedDescription)")
+               } else {
+                   self.updateSubtotal()
+               }
+           }
+       }
+        
+    
+    func showAlert(message: String) {
+            let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
         }
-    }
     
     func updateSubtotal() {
 
         let subtotal = shoppingCartViewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
         subtotalLabel.text = "\(subtotal)$"
 
-       // let subtotal = cartItems.reduce(0) { $0 + $1.1 * $1.2 }
-        //subtotalLabel.text = "\(subtotal)$"
         
         // Convert subtotal using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD

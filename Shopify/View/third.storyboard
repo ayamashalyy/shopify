@@ -348,17 +348,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lqq-Mx-qj1">
                                 <rect key="frame" x="0.0" y="753" width="393" height="70"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C4E-5S-qhL">
-                                        <rect key="frame" x="9.9999999999999964" y="10" width="50.666666666666657" height="34.333333333333336"/>
-                                        <color key="tintColor" systemColor="systemPinkColor"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system"/>
-                                        <connections>
-                                            <action selector="productFavBtn:" destination="CI3-Be-L5h" eventType="touchUpInside" id="4oG-15-9Vc"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wbj-uI-j0v">
-                                        <rect key="frame" x="199" y="9.9999999999999964" width="169" height="47.666666666666657"/>
+                                        <rect key="frame" x="30" y="20" width="333" height="40"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Add to card ">
@@ -371,11 +362,11 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <constraints>
-                                    <constraint firstItem="Wbj-uI-j0v" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="10" id="Npp-jI-gcF"/>
-                                    <constraint firstItem="C4E-5S-qhL" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="10" id="VMT-Wb-k4l"/>
-                                    <constraint firstAttribute="trailing" secondItem="Wbj-uI-j0v" secondAttribute="trailing" constant="25" id="WR3-mR-kmH"/>
-                                    <constraint firstItem="C4E-5S-qhL" firstAttribute="leading" secondItem="Lqq-Mx-qj1" secondAttribute="leading" constant="10" id="nzz-pk-jhs"/>
+                                    <constraint firstItem="Wbj-uI-j0v" firstAttribute="leading" secondItem="Lqq-Mx-qj1" secondAttribute="leading" constant="30" id="AGv-8K-Xl0"/>
+                                    <constraint firstItem="Wbj-uI-j0v" firstAttribute="top" secondItem="Lqq-Mx-qj1" secondAttribute="top" constant="20" id="Npp-jI-gcF"/>
+                                    <constraint firstAttribute="bottom" secondItem="Wbj-uI-j0v" secondAttribute="bottom" constant="10" id="XL2-Pm-seF"/>
                                     <constraint firstAttribute="height" constant="70" id="vXM-aG-RKb"/>
+                                    <constraint firstAttribute="trailing" secondItem="Wbj-uI-j0v" secondAttribute="trailing" constant="30" id="zjs-Ct-RhG"/>
                                 </constraints>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="zkS-v6-Nc5">
@@ -387,26 +378,25 @@
                                 <rect key="frame" x="0.0" y="38" width="393" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem id="Mm6-0F-oBf">
+                                    <navigationItem title="Shopify" id="Mm6-0F-oBf">
                                         <barButtonItem key="leftBarButtonItem" image="left" id="DeA-Gy-S9Q">
                                             <connections>
                                                 <action selector="back:" destination="CI3-Be-L5h" id="d6s-Q1-8Ri"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem image="heart.fill" catalog="system" id="VF9-2L-tfd">
-                                                <color key="tintColor" systemColor="systemOrangeColor"/>
+                                        <barButtonItem key="rightBarButtonItem" image="heart" catalog="system" style="plain" id="qSK-oC-TxI">
+                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="ji3-BM-13g">
+                                                <rect key="frame" x="290" y="5" width="87" height="34.333333333333336"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system">
+                                                    <color key="baseForegroundColor" systemColor="systemRedColor"/>
+                                                </buttonConfiguration>
                                                 <connections>
-                                                    <action selector="goToAllFaviourt:" destination="CI3-Be-L5h" id="BFo-Rx-xmv"/>
+                                                    <action selector="productFavBtn:" destination="CI3-Be-L5h" eventType="touchUpInside" id="jrd-1J-eRd"/>
                                                 </connections>
-                                            </barButtonItem>
-                                            <barButtonItem image="cart.fill" catalog="system" id="36o-ot-Ypw">
-                                                <color key="tintColor" systemColor="systemOrangeColor"/>
-                                                <connections>
-                                                    <action selector="goToCard:" destination="CI3-Be-L5h" id="jG6-6x-TjO"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
+                                            </button>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -437,13 +427,7 @@
                                     <color key="tintColor" systemColor="systemRedColor"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" image="heart.fill" catalog="system"/>
-                                    <connections>
-                                        <action selector="showFaviourts:" destination="CI3-Be-L5h" eventType="touchUpInside" id="fJZ-hc-zXy"/>
-                                    </connections>
                                 </button>
-                                <connections>
-                                    <action selector="showAllFavouirts:" destination="CI3-Be-L5h" id="OS0-0a-adc"/>
-                                </connections>
                             </barButtonItem>
                             <barButtonItem style="plain" id="dXB-dC-lYj">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="4Yn-D9-FtM">
@@ -451,9 +435,6 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" image="cart.fill" catalog="system" title=""/>
-                                    <connections>
-                                        <action selector="allBasketProduct:" destination="CI3-Be-L5h" eventType="touchUpInside" id="obR-PJ-CcD"/>
-                                    </connections>
                                 </button>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -461,11 +442,10 @@
                     <connections>
                         <outlet property="addToCard" destination="Wbj-uI-j0v" id="BcX-f7-Wq3"/>
                         <outlet property="addToCart" destination="Wbj-uI-j0v" id="Drh-WO-yJZ"/>
-                        <outlet property="allBasketButton" destination="dXB-dC-lYj" id="qUu-Yp-nFx"/>
                         <outlet property="basket" destination="4Yn-D9-FtM" id="zqP-Wj-ma6"/>
                         <outlet property="myCollectionOfImages" destination="0nB-v7-E6T" id="Qow-Y7-AaS"/>
                         <outlet property="pageContoller" destination="zkS-v6-Nc5" id="BYL-LN-YMQ"/>
-                        <outlet property="productFavButton" destination="C4E-5S-qhL" id="3Ml-Ti-Ol0"/>
+                        <outlet property="productFavButton" destination="ji3-BM-13g" id="4s8-oM-QGu"/>
                         <outlet property="scroll" destination="rLA-4G-Jld" id="bUR-V0-4oZ"/>
                         <outlet property="stack" destination="6mF-u8-Lbr" id="1h9-i4-2Fi"/>
                     </connections>
@@ -724,16 +704,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

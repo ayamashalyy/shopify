@@ -17,153 +17,196 @@ class ProductViewController: UIViewController {
     var productViewModel: ProductViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
     var firstImageURL : String?
+    var firstVariantId : Int?
+    var isComeFromFaviourts: Bool?
     
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var addToCart: UIButton!
     @IBOutlet weak var productFavButton: UIButton!
     @IBOutlet weak var basket: UIButton!
-    @IBOutlet weak var allBasketButton: UIBarButtonItem!
     @IBOutlet weak var myCollectionOfImages: UICollectionView!
     
-
     override func viewDidLoad() {
-            super.viewDidLoad()
+        super.viewDidLoad()
         fetchExchangeRates()
-            
-            print("in product the id \(productId ?? "")")
-            setUpUI()
-            myCollectionOfImages.delegate = self
-            myCollectionOfImages.dataSource = self
-            productViewModel = ProductViewModel()
-            productViewModel?.bindResultToViewController = { [weak self] in
-                DispatchQueue.main.async {
-                    guard let self = self, let product = self.productViewModel?.product else { return }
-                    let imageUrl = product.images
-                    self.firstImageURL =  product.images.first?.url
-                    self.setupStackView(name: product.name,
-                                        price: "$\(product.variants.first?.price ?? "")",
-                                        description: product.description,
-                                        variants: product.variants)
-
-                    self.myCollectionOfImages.reloadData()
-                    self.pageContoller.numberOfPages = product.images.count
-
-                    self.indicator.stopAnimating()
+        
+        print("in product the id \(productId ?? "")")
+        setUpUI()
+        myCollectionOfImages.delegate = self
+        myCollectionOfImages.dataSource = self
+        productViewModel = ProductViewModel()
+        productViewModel?.bindResultToViewController = { [weak self] in
+            DispatchQueue.main.async {
+                guard let self = self, let product = self.productViewModel?.product else { return }
+                let imageUrl = product.images
+                self.firstImageURL =  product.images.first?.url
+                self.setupStackView(name: product.name,
+                                    price: "$\(product.variants.first?.price ?? "")",
+                                    description: product.description,
+                                    variants: product.variants)
+                
+                if self.isComeFromFaviourts == true
+                {
+                    print("is come from fav")
+                    self.updateFavButton(iscomefromFav: true)
+                    
                 }
+                else{
+                    print("is noooooot come from fav")
+                    
+                    self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isFav in
+                        self.updateFavButton(iscomefromFav: isFav)
+                    }
+                }
+                self.myCollectionOfImages.reloadData()
+                self.pageContoller.numberOfPages = product.images.count
+                
+                self.indicator.stopAnimating()
             }
-            productViewModel?.getProductDetails(id: productId!)
         }
+        productViewModel?.getProductDetails(id: productId!)
+    }
     
+    func updateFavButton(iscomefromFav: Bool) {
+        if iscomefromFav {
+            isFav = true
+            productFavButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+            productFavButton.tintColor = .red
+        } else {
+            isFav = false
+            productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            productFavButton.tintColor = .red
+        }
+    }
     
     @IBAction func back(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
     
-    @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        Navigation.ToOrders(from: self)
-    }
     
-    @IBAction func goToAllFaviourt(_ sender: UIBarButtonItem) {
-        Navigation.ToAllFavourite(from: self)
-    }
-    
-    @IBAction func showFaviourts(_ sender: UIButton) {
-        print("show all fav")
-        Navigation.ToAllFavourite(from: self)
-    }
     
     @IBOutlet weak var pageContoller: UIPageControl!
-    @IBAction func allBasketProduct(_ sender: UIButton) {
-        print("show all basket")
-        Navigation.ToOrders(from: self)
-    }
+    
+    var isFav = false
     
     @IBAction func productFavBtn(_ sender: UIButton) {
-        print("show add to fav")
-        // Assuming `productId` and `firstImageURL` are properties of your class
-          guard let productIdString = productId, let firstImageURL = firstImageURL else {
-              showAlert(message: "The product not loaded yet")
-              return
-          }
-          
-          // Convert productId to an integer
-          if let productIdInt = Int(productIdString) {
-         //     productViewModel?.addToFavDraftOrders(selectedVariantsData: [(productIdInt, firstImageURL)])
-          } else {
-              showAlert(message: "Invalid product ID")
-          }
+        
+        productFavButton.isEnabled = false
+        
+        guard let productIdString = productId, let firstImageURL = firstImageURL else {
+            showAlert(message: "The product not loaded yet")
+            return
+        }
+        
+        // i need variant id not product id as draft order deal with it
+        if isFav{
+            // remove from fav
+            
+            let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.productViewModel?.removeFromFavDraftOrders(VariantsId: firstVariantId!) { isSuccess in
+                    DispatchQueue.main.async {
+                        if isSuccess {
+                            self.isFav = false
+                            self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                            self.productFavButton.isEnabled = true
+
+                        }
+                    }
+                }
+            }))
+            
+            present(alertController, animated: true, completion: nil)
+            
+        }
+        else{
+            // add to fav
+            productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
+                DispatchQueue.main.async {
+                    if isSuccess {
+                        self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                        self?.showCheckMarkAnimation(mark: "heart.fill")
+                        self?.isFav = true
+                        self?.productFavButton.isEnabled = true
+
+                    } else {
+                        self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
+                        self?.productFavButton.isEnabled = true
+                    }
+                }
+            }
+        }
     }
     
     @IBOutlet weak var addToCard: UIButton!
     var isButtonClicked = false
-
+    
     
     @IBAction func addCartAction(_ sender: UIButton) {
         
         if isButtonClicked {
-                   return
-               }
+            return
+        }
         isButtonClicked = true
         addToCard.isEnabled = false
         
         
         var selectedVariants: [String] = []
         var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
-
+        
         
         for subview in stack.arrangedSubviews {
             
-                   if let variantStackView = subview as? UIStackView,
-                      let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
-                      let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
-                      !checkmarkImageView.isHidden {
-                       if let variantText = variantButton.titleLabel?.text {
-                           selectedVariants.append(variantText)
-
-                           for variant in productViewModel?.product?.variants ?? [] {
-                               
-                               
-                               if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
-                                   print("in sign")
-
-                                   let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
-                                   
-                                   if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
-                                       print("in sign match")
-                                       if let imageUrl = productViewModel?.product?.images.first?.url {
-                                           selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
-                                       }
-                                   }
-                               } else {
-                                   print("default $ ")
-                                   if("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText){
-                                       print("in defualt match")
-
-                                       if let imageUrl = productViewModel?.product?.images.first?.url {
-                                           selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity : variant.inventory_quantity!))
-                                       }
-                                   }
-                               }
-
-                       }
-                       }
-                   }
-               }
+            if let variantStackView = subview as? UIStackView,
+               let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
+               let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
+               !checkmarkImageView.isHidden {
+                if let variantText = variantButton.titleLabel?.text {
+                    selectedVariants.append(variantText)
+                    
+                    for variant in productViewModel?.product?.variants ?? [] {
+                        
+                        
+                        if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
+                            
+                            let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
+                            
+                            if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
+                                if let imageUrl = productViewModel?.product?.images.first?.url {
+                                    selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
+                                }
+                            }
+                        } else {
+                            if("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText){
+                                if let imageUrl = productViewModel?.product?.images.first?.url {
+                                    selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity : variant.inventory_quantity!))
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
         
         productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
-                 DispatchQueue.main.async {
-                     if isSuccess {
-                        print("Successfully added to cart")
-                         self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
-                         } else {
-                       print("Failed to add to cart")
-                        self.showAlert(message: "Failed to add to cart" ) 
-                    }
-                 }
-             }
+            DispatchQueue.main.async {
+                if isSuccess {
+                    self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
+                    //   self.addToCard.isEnabled = true
+                    
+                } else {
+                    self.showAlert(message: "Failed to add to cart" )
+                    // self.addToCard.isEnabled = true
+                    
+                }
+            }
+        }
     }
-
+    
     
     func setUpUI() {
         addToCart.backgroundColor = UIColor(hex: "#FF7D29")
@@ -182,57 +225,63 @@ class ProductViewController: UIViewController {
         nameText.isScrollEnabled = false
         nameText.isEditable = false
         nameText.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-
+        
         let ratingView = CosmosView()
         ratingView.settings.updateOnTouch = false
         ratingView.rating = 4
-
+        
         let descriptionTextView = UITextView()
         descriptionTextView.text = description
         descriptionTextView.isScrollEnabled = false
         descriptionTextView.isEditable = false
         descriptionTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-
+        
         let reviewsHeader = UILabel()
         reviewsHeader.text = "Reviews"
         reviewsHeader.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-
+        
         let reviewsTableView = UITableView()
         reviewsTableView.delegate = self
         reviewsTableView.dataSource = self
         reviewsTableView.isScrollEnabled = false
         reviewsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ReviewCell")
-       
+        
         let availableSizeAndColorLabel = UILabel()
-          availableSizeAndColorLabel.text = "Available Size and Color:"
-          availableSizeAndColorLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-
+        availableSizeAndColorLabel.text = "Available Size and Color:"
+        availableSizeAndColorLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        
         
         stack.addArrangedSubview(nameText)
         stack.addArrangedSubview(ratingView)
         stack.addArrangedSubview(descriptionTextView)
         stack.addArrangedSubview(availableSizeAndColorLabel)
         
+        
+        
+        // get it to save product to fav by it
+        firstVariantId = variants.first?.id
+        
+        
+        
         for variant in variants {
             let variantStackView = UIStackView()
             variantStackView.axis = .horizontal
             variantStackView.spacing = 8
-         
+            
             
             let variantButton = UIButton(type: .system)
-//            variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
             
-            //Handle the currency 
+            //Handle the currency
             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
                 let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
                 variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)", for: .normal)
             } else {
                 variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
             }
-                                
+            
             variantButton.setTitleColor(.black, for: .normal)
             variantButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-
+            
             variantButton.addTarget(self, action: #selector(variantButtonTapped(_:)), for: .touchUpInside)
             
             let checkmarkImageView = UIImageView(image: UIImage(systemName: "checkmark"))
@@ -244,24 +293,24 @@ class ProductViewController: UIViewController {
             variantStackView.addArrangedSubview(checkmarkImageView)
             stack.addArrangedSubview(variantStackView)
         }
-
-
+        
+        
         stack.addArrangedSubview(reviewsHeader)
         stack.addArrangedSubview(reviewsTableView)
-
+        
         NSLayoutConstraint.activate([
             reviewsTableView.heightAnchor.constraint(equalToConstant: 200)
         ])
-
+        
         let seeMoreButton = UIButton(type: .system)
         seeMoreButton.setTitle("See More", for: .normal)
         seeMoreButton.addTarget(self, action: #selector(seeMoreReviews), for: .touchUpInside)
-
+        
         stack.addArrangedSubview(seeMoreButton)
         stack.setCustomSpacing(20, after: reviewsTableView)
     }
-
-
+    
+    
     @objc func variantButtonTapped(_ sender: UIButton) {
         guard let variantStackView = sender.superview as? UIStackView,
               let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView else {
@@ -281,10 +330,10 @@ class ProductViewController: UIViewController {
     }
     
     private func showAlert(message: String) {
-           let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-           alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-           present(alertController, animated: true, completion: nil)
-       }
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
+    }
     
     func fetchExchangeRates(){
         settingsViewModel.fetchExchangeRates { [weak self] error in
@@ -334,7 +383,7 @@ extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
         var arrayOfReviews = ProductViewModel.getReviews()
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath)
         let review = arrayOfReviews[indexPath.row]
-                    
+        
         var content = cell.defaultContentConfiguration()
         content.text = review.1
         content.secondaryText = review.0
