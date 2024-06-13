@@ -285,8 +285,13 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
             }
             
-            cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            
+            if product.variants[0].isSelected {
+                print("is fav ")
+                cell.heartButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+            } else {
+                print("is not fav")
+                cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
             cell.heartButton.tag = indexPath.row
             cell.delegate = self
             
@@ -295,11 +300,89 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         return cell
     }
     
+    
+    
+//    func didTapHeartButton(in cell: CustomCategoriesCell) {
+//        if let indexPath = categoriesCollectionView.indexPath(for: cell) {
+//            print("Heart button tapped for row: \(indexPath.row)")
+//        }
+//    }
+    
+    
     func didTapHeartButton(in cell: CustomCategoriesCell) {
+        
+        var productViewModel = ProductViewModel()
+        
         if let indexPath = categoriesCollectionView.indexPath(for: cell) {
-            print("Heart button tapped for row: \(indexPath.row)")
+            guard let product = categoriesViewModel.product(at: indexPath.row) else {
+                return
+            }
+
+            if Authorize.isRegistedCustomer() {
+                cell.heartButton.isEnabled = false
+// deafult now if false
+                if product.variants[0].isSelected {
+                    // Remove from fav
+                    showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
+                                           okAction: { [weak self] _ in
+                        print("OK button remove tapped")
+                      productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                            DispatchQueue.main.async {
+                                if isSuccess {
+                                    product.variants[0].isSelected = false
+                                    cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                    cell.heartButton.isEnabled = true
+                                    print("remove succeful")
+                                } else {
+                                    self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                    cell.heartButton.isEnabled = true
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    // Add to fav
+                    productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
+                        DispatchQueue.main.async {
+                            if isSuccess {
+                                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                                cell.heartButton.isEnabled = true
+                                print("added succesfully ")
+                                product.variants[0].isSelected = true
+                                self?.showCheckMarkAnimation(mark: "heart.fill")
+
+                            } else {
+                                self?.showAlertWithTwoOption(message: "Failed to add to favorites")
+                                cell.heartButton.isEnabled = true
+                            }
+                        }
+                    }
+                }
+            } else {
+                showAlertWithTwoOption(message: "Login to add to favorites?",
+                                       okAction: {  _ in
+                    Navigation.ToALogin(from: self)
+                    print("Login OK button tapped")
+                })
+            }
         }
     }
+
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        present(alertController, animated: true, completion: nil)
+    }
+
+    
+    
+    
+    
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width / 2 - 20 , height: 260)
