@@ -11,31 +11,42 @@ class ProductViewModel{
     
         var favViewModel = FavViewModel()
         var bindResultToViewController : (()->()) = {}
-        
         var product : Product?{
             didSet{
                 bindResultToViewController()
             }
         }
-        
-            
+                    
         func checkIsFav(imageUrl: String, completion: @escaping (Bool) -> Void) {
-            favViewModel.bindResultToViewController = { [weak self] in
-                DispatchQueue.main.async {
-                    guard let self = self, let lineItems = self.favViewModel.LineItems else {
-                        completion(false)
-                        return
+                favViewModel.bindResultToViewController = { [weak self] in
+                    DispatchQueue.main.async {
+                        
+                        guard let self = self else {
+                            print("in  guard 1")
+
+                            completion(false)
+                            return
+                        }
+                        
+                        guard let lineItems = self.favViewModel.LineItems else {
+                            print("in  guard let 2 ")
+
+                            completion(false)
+                            return
+                        }
+                        print("after  guard let")
+
+                        let isFav = lineItems.contains { lineItem in
+                            imageUrl == lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value
+                        }
+                        
+                        print(" i get the result ot isfav in check is fav \(isFav)")
+
+                        completion(isFav)
                     }
-                    
-                    let isFav = lineItems.contains { lineItem in
-                        imageUrl == lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value
-                    }
-                    
-                    completion(isFav)
                 }
+                favViewModel.getFavs()
             }
-            favViewModel.getFavs()
-        }
     
     
      func getProductDetails(id: String) {

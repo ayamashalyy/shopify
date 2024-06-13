@@ -22,7 +22,17 @@ class CustomCategoriesCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    func updateFavButton(isFav: Bool) {
+        if isFav {
+            print("is fav ")
+            heartButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+        } else {
+            print("is not fav")
+            heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        }
+    }
+    
     private func setupUI() {
         addSubview(categoriesImgView)
         addSubview(nameCategoriesLabel)

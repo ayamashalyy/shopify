@@ -71,11 +71,9 @@ class ProductViewController: UIViewController {
     
     func updateFavButton(iscomefromFav: Bool) {
         if iscomefromFav {
-            isFav = true
             productFavButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             productFavButton.tintColor = .red
         } else {
-            isFav = false
             productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
             productFavButton.tintColor = .red
         }

@@ -13,6 +13,9 @@ class FavViewModel {
     
     var LineItems : [LineItem]?{
         didSet{
+            print("did set line item \(LineItems?[0].title)")
+            print("did set line item \(LineItems?[1].title)")
+
             bindResultToViewController()
          //   print("LineItems     is    \(LineItems?.count)")
         }
