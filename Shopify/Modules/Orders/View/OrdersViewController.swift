@@ -11,6 +11,8 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
     
     @IBOutlet weak var ordersTable: UITableView!
     
+    var orderViewModel = OrderViewModel()
+    
     var orders: [Order] = [
         Order(totalPrice: "$100", creationDate: "2023-05-01", shippedTo: "New York", phone: "123-456-7890"),
         Order(totalPrice: "$200", creationDate: "2023-06-01", shippedTo: "Los Angeles", phone: "098-765-4321"),
@@ -24,6 +26,16 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         ordersTable.dataSource = self
         ordersTable.delegate = self
         ordersTable.register(UINib(nibName: "OrderViewCell", bundle: nil), forCellReuseIdentifier: "OrderViewCell")
+        
+        // Example usage
+        orderViewModel.createOrder { order, error in
+            if let order = order {
+                print("Order created successfully: \(order)")
+            } else if let error = error {
+                print("Failed to create order: \(error.localizedDescription)")
+            }
+        }
+        
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -260,7 +260,7 @@ class CategoriesViewController: UIViewController {
 }
 
 
-extension CategoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension CategoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CustomCategoriesCellDelegate{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categoriesViewModel.numberOfCategoryProducts()
@@ -285,10 +285,20 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
             }
             
-            cell.heartImageView.image = UIImage(systemName: "heart")
+            cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            
+            cell.heartButton.tag = indexPath.row
+            cell.delegate = self
+            
         }
         
         return cell
+    }
+    
+    func didTapHeartButton(in cell: CustomCategoriesCell) {
+        if let indexPath = categoriesCollectionView.indexPath(for: cell) {
+            print("Heart button tapped for row: \(indexPath.row)")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
