@@ -54,9 +54,11 @@ class Navigation {
        }
 
 
-    static func ToSearch(from viewController: UIViewController) {
+    static func ToSearch(from viewController: UIViewController,comeFromHome:Bool , products: [Product]) {
            let storyboard = UIStoryboard(name: "third", bundle: nil)
            if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+               vc.comeFromHome = comeFromHome
+               vc.products =  products
                vc.modalPresentationStyle = .fullScreen
                viewController.present(vc, animated: true, completion: nil)
            }

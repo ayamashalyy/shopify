@@ -32,7 +32,7 @@ class AllFavViewController: UIViewController {
         super.viewDidLoad()
         allFavTable.dataSource = self
         allFavTable.delegate = self
-        
+        fetchExchangeRates()
         allFavTable.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         allFavTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
@@ -193,12 +193,10 @@ extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
                         if isSuccess {
                             print("Removed from favorites table")
                             self.myfavLineItem.remove(at: indexPath.row)
-                            
                             tableView.deleteRows(at: [indexPath], with: .fade)
                             self.checkIfNoData()
                             self.indicator.stopAnimating()
 
-                            
                         }
                     }
                 }

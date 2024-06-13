@@ -66,7 +66,7 @@ class CustomCategoriesCell: UICollectionViewCell {
 
         categoriesImgView.layer.cornerRadius = 20
         categoriesImgView.layer.masksToBounds = true
-
+        categoriesImgView.contentMode = .scaleAspectFit 
         contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true
 

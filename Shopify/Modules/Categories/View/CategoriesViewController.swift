@@ -301,14 +301,6 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
     }
     
     
-    
-//    func didTapHeartButton(in cell: CustomCategoriesCell) {
-//        if let indexPath = categoriesCollectionView.indexPath(for: cell) {
-//            print("Heart button tapped for row: \(indexPath.row)")
-//        }
-//    }
-    
-    
     func didTapHeartButton(in cell: CustomCategoriesCell) {
         
         var productViewModel = ProductViewModel()
@@ -377,10 +369,6 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         present(alertController, animated: true, completion: nil)
     }
 
-    
-    
-    
-    
     
     
     
