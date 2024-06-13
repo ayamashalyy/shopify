@@ -17,8 +17,8 @@ class ShoppingCartableViewCell: UITableViewCell {
     @IBOutlet weak var decrementButton: UIButton!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var productView: UIView!
-   
-    
+    @IBOutlet weak var sizeLable: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.clipsToBounds = false

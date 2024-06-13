@@ -164,7 +164,7 @@
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="JFx-xK-oPh">
-                                <rect key="frame" x="0.0" y="136.00000000000003" width="393" height="501.66666666666674"/>
+                                <rect key="frame" x="0.0" y="136" width="393" height="557.66666666666663"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShoppingCartableViewCell" id="itK-Si-Cfn" customClass="ShoppingCartableViewCell" customModule="Shopify" customModuleProvider="target">
@@ -178,19 +178,19 @@
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Total Price :" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c9r-ed-rmj">
-                                <rect key="frame" x="42.999999999999993" y="652.66666666666663" width="118.33333333333331" height="26.333333333333371"/>
+                                <rect key="frame" x="42.999999999999993" y="708.66666666666663" width="118.33333333333331" height="26.333333333333371"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2000$" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqW-dA-Xzi">
-                                <rect key="frame" x="204.33333333333337" y="652.66666666666663" width="168.66666666666663" height="26.333333333333371"/>
+                                <rect key="frame" x="204.33333333333337" y="708.66666666666663" width="168.66666666666663" height="26.333333333333371"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W3v-r2-1xD">
-                                <rect key="frame" x="29" y="699" width="334" height="43"/>
+                                <rect key="frame" x="29" y="755" width="334" height="43"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="43" id="9zy-7V-aTZ"/>
                                 </constraints>
@@ -212,7 +212,7 @@
                             <constraint firstItem="JFx-xK-oPh" firstAttribute="trailing" secondItem="0wF-ed-GCy" secondAttribute="trailing" id="91g-4R-DzE"/>
                             <constraint firstItem="0wF-ed-GCy" firstAttribute="trailing" secondItem="lqW-dA-Xzi" secondAttribute="trailing" constant="20" id="Fgz-51-Jqt"/>
                             <constraint firstItem="c9r-ed-rmj" firstAttribute="leading" secondItem="0wF-ed-GCy" secondAttribute="leading" constant="43" id="GID-88-clz"/>
-                            <constraint firstItem="0wF-ed-GCy" firstAttribute="bottom" secondItem="W3v-r2-1xD" secondAttribute="bottom" constant="76" id="GaL-dz-mYc"/>
+                            <constraint firstItem="0wF-ed-GCy" firstAttribute="bottom" secondItem="W3v-r2-1xD" secondAttribute="bottom" constant="20" id="GaL-dz-mYc"/>
                             <constraint firstItem="W3v-r2-1xD" firstAttribute="top" secondItem="lqW-dA-Xzi" secondAttribute="bottom" constant="20" id="H3D-hs-lpQ"/>
                             <constraint firstItem="0wF-ed-GCy" firstAttribute="trailing" secondItem="NvK-WS-gcK" secondAttribute="trailing" id="VZZ-5J-vuL"/>
                             <constraint firstItem="lqW-dA-Xzi" firstAttribute="top" secondItem="JFx-xK-oPh" secondAttribute="bottom" constant="15" id="XxA-dR-kHB"/>
