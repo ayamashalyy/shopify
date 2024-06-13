@@ -99,11 +99,9 @@ class ProductViewController: UIViewController {
                 showAlert(message: "The product not loaded yet")
                 return
             }
-            
             // i need variant id not product id as draft order deal with it
             if isFav{
                 // remove from fav
-                
                 let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
@@ -119,9 +117,7 @@ class ProductViewController: UIViewController {
                         }
                     }
                 }))
-                
                 present(alertController, animated: true, completion: nil)
-                
             }
             else{
                 // add to fav

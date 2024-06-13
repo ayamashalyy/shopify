@@ -143,6 +143,7 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         let cell = categoriesCollectionView.dequeueReusableCell(withReuseIdentifier: "brandsCell", for: indexPath) as! CustomCategoriesCell
         
         if let product = brandProductsViewModel.product(at: indexPath.row) {
+            
             print("Displaying product: \(product.name) with price: \(product.variants.first?.price ?? "N/A")")
             cell.nameCategoriesLabel.text = product.name
             
@@ -158,15 +159,13 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
             } else {
                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
             }
-            
-            // Update the favorite button based on the product's favorite status
-            let productImageURL = product.images.first?.url ?? ""
-            productViewModel.checkIsFav(imageUrl: productImageURL) { isFav in
-                DispatchQueue.main.async {
-                    cell.updateFavButton(isFav: isFav)
-                    // to handel the button on next according
-                    product.variants[0].isSelected = isFav
-                }
+
+            if product.variants[0].isSelected {
+                print("is fav ")
+                cell.heartButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
+            } else {
+                print("is not fav")
+                cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
             }
         }
         
@@ -215,6 +214,7 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
                                 cell.heartButton.isEnabled = true
                                 print("added succesfully ")
                                 product.variants[0].isSelected = true
+                                self?.showCheckMarkAnimation(mark: "heart.fill")
 
                             } else {
                                 self?.showAlertWithTwoOption(message: "Failed to add to favorites")
@@ -242,64 +242,6 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
         present(alertController, animated: true, completion: nil)
     }
 
-    
-//    func didTapHeartButton(in cell: CustomCategoriesCell) {
-//        if let indexPath = categoriesCollectionView.indexPath(for: cell) {
-//            let product = brandProductsViewModel.product(at: indexPath.row)
-//
-//            if (Authorize.isRegistedCustomer()) {
-//
-//                cell.heartButton.isEnabled = false
-//                if product!.variants[0].isSelected{
-//                    // remove from fav
-//                showAlertWithTwoOption(message: "Are you sure ? Remove from favorites?",
-//                                                okAction: { action in
-//                        print("OK button  remove")
-//                            self.productViewModel?.removeFromFavDraftOrders(VariantsId: product?.variants[0].id!) { isSuccess in
-//                            DispatchQueue.main.async {
-//                                if isSuccess {
-//                                    product?.variants[0].isSelected = false
-//                                    cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-//                                    cell.heartButton.isEnabled = true
-//                                }
-//                            }
-//                        }
-//                    })
-//                }
-//                else{
-//                    // add to fav
-//                    productViewModel.addToFavDraftOrders(selectedVariantsData: [(product!.variants[0].id, product?.images.first?.url ?? "",1)]){ [weak self ] isSuccess in
-//                        DispatchQueue.main.async {
-//                            if isSuccess {
-//                                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-//                                cell.heartButton.isEnabled = true
-//                            } else {
-//                                self?.showAlertWithTwoOption(message: "Sorry,Failed to add to Faviourts" )
-//                                cell.heartButton.isEnabled = true
-//                            }
-//                        }
-//                    }
-//                }}else {
-//                    self.showAlertWithTwoOption(message: "Login to add to faviourts?",
-//                                                okAction: { action in
-//                        Navigation.ToALogin(from: self)
-//                        print("OK button tapped")
-//                    }
-//                    )
-//                }
-//        }
-//    }
-//    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
-//        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-//        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
-//        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
-//        alertController.addAction(okAlertAction)
-//        alertController.addAction(cancelAlertAction)
-//            present(alertController, animated: true, completion: nil)
-//    }
-//
-//    
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width / 2 - 20 , height: 260)
     }

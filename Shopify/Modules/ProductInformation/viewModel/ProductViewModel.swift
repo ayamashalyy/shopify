@@ -46,7 +46,7 @@ class ProductViewModel{
                     }
                 }
                 favViewModel.getFavs()
-            }
+       }
     
     
      func getProductDetails(id: String) {
