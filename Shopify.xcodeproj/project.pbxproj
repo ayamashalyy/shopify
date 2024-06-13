@@ -57,6 +57,8 @@
 		517FF60A2C1456C800FA0FD2 /* BrandProductsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517FF6092C1456C800FA0FD2 /* BrandProductsViewModel.swift */; };
 		51871C462C0F122F0045676F /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51871C452C0F122F0045676F /* CategoriesViewController.swift */; };
 		51871C4B2C0F6C5D0045676F /* BrandsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51871C4A2C0F6C5D0045676F /* BrandsViewController.swift */; };
+		5187651C2C1A20D50040EF33 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187651B2C1A20D50040EF33 /* Order.swift */; };
+		5187651E2C1A31CB0040EF33 /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187651D2C1A31CB0040EF33 /* OrderViewModel.swift */; };
 		518B837E2C132F5D001DD3A4 /* CustomBrandCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B837D2C132F5D001DD3A4 /* CustomBrandCell.swift */; };
 		518B83802C132FF9001DD3A4 /* CustomCouponCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B837F2C132FF9001DD3A4 /* CustomCouponCell.swift */; };
 		518B83842C134CE0001DD3A4 /* CustomCategoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B83832C134CE0001DD3A4 /* CustomCategoriesCell.swift */; };
@@ -161,6 +163,8 @@
 		517FF6092C1456C800FA0FD2 /* BrandProductsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandProductsViewModel.swift; sourceTree = "<group>"; };
 		51871C452C0F122F0045676F /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		51871C4A2C0F6C5D0045676F /* BrandsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandsViewController.swift; sourceTree = "<group>"; };
+		5187651B2C1A20D50040EF33 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		5187651D2C1A31CB0040EF33 /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		518B837D2C132F5D001DD3A4 /* CustomBrandCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBrandCell.swift; sourceTree = "<group>"; };
 		518B837F2C132FF9001DD3A4 /* CustomCouponCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCouponCell.swift; sourceTree = "<group>"; };
 		518B83832C134CE0001DD3A4 /* CustomCategoriesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategoriesCell.swift; sourceTree = "<group>"; };
@@ -399,6 +403,7 @@
 				7D2B98522C15D28C0029BB08 /* Customer.swift */,
 				517F92652C167633006200C2 /* CategoryProducts.swift */,
 				51A9B0332C17AC6800394EFD /* Currency.swift */,
+				5187651B2C1A20D50040EF33 /* Order.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -715,6 +720,7 @@
 		51D8D7F82C110D6A00F49A0B /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				5187651D2C1A31CB0040EF33 /* OrderViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1137,6 +1143,7 @@
 				03D35C892C0CEC1300523AF7 /* ViewController.swift in Sources */,
 				0337F1FB2C0E0C3B00D97CBD /* ShoppingCartableViewCell.swift in Sources */,
 				037955D42C0E7715003A3AF9 /* SelectAddressViewController.swift in Sources */,
+				5187651E2C1A31CB0040EF33 /* OrderViewModel.swift in Sources */,
 				03D35C852C0CEC1300523AF7 /* AppDelegate.swift in Sources */,
 				51A9B0342C17AC6800394EFD /* Currency.swift in Sources */,
 				518B83842C134CE0001DD3A4 /* CustomCategoriesCell.swift in Sources */,
@@ -1170,6 +1177,7 @@
 				03E3E5B52C19071200F0164C /* ContactUsViewController.swift in Sources */,
 				0351671B2C0D3E6C00B208A8 /* SettingsViewController.swift in Sources */,
 				03EAA80C2C1434F500A60BDA /* AddressViewModel.swift in Sources */,
+				5187651C2C1A20D50040EF33 /* Order.swift in Sources */,
 				7DDC925B2C19402D002B5AD6 /* animation.swift in Sources */,
 				7DEFA6932C11EDE900DBD777 /* signUpViewController.swift in Sources */,
 				518B83802C132FF9001DD3A4 /* CustomCouponCell.swift in Sources */,
