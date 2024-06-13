@@ -8,27 +8,27 @@
 import Foundation
 
 class Authorize{
-
+    
     static let customerIDKey = "CustomerID"
-        static func saveCustomerIDToUserDefaults(customerID: Int) {
-            UserDefaults.standard.set(customerID, forKey: customerIDKey)
-        }
-        
-        static func getCustomerIDFromUserDefaults() -> Int? {
-            // if make get and their is no id will get 0
-            return UserDefaults.standard.integer(forKey: customerIDKey)
-        }
-        
-        static func clearCustomerIDFromUserDefaults() {
-            print("clear user key")
-            UserDefaults.standard.removeObject(forKey: customerIDKey)
-        }
+    static func saveCustomerIDToUserDefaults(customerID: Int) {
+        UserDefaults.standard.set(customerID, forKey: customerIDKey)
+    }
+    
+    static func getCustomerIDFromUserDefaults() -> Int? {
+        // if make get and their is no id will get 0
+        return UserDefaults.standard.integer(forKey: customerIDKey)
+    }
+    
+    static func clearCustomerIDFromUserDefaults() {
+        print("clear user key")
+        UserDefaults.standard.removeObject(forKey: customerIDKey)
+    }
     
     
     static let draftOrderIDOneSting = "draftOrderIDOne"
     static func favDraftOrder(draftOrderIDOne: Int) {
         print("favDraftOrder seeeet   \(draftOrderIDOne) ")
-
+        
         UserDefaults.standard.set(draftOrderIDOne, forKey: draftOrderIDOneSting )
     }
     static  func favDraftOrder() -> Int? {
@@ -52,29 +52,42 @@ class Authorize{
     static  func clearCardDraftOrderId() {
         UserDefaults.standard.removeObject(forKey: draftOrderIDTwoSting)
     }
-
+    
     // the function that call it also should go to navigation to login
-    static func logout (){
+    static func logout () {
         Authorize.clearCardDraftOrderId()
         Authorize.clearCustomerIDFromUserDefaults()
         Authorize.clearFavDraftOrder()
-                
+        
+    }
+    
+    static func isRegistedCustomer () -> Bool {
+        
+        if (Authorize.getCustomerIDFromUserDefaults() != 0)
+        {
+            print("he isRegistedCustomer ")
+            return true
+        }
+        else{
+            print("he is guest ")
+
+            return false
+        }
     }
 }
 
-
 /*
-
+ 
  // To access the customer ID from anywhere in the application
  if let customerID = Authorize.getCustomerIDFromUserDefaults() {
-     print("Customer ID:", customerID)
+ print("Customer ID:", customerID)
  }
  
  // Log out action
  func logout() {
-     // Clear the saved customer ID
-     Authorize.clearCustomerIDFromUserDefaults()
+ // Clear the saved customer ID
+ Authorize.clearCustomerIDFromUserDefaults()
  // navigtion to login
  }
-
+ 
  */

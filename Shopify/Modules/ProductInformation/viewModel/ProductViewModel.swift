@@ -93,7 +93,6 @@ class ProductViewModel{
     func addToFavDraftOrders(selectedVariantsData: [(id: Int, imageUrl: String, quantity:Int)],completion: @escaping (Bool) -> Void) {
         getuPdataDraftOrder(selectedVariantsData,isCardIsTrueAndFavIsFAV: false) { draftOrderRequest in
             if let draftOrderRequest = draftOrderRequest {
-                                
                 Decoding.encodeData(object: draftOrderRequest){ jsonData, encodeError in
                     guard let jsonData = jsonData, encodeError == nil else {
                         print("Error encoding  data:", encodeError?.localizedDescription ?? "Unknown error")
@@ -119,7 +118,6 @@ class ProductViewModel{
     
     
     func removeFromFavDraftOrders (VariantsId:Int,completion:@escaping(Bool)-> Void){
-        
         removeFromDraftOrder(VariantsId: VariantsId) { draftOrderRequest in
             if let draftOrderRequest = draftOrderRequest {
                 

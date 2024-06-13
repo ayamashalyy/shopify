@@ -32,7 +32,7 @@ class ProductViewController: UIViewController {
         super.viewDidLoad()
         fetchExchangeRates()
         
-        print("in product the id \(productId ?? "")")
+        //  print("in product the id \(productId ?? "")")
         setUpUI()
         myCollectionOfImages.delegate = self
         myCollectionOfImages.dataSource = self
@@ -49,12 +49,12 @@ class ProductViewController: UIViewController {
                 
                 if self.isComeFromFaviourts == true
                 {
-                    print("is come from fav")
+                    //            print("is come from fav")
                     self.updateFavButton(iscomefromFav: true)
                     
                 }
                 else{
-                    print("is noooooot come from fav")
+                    //             print("is noooooot come from fav")
                     
                     self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isFav in
                         self.updateFavButton(iscomefromFav: isFav)
@@ -93,111 +93,133 @@ class ProductViewController: UIViewController {
     
     @IBAction func productFavBtn(_ sender: UIButton) {
         
-        productFavButton.isEnabled = false
-        
-        guard let productIdString = productId, let firstImageURL = firstImageURL else {
-            showAlert(message: "The product not loaded yet")
-            return
-        }
-        
-        // i need variant id not product id as draft order deal with it
-        if isFav{
-            // remove from fav
+        if   (Authorize.isRegistedCustomer())
+        {
+            productFavButton.isEnabled = false
             
-            let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
-                guard let self = self else { return }
-                self.productViewModel?.removeFromFavDraftOrders(VariantsId: firstVariantId!) { isSuccess in
+            guard let productIdString = productId, let firstImageURL = firstImageURL else {
+                showAlert(message: "The product not loaded yet")
+                return
+            }
+            
+            // i need variant id not product id as draft order deal with it
+            if isFav{
+                // remove from fav
+                
+                let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.productViewModel?.removeFromFavDraftOrders(VariantsId: firstVariantId!) { isSuccess in
+                        DispatchQueue.main.async {
+                            if isSuccess {
+                                self.isFav = false
+                                self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                self.productFavButton.isEnabled = true
+                                
+                            }
+                        }
+                    }
+                }))
+                
+                present(alertController, animated: true, completion: nil)
+                
+            }
+            else{
+                // add to fav
+                productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
                     DispatchQueue.main.async {
                         if isSuccess {
-                            self.isFav = false
-                            self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                            self.productFavButton.isEnabled = true
-
+                            self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                            self?.showCheckMarkAnimation(mark: "heart.fill")
+                            self?.isFav = true
+                            self?.productFavButton.isEnabled = true
+                            
+                        } else {
+                            self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
+                            self?.productFavButton.isEnabled = true
                         }
                     }
                 }
-            }))
-            
-            present(alertController, animated: true, completion: nil)
-            
-        }
-        else{
-            // add to fav
-            productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
-                DispatchQueue.main.async {
-                    if isSuccess {
-                        self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                        self?.showCheckMarkAnimation(mark: "heart.fill")
-                        self?.isFav = true
-                        self?.productFavButton.isEnabled = true
-
-                    } else {
-                        self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
-                        self?.productFavButton.isEnabled = true
-                    }
+            }}else {
+                
+                self.showAlertWithTwoOption(message: "Login to add to faviourts?",
+                                            okAction: { action in
+                    Navigation.ToALogin(from: self)
+                    print("OK button tapped")
                 }
+                )
             }
-        }
+    }
+    
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     @IBOutlet weak var addToCard: UIButton!
     
-    
     @IBAction func addCartAction(_ sender: UIButton) {
-        addToCard.isEnabled = false
-                
-        var selectedVariants: [String] = []
-        var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
-        
-        
-        for subview in stack.arrangedSubviews {
+        if   (Authorize.isRegistedCustomer()){
             
-            if let variantStackView = subview as? UIStackView,
-               let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
-               let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
-               !checkmarkImageView.isHidden {
-                if let variantText = variantButton.titleLabel?.text {
-                    selectedVariants.append(variantText)
-                    
-                    for variant in productViewModel?.product?.variants ?? [] {
+            addToCard.isEnabled = false
+            var selectedVariants: [String] = []
+            var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
+        
+            for subview in stack.arrangedSubviews {
+                  if let variantStackView = subview as? UIStackView,
+                   let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
+                   let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
+                   !checkmarkImageView.isHidden {
+                    if let variantText = variantButton.titleLabel?.text {
+                        selectedVariants.append(variantText)
                         
-                        
-                        if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
-                            
-                            let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
-                            
-                            if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
-                                if let imageUrl = productViewModel?.product?.images.first?.url {
-                                    selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
+                        for variant in productViewModel?.product?.variants ?? [] {
+                            if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
+                              let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
+                                if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
+                                    if let imageUrl = productViewModel?.product?.images.first?.url {
+                                        selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
+                                    }
                                 }
-                            }
-                        } else {
-                            if("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText){
-                                if let imageUrl = productViewModel?.product?.images.first?.url {
-                                    selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity : variant.inventory_quantity!))
+                            } else {
+                                if("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$" == variantText){
+                                    if let imageUrl = productViewModel?.product?.images.first?.url {
+                                        selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity : variant.inventory_quantity!))
+                                    }
                                 }
                             }
                         }
-                        
                     }
                 }
             }
-        }
-        
-        productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
-            DispatchQueue.main.async {
-                if isSuccess {
-                    self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
-                     self.addToCard.isEnabled = true
-                    self.hideAllCheckmarkImages()
-                } else {
-                    self.showAlert(message: "Failed to add to cart" )
-                    self.addToCard.isEnabled = true
-                    
+            productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
+                DispatchQueue.main.async {
+                    if isSuccess {
+                        self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
+                        self.addToCard.isEnabled = true
+                        self.hideAllCheckmarkImages()
+                    } else {
+                        self.showAlert(message: "Failed to add to cart" )
+                        self.addToCard.isEnabled = true
+                        
+                    }
                 }
-            }
+            }}else {
+                self.showAlertWithTwoOption(message: "Login to add to faviourts?",
+                                            okAction: { action in
+                    Navigation.ToALogin(from: self)
+                    print("OK button tapped")
+                }
+                )
+            
         }
     }
     
@@ -293,13 +315,13 @@ class ProductViewController: UIViewController {
             
             
             // Highlight the selected variant
-                 if selectedVarientId == variant.id {
-                     // You can change the background color or add a border to highlight the selected variant
-                     variantStackView.layer.borderWidth = 2.0
-                     variantStackView.layer.borderColor = UIColor.orange.cgColor
-                     variantStackView.layer.cornerRadius = 8.0
-                 }
-                 
+            if selectedVarientId == variant.id {
+                // You can change the background color or add a border to highlight the selected variant
+                variantStackView.layer.borderWidth = 2.0
+                variantStackView.layer.borderColor = UIColor.orange.cgColor
+                variantStackView.layer.cornerRadius = 8.0
+            }
+            
             
             variantStackView.addArrangedSubview(variantButton)
             variantStackView.addArrangedSubview(checkmarkImageView)
@@ -341,11 +363,13 @@ class ProductViewController: UIViewController {
         present(reviewsVC, animated: true, completion: nil)
     }
     
-    private func showAlert(message: String) {
+    private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+        alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
+    
     
     func fetchExchangeRates(){
         settingsViewModel.fetchExchangeRates { [weak self] error in
@@ -399,6 +423,7 @@ extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
         var content = cell.defaultContentConfiguration()
         content.text = review.1
         content.secondaryText = review.0
+        // content , image i want make rounded small photo = review.2 which is name of image in my assart
         cell.contentConfiguration = content
         
         return cell
