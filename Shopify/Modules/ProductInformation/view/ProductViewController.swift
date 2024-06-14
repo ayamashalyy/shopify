@@ -20,7 +20,8 @@ class ProductViewController: UIViewController {
     var firstVariantId : Int?
     var isComeFromFaviourts: Bool?
     var selectedVarientId : Int?
-    
+    var isFav = false
+
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var addToCart: UIButton!
@@ -58,6 +59,8 @@ class ProductViewController: UIViewController {
                     
                     self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isFav in
                         self.updateFavButton(iscomefromFav: isFav)
+                        self.isFav = isFav
+                        
                     }
                 }
                 self.myCollectionOfImages.reloadData()
@@ -70,11 +73,11 @@ class ProductViewController: UIViewController {
         
         
     }
-    
     func updateFavButton(iscomefromFav: Bool) {
         if iscomefromFav {
             productFavButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
             productFavButton.tintColor = .red
+            
         } else {
             productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
             productFavButton.tintColor = .red
@@ -89,7 +92,7 @@ class ProductViewController: UIViewController {
     
     @IBOutlet weak var pageContoller: UIPageControl!
     
-    var isFav = false
+    
     
     @IBAction func productFavBtn(_ sender: UIButton) {
         
@@ -103,6 +106,7 @@ class ProductViewController: UIViewController {
             }
             // i need variant id not product id as draft order deal with it
             if isFav{
+                
                 // remove from fav
                 let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -124,7 +128,6 @@ class ProductViewController: UIViewController {
             else{
                 // add to fav
                 productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
-
                     DispatchQueue.main.async {
                         if isSuccess {
                             self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)

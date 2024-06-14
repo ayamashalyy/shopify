@@ -26,6 +26,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
     }
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
+        Navigation.ToSearch(from: self, comeFromHome: true, products: [])
     }
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
