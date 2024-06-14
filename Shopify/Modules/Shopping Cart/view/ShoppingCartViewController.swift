@@ -29,6 +29,35 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             self?.tableView.reloadData()
             self?.updateSubtotal()
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if Authorize.isRegistedCustomer() {
+            getThemButton.isEnabled = true
+
+        }else{
+            getThemButton.isEnabled = false
+            self.showAlertWithTwoOption(message: "Login to add to cart?",
+                                        okAction: { action in
+                Navigation.ToALogin(from: self)
+                print("OK button tapped")
+            }
+            )
+        }
+    }
+    
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     func fetchDraftOrders() {
@@ -173,16 +202,11 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
                     }
                 }
             }))
-
+            
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             present(alert, animated: true, completion: nil)
         }
     }
-
-
-
-    
-    
     
     func showAlert(message: String) {
         let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)

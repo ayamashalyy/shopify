@@ -35,11 +35,20 @@ class BrandProductsViewModel{
 
                 Decoding.decodeData(data: data, objectType: [Product].self) { products, decodeError in
                     if let products = products {
-                        self.checkIsFav(productFromApi: products) { productWithFavStatus in
-                            self.products = productWithFavStatus
-                            self.filteredProducts = productWithFavStatus
+                        
+                        if Authorize.isRegistedCustomer(){
+                            self.checkIsFav(productFromApi: products) { productWithFavStatus in
+                                self.products = productWithFavStatus
+                                self.filteredProducts = productWithFavStatus
+                                completion(nil)
+                            }
+                        }else {
+                            self.products = products
+                            self.filteredProducts = products
                             completion(nil)
                         }
+                        
+                        
                     } else if let decodeError = decodeError {
                         completion(decodeError)
                     } else {

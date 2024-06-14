@@ -32,11 +32,19 @@ class CategoriesViewModel{
             Decoding.decodeData(data: data, objectType: [Product].self) { [weak self] (products, decodeError) in
                 guard let self = self else { return }
                 if let products = products {
-                    
-                    self.checkIsFav(productFromApi: products) { productWithFavStatus in
-                        self.categoryProducts = productWithFavStatus
+                  
+                    if Authorize.isRegistedCustomer(){
+                        
+                        self.checkIsFav(productFromApi: products) { productWithFavStatus in
+                            self.categoryProducts = productWithFavStatus
+                            completion(nil)
+                        }
+                        
+                    }else {
+                        self.categoryProducts = products
                         completion(nil)
                     }
+                    
                 } else if let decodeError = decodeError {
                     completion(decodeError)
                 } else {

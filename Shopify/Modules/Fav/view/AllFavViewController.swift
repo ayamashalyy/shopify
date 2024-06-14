@@ -42,34 +42,53 @@ class AllFavViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setUpUI()
-        
-        myfavLineItem.removeAll()
-        allFavTable.reloadData()
+        if Authorize.isRegistedCustomer() {
+            setUpUI()
             
-        favViewModel?.bindResultToViewController = { [weak self] in
-            DispatchQueue.main.async {
-                guard let self = self, let lineItems = self.favViewModel?.LineItems else { return }
-                
-                for lineItem in lineItems {
-                    if let productId = lineItem.product_id,
-                       let imageUrl = lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value,
-                       let price = lineItem.price {
-                        let favLineItem = FavLineItem(name: lineItem.title ?? "", productId: lineItem.product_id!, image: imageUrl, price: price, firstVariantid: lineItem.variant_id!)
-                        self.myfavLineItem.append(favLineItem)
-                        print("Fav: \(favLineItem)")
-                    } else {
-                        print("Error: Missing data in lineItem \(lineItem)")
+            myfavLineItem.removeAll()
+            allFavTable.reloadData()
+            
+            favViewModel?.bindResultToViewController = { [weak self] in
+                DispatchQueue.main.async {
+                    guard let self = self, let lineItems = self.favViewModel?.LineItems else { return }
+                    
+                    for lineItem in lineItems {
+                        if let productId = lineItem.product_id,
+                           let imageUrl = lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value,
+                           let price = lineItem.price {
+                            let favLineItem = FavLineItem(name: lineItem.title ?? "", productId: lineItem.product_id!, image: imageUrl, price: price, firstVariantid: lineItem.variant_id!)
+                            self.myfavLineItem.append(favLineItem)
+                            print("Fav: \(favLineItem)")
+                        } else {
+                            print("Error: Missing data in lineItem \(lineItem)")
+                        }
                     }
+                    self.indicator.stopAnimating()
+                    self.checkIfNoData()
+                    self.allFavTable.reloadData()
                 }
-                
-                self.indicator.stopAnimating()
-                self.checkIfNoData()
-                self.allFavTable.reloadData()
             }
+            favViewModel?.getFavs()
+        }else{
+            self.showAlertWithTwoOption(message: "Login to add to faviourts?",
+                                        okAction: { action in
+                Navigation.ToALogin(from: self)
+                print("OK button tapped")
+            }
+            )
         }
-
-        favViewModel?.getFavs()
+    }
+    
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     func checkIfNoData() {
@@ -179,7 +198,7 @@ extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             
             self.indicator.startAnimating()
-
+            
             favViewModel?.removeLineItem(index: indexPath.row)
             
             let alertController = UIAlertController(title: "Confirmation", message: "Are you sure? Remove from favorites?", preferredStyle: .alert)
@@ -196,7 +215,7 @@ extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
                             tableView.deleteRows(at: [indexPath], with: .fade)
                             self.checkIfNoData()
                             self.indicator.stopAnimating()
-
+                            
                         }
                     }
                 }

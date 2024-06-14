@@ -452,6 +452,7 @@
                     <tabBarItem key="tabBarItem" title="Me" image="person.circle" catalog="system" id="3wy-Cl-Dog"/>
                     <navigationItem key="navigationItem" id="eWm-1U-qyP"/>
                     <connections>
+                        <outlet property="setting" destination="Fik-ka-m8H" id="RSu-5K-H6T"/>
                         <outlet property="tableview" destination="EEY-B4-vdU" id="r8n-84-0Gu"/>
                     </connections>
                 </viewController>

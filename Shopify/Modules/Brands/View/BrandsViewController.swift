@@ -21,6 +21,7 @@ class BrandsViewController: UIViewController {
     
     var categoriesCollectionView: UICollectionView!
     var valueLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

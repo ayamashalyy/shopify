@@ -15,6 +15,7 @@ struct Order {
 }
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    @IBOutlet weak var setting: UIBarButtonItem!
     
     @IBOutlet weak var tableview: UITableView!
     
@@ -31,6 +32,33 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         tableview.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if Authorize.isRegistedCustomer() {
+            setting.isEnabled = true
+        } else {
+            setting.isEnabled = false
+         self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
+                                       okAction: { action in
+               Navigation.ToALogin(from: self)
+               print("OK button tapped")
+           }
+           )
+       }
+   }
+   
+   private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+       let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+       
+       let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+       let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+       
+       alertController.addAction(okAlertAction)
+       alertController.addAction(cancelAlertAction)
+       
+       present(alertController, animated: true, completion: nil)
+   }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
