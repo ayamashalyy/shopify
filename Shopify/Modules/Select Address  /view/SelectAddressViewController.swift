@@ -9,7 +9,9 @@ import UIKit
 
 
 
-class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITableViewDelegate {
+class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITableViewDelegate, SelectAddressCellProtocol {
+    
+    
     private let viewModel: AddressViewModel
     
     @IBOutlet weak var tableView: UITableView!
@@ -46,8 +48,6 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         
         alert.addTextField { textField in
             textField.placeholder = "Country"
-            textField.text = "Egypt"
-            textField.isUserInteractionEnabled = false
         }
         
         alert.addTextField { (textField) in
@@ -147,12 +147,16 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         }
         
         let address = viewModel.addresses[indexPath.row]
+       // print("addressTest\(address)")
+        print("addressTest..............................\(address.isDefault)")
         cell.addressLabel.text = address.address1
         cell.phoneLabel.text = address.phone
         cell.cityLabel.text = address.city
         cell.countryLabel.text = address.country
         cell.zipCodeLabel.text = address.zip
-        if address.isDefault ?? true {
+        cell.indexPath = indexPath
+        cell.delegate = self
+        if address.isDefault {
             cell.containerView.backgroundColor = UIColor.white
             cell.containerView.layer.borderColor = UIColor(hex: "#FF7D29").cgColor
             cell.containerView.layer.borderWidth = 1.0
@@ -212,9 +216,38 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        for i in 0..<viewModel.addresses.count {
+            viewModel.addresses[i].isDefault = false
+        }
+        viewModel.addresses[indexPath.row].isDefault = true
+        let selectedAddress = viewModel.addresses[indexPath.row]
+        viewModel.updateAddress(selectedAddress) { [weak self] result in
+            switch result {
+            case .success(let updatedAddress):
+                print("Address updated successfully: \(updatedAddress)")
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+                
+            case .failure(let error):
+                print("Failed to update address: \(error)")
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "Error", message: "Failed to update address: \(error.localizedDescription)")
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    func editAddress(at indexPath: IndexPath) {
         let address = viewModel.addresses[indexPath.row]
         
         let alert = UIAlertController(title: "Edit Address", message: nil, preferredStyle: .alert)
@@ -236,8 +269,8 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         
         alert.addTextField { textField in
             textField.placeholder = "Country"
-            textField.text = "Egypt"
-            textField.isUserInteractionEnabled = false
+            textField.text = address.country
+            
         }
         
         alert.addTextField { textField in
@@ -263,7 +296,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
                 return
             }
             
-            let updatedAddress = Address(id: address.id, address1: address1, phone: phone, city: city, country: country, zip: zip, isDefault: address.isDefault ?? false)
+            let updatedAddress = Address(id: address.id, address1: address1, phone: phone, city: city, country: country, zip: zip, isDefault: address.isDefault)
             
             self.viewModel.updateAddress(updatedAddress) { result in
                 switch result {

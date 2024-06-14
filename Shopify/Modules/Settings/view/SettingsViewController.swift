@@ -61,6 +61,12 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         if settings[indexPath.row] == "Address" {
             navToSelectAddress()
         }
+        if settings[indexPath.row] == "About Us" {
+            navToAboutUs()
+        }
+        if settings[indexPath.row] == "Contact Us" {
+            navToContactUs()
+        }
     }
     
     func navToSelectAddress(){
@@ -71,11 +77,33 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         }
     }
     
-    
-    
-    @IBAction func logoutButtonTapped(_ sender: UIButton) {
-        Authorize.clearCustomerIDFromUserDefaults()
+    func navToAboutUs(){
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let AboutUsViewController = storyboard.instantiateViewController(withIdentifier: "AboutUsViewController") as? AboutUsViewController {
+            AboutUsViewController.modalPresentationStyle = .fullScreen
+            present(AboutUsViewController, animated: true, completion: nil)
+        }
     }
+    
+    func navToContactUs(){
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let ContactUsViewController = storyboard.instantiateViewController(withIdentifier: "ContactUsViewController") as? ContactUsViewController {
+            ContactUsViewController.modalPresentationStyle = .fullScreen
+            present(ContactUsViewController, animated: true, completion: nil)
+        }
+    }
+    
+
+        @IBAction func logoutButtonTapped(_ sender: UIButton) {
+            let alertController = UIAlertController(title: "Confirm Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
+                Authorize.logout()
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        }
+
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)

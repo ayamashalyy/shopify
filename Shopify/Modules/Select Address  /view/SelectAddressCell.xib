@@ -33,16 +33,16 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="min-l6-kfs">
-                                <rect key="frame" x="138" y="22" width="250" height="20.333333333333329"/>
+                                <rect key="frame" x="138" y="22" width="200" height="26.333333333333329"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="250" id="qOg-4Y-Q7V"/>
+                                    <constraint firstAttribute="width" constant="200" id="qOg-4Y-Q7V"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TwM-2S-t9t">
-                                <rect key="frame" x="139" y="62.333333333333336" width="250" height="20.333333333333336"/>
+                                <rect key="frame" x="139" y="68.333333333333329" width="250" height="20.333333333333329"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="Xwe-F8-bGd"/>
                                 </constraints>
@@ -86,9 +86,18 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBg-6I-7fH">
+                                <rect key="frame" x="348" y="0.0" width="44" height="46"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="compose (1)"/>
+                                <connections>
+                                    <action selector="edit:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Lbm-P7-t08"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="sBg-6I-7fH" firstAttribute="top" secondItem="Byd-92-yNa" secondAttribute="top" id="04c-ry-JtV"/>
                             <constraint firstItem="sv7-il-Iap" firstAttribute="trailing" secondItem="JO6-zN-Pn1" secondAttribute="trailing" id="1Lb-P1-trS"/>
                             <constraint firstItem="sv7-il-Iap" firstAttribute="top" secondItem="JO6-zN-Pn1" secondAttribute="bottom" constant="17" id="1ae-by-sOM"/>
                             <constraint firstItem="5QJ-dK-Svk" firstAttribute="firstBaseline" secondItem="1p3-zk-uC7" secondAttribute="baseline" id="1w0-hx-mWl"/>
@@ -101,10 +110,12 @@
                             <constraint firstItem="1p3-zk-uC7" firstAttribute="top" secondItem="xjL-80-Y8a" secondAttribute="bottom" constant="15" id="DzY-TC-RRw"/>
                             <constraint firstItem="TwM-2S-t9t" firstAttribute="top" secondItem="min-l6-kfs" secondAttribute="bottom" constant="20" id="EPY-wt-QRg"/>
                             <constraint firstItem="5QJ-dK-Svk" firstAttribute="leading" secondItem="sv7-il-Iap" secondAttribute="leading" id="IMI-XB-gua"/>
+                            <constraint firstAttribute="trailing" secondItem="sBg-6I-7fH" secondAttribute="trailing" constant="15" id="JOI-bp-dvk"/>
                             <constraint firstItem="xjL-80-Y8a" firstAttribute="trailing" secondItem="7Cn-f5-JdD" secondAttribute="trailing" id="JR8-60-zSr"/>
                             <constraint firstItem="5QJ-dK-Svk" firstAttribute="top" secondItem="sv7-il-Iap" secondAttribute="bottom" constant="12" id="Msh-7X-7KP"/>
                             <constraint firstItem="7Cn-f5-JdD" firstAttribute="leading" secondItem="IQQ-9Y-1Tf" secondAttribute="leading" id="MxI-jT-bnE"/>
                             <constraint firstItem="1p3-zk-uC7" firstAttribute="leading" secondItem="xjL-80-Y8a" secondAttribute="leading" id="Ncv-rD-sRU"/>
+                            <constraint firstItem="TwM-2S-t9t" firstAttribute="top" secondItem="sBg-6I-7fH" secondAttribute="bottom" constant="22.329999999999998" id="Q0b-EU-73k"/>
                             <constraint firstItem="sv7-il-Iap" firstAttribute="leading" secondItem="JO6-zN-Pn1" secondAttribute="leading" id="T8N-gz-eSI"/>
                             <constraint firstItem="xjL-80-Y8a" firstAttribute="top" secondItem="7Cn-f5-JdD" secondAttribute="bottom" constant="15" id="X2d-Cg-Ohc"/>
                             <constraint firstItem="IQQ-9Y-1Tf" firstAttribute="leading" secondItem="Byd-92-yNa" secondAttribute="leading" constant="20" id="bry-J3-cg6"/>
@@ -118,6 +129,7 @@
                             <constraint firstItem="min-l6-kfs" firstAttribute="leading" secondItem="mu1-gT-Az9" secondAttribute="trailing" constant="46" id="r63-Cg-51e"/>
                             <constraint firstItem="JO6-zN-Pn1" firstAttribute="trailing" secondItem="TwM-2S-t9t" secondAttribute="trailing" id="sht-tb-wER"/>
                             <constraint firstItem="1p3-zk-uC7" firstAttribute="trailing" secondItem="xjL-80-Y8a" secondAttribute="trailing" id="uB3-A2-MeO"/>
+                            <constraint firstItem="sBg-6I-7fH" firstAttribute="leading" secondItem="min-l6-kfs" secondAttribute="trailing" constant="10" id="yNf-Xg-yvJ"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -146,6 +158,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="compose (1)" width="32" height="32"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

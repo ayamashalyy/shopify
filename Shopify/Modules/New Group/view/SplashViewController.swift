@@ -18,7 +18,7 @@ class SplashViewController: UIViewController {
           // Authorize.logout()
       self.checkCustomerID()
          //   Navigation.ToSearch(from: self, comeFromHome: true , products: [])
-          
+
         }
     }
     

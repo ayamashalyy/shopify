@@ -124,6 +124,7 @@ class ProductViewController: UIViewController {
             else{
                 // add to fav
                 productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
+
                     DispatchQueue.main.async {
                         if isSuccess {
                             self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)

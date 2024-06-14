@@ -87,6 +87,7 @@ class Authorize{
  func logout() {
  // Clear the saved customer ID
  Authorize.clearCustomerIDFromUserDefaults()
+
  // navigtion to login
  }
  

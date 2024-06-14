@@ -118,7 +118,6 @@ class ShoppingCartViewModel {
             completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to serialize JSON"]))
             return
         }
-        // Print request details for debugging
         if let jsonString = String(data: bodyData, encoding: .utf8) {
             print("Request Body JSON: \(jsonString)")
         }
@@ -126,4 +125,47 @@ class ShoppingCartViewModel {
             completion(error)
         }
     }
+    
+    func deleteLineItem (with cartItems: [(String, Int, Int, String?, Int, Int, String, Int)],variantId: Int,newQuantity: Int, completion: @escaping (Error?) -> Void) {
+        let updateEndpoint = Endpoint.specficDraftOeder
+        let rootOfJson = Root.specificDraftOrder
+        let draftOrderId = "\(Authorize.cardDraftOrderId()!).json"
+        var lineItemsDict: [[String: Any]] = []
+        
+        for item in cartItems {
+            
+            if item.4 == variantId
+            {
+               
+            }
+            else
+            {
+                lineItemsDict.append([
+                    "variant_id": item.4,
+                    "quantity": item.2
+                ])
+            }
+        }
+        
+        
+        let body: [String: Any] = [
+            "draft_order": [
+                "id": Authorize.cardDraftOrderId()!,
+                "line_items": lineItemsDict
+            ]
+        ]
+        
+        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+            completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to serialize JSON"]))
+            return
+        }
+        if let jsonString = String(data: bodyData, encoding: .utf8) {
+            print("Request Body JSON: \(jsonString)")
+        }
+        NetworkManager.updateResource(endpoint: updateEndpoint, rootOfJson: rootOfJson, body: bodyData, addition: draftOrderId) { (data, error) in
+            completion(error)
+        }
+    }
+
+
 }

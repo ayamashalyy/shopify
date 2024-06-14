@@ -8,7 +8,7 @@
 import Foundation
 
 struct Address: Codable {
-    let id: Int
+    var id: Int
     let customerId: Int?
     let firstName: String?
     let lastName: String?
@@ -24,7 +24,7 @@ struct Address: Codable {
     let provinceCode: String?
     let countryCode: String?
     let countryName: String?
-    let isDefault: Bool?
+    var isDefault: Bool
     
     init(id: Int, address1: String, phone: String, city: String, country: String, zip: String, isDefault: Bool) {
         self.id = id
