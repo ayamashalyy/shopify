@@ -40,6 +40,10 @@ class CategoriesViewController: UIViewController {
         fetchExchangeRates()
     }
     
+    
+    @IBAction func goToSearch(_ sender: UIBarButtonItem) {
+    }
+    
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
@@ -67,7 +71,7 @@ class CategoriesViewController: UIViewController {
         
         categoriesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 160).isActive = true
         categoriesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor , constant: -100).isActive = true
         categoriesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         categoriesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
@@ -260,7 +264,7 @@ class CategoriesViewController: UIViewController {
 }
 
 
-extension CategoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension CategoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CustomCategoriesCellDelegate{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return categoriesViewModel.numberOfCategoryProducts()
@@ -285,10 +289,20 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                 cell.categoriesImgView.image = UIImage(named: "splash-img.jpg")
             }
             
-            cell.heartImageView.image = UIImage(systemName: "heart")
+            cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            
+            cell.heartButton.tag = indexPath.row
+            cell.delegate = self
+            
         }
         
         return cell
+    }
+    
+    func didTapHeartButton(in cell: CustomCategoriesCell) {
+        if let indexPath = categoriesCollectionView.indexPath(for: cell) {
+            print("Heart button tapped for row: \(indexPath.row)")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

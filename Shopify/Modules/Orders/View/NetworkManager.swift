@@ -15,6 +15,7 @@ enum Endpoint: String {
     case listOfBrandProducts = "products.json?collection_id="
     case customers = "customers.json"
     case addressCastomer = "customers/"
+    case order = "orders.json"
     
     
     //case productsByCategory = "collections/"
@@ -39,6 +40,8 @@ enum Root: String {
    case allDraftOrderRoot = "draft_orders"
     
     case specificDraftOrder = "draft_order"
+    case order = "order"
+    case orders = "orders"
 }
 
 // remove it every time before push

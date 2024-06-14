@@ -11,21 +11,45 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
     
     @IBOutlet weak var ordersTable: UITableView!
     
-    var orders: [Order] = [
-        Order(totalPrice: "$100", creationDate: "2023-05-01", shippedTo: "New York", phone: "123-456-7890"),
-        Order(totalPrice: "$200", creationDate: "2023-06-01", shippedTo: "Los Angeles", phone: "098-765-4321"),
-        Order(totalPrice: "$200", creationDate: "2023-06-01", shippedTo: "Los Angeles", phone: "098-765-4321") ,
-        Order(totalPrice: "$200", creationDate: "2023-06-01", shippedTo: "Los Angeles", phone: "098-765-4321") ,
-        Order(totalPrice: "$200", creationDate: "2023-06-01", shippedTo: "Los Angeles", phone: "098-765-4321")
-    ]
+    var orderViewModel = OrderViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         ordersTable.dataSource = self
         ordersTable.delegate = self
         ordersTable.register(UINib(nibName: "OrderViewCell", bundle: nil), forCellReuseIdentifier: "OrderViewCell")
+        
+        fetchOrders()
+        // Example for post dummy order
+        
     }
-
+    
+    func fetchOrders() {
+        orderViewModel.fetchOrders { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.ordersTable.reloadData()
+                case .failure(let error):
+                    print("Failed to fetch orders: \(error.localizedDescription)")
+                    // Show an alert or handle error appropriately
+                }
+            }
+        }
+    }
+    
+    func confirmOrder(){
+//        orderViewModel.createOrder { order, error in
+//            if let order = order {
+//                print("Order created successfully: \(order)")
+//            } else if let error = error {
+//                print("Failed to create order: \(error.localizedDescription)")
+//            }
+//        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -45,7 +69,7 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return orders.count
+        return orderViewModel.orders.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -53,11 +77,12 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "OrderViewCell", for: indexPath) as? OrderViewCell else {
             return UITableViewCell()
         }
-        let order = orders[indexPath.row]
-        cell.TotalPriceValue.text = order.totalPrice
-        cell.CreationDateValue.text = order.creationDate
-        cell.ShippedToValue.text = order.shippedTo
-        cell.PhoneValue.text = order.phone
+        let order = orderViewModel.orders[indexPath.row]
+        cell.TotalPriceValue.text = order.current_subtotal_price
+        cell.CreationDateValue.text = order.created_at
+        cell.ShippedToValue.text = order.shipping_address?.address1
+        cell.PhoneValue.text = order.shipping_address?.phone
+        print(order.email)
         return cell
     }
     

@@ -14,7 +14,6 @@ class BrandsViewController: UIViewController {
 
     @IBOutlet weak var indicator: UIActivityIndicatorView!
 
-    @IBOutlet weak var searchBar: UISearchBar!
     var brandProductsViewModel = BrandProductsViewModel()
     let settingsViewModel = SettingsViewModel()
     
@@ -32,6 +31,10 @@ class BrandsViewController: UIViewController {
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
+    }
+    
+    
+    @IBAction func goToSearch(_ sender: UIBarButtonItem) {
     }
     
     func setupUI(){
@@ -131,7 +134,7 @@ class BrandsViewController: UIViewController {
     
 }
 
-extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CustomCategoriesCellDelegate{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return brandProductsViewModel.numberOfProducts()
@@ -159,9 +162,20 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
             }
         }
         
-        cell.heartImageView.image = UIImage(systemName: "heart")
+        cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         
+        cell.heartButton.tag = indexPath.row
+        cell.delegate = self
+
         return cell
+    }
+    
+    func didTapHeartButton(in cell: CustomCategoriesCell) {
+        if let indexPath = categoriesCollectionView.indexPath(for: cell) {
+            print("Heart button tapped for row: \(indexPath.row)")
+            let item = brandProductsViewModel.product(at: indexPath.row)
+            print("product id in the cell =  \(item?.id) , \(item?.name)")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
