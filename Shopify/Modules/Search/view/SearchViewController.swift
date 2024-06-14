@@ -53,29 +53,24 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     func loadProducts() {
         if comeFromHome ?? false {
-
                 print("inside")
             searchViewModel.bindResultToViewController = { [weak self] in
                 DispatchQueue.main.async {
                     self?.products = self?.searchViewModel.products ?? []
-                  //  self?.filteredProducts = self?.searchViewModel.products ?? []
                     self?.searchCollectionView.reloadData()
                 }
             }
             searchViewModel.getProducts()
-            
         }
-        else {
-            
-            filteredProducts = products
-        }
-        
+//        else {
+//            filteredProducts = products
+//        }
         searchCollectionView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            isSearching = false
+            isSearching = false //?
             filteredProducts = products
         } else {
             isSearching = true

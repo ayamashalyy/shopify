@@ -67,6 +67,8 @@ class ProductViewController: UIViewController {
             }
         }
         productViewModel?.getProductDetails(id: productId!)
+        
+        
     }
     
     func updateFavButton(iscomefromFav: Bool) {
@@ -166,9 +168,9 @@ class ProductViewController: UIViewController {
             addToCard.isEnabled = false
             var selectedVariants: [String] = []
             var selectedVariantsIDsAndImageUrl: [(Int ,String,Int)] = []
-        
+            
             for subview in stack.arrangedSubviews {
-                  if let variantStackView = subview as? UIStackView,
+                if let variantStackView = subview as? UIStackView,
                    let variantButton = variantStackView.arrangedSubviews.first as? UIButton,
                    let checkmarkImageView = variantStackView.arrangedSubviews.last as? UIImageView,
                    !checkmarkImageView.isHidden {
@@ -177,7 +179,7 @@ class ProductViewController: UIViewController {
                         
                         for variant in productViewModel?.product?.variants ?? [] {
                             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
-                              let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
+                                let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
                                 if( "Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)" == variantText){
                                     if let imageUrl = productViewModel?.product?.images.first?.url {
                                         selectedVariantsIDsAndImageUrl.append((id: variant.id, imageUrl: imageUrl,quantity: variant.inventory_quantity! ))
@@ -213,8 +215,8 @@ class ProductViewController: UIViewController {
                     print("OK button tapped")
                 }
                 )
-            
-        }
+                
+            }
     }
     
     func hideAllCheckmarkImages() {
@@ -410,16 +412,23 @@ extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewTableViewCell")
+
         var arrayOfReviews = ProductViewModel.getReviews()
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewTableViewCell", for: indexPath) as! ReviewTableViewCell
         let review = arrayOfReviews[indexPath.row]
         
-        var content = cell.defaultContentConfiguration()
-        content.text = review.1
-        content.secondaryText = review.0
-        // content , image i want make rounded small photo = review.2 which is name of image in my assart
-        cell.contentConfiguration = content
+        cell.reviewLabel.text = review.1
+        cell.reviewerLabel.text = review.0
+        cell.cosmosView.rating = review.3
+        if let image = UIImage(named: review.2) {
+            cell.reviewerImageView.image = image
+        } else {
+            cell.reviewerImageView.image = UIImage(named: "splash")
+        }
         
         return cell
     }
+    
 }

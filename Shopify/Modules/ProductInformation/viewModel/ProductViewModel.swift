@@ -331,7 +331,7 @@ class ProductViewModel{
     }
   
         
-  static func getReviews() -> [(String, String, String)] {
+  static func getReviews() -> [(String, String, String, Double)] {
                 return UserReview.getReviews()
         }
 

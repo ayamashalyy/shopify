@@ -16,8 +16,8 @@ class SplashViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
          // for codding only the next line:
           // Authorize.logout()
-         //  self.checkCustomerID()
-            Navigation.ToSearch(from: self, comeFromHome: true , products: [])
+      self.checkCustomerID()
+         //   Navigation.ToSearch(from: self, comeFromHome: true , products: [])
           
         }
     }

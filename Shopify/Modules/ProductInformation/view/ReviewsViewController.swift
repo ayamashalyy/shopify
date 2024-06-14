@@ -6,44 +6,45 @@
 //
 
 import UIKit
+import Cosmos
 
 class ReviewsViewController: UIViewController {
-    
 
     @IBOutlet weak var reviewsTableView: UITableView!
-    
-    var reviews = [(reviewer: String, reviewText: String, ourImage :String)]()
+
+    var reviews = [(reviewer: String, reviewText: String, ourImage: String, rating: Double)]()
         
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            reviewsTableView.delegate = self
-            reviewsTableView.dataSource = self
-            reviewsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ReviewCell")
-        }
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        reviewsTableView.delegate = self
+        reviewsTableView.dataSource = self
+        reviewsTableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewTableViewCell")
+    }
+
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true)
     }
+}
 
+extension ReviewsViewController: UITableViewDelegate, UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return reviews.count
     }
-
-    extension ReviewsViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewTableViewCell", for: indexPath) as! ReviewTableViewCell
+        let review = reviews[indexPath.row]
         
-
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return reviews.count
+        cell.reviewLabel.text = review.reviewText
+        cell.reviewerLabel.text = review.reviewer
+        cell.cosmosView.rating = review.rating
+        if let image = UIImage(named: review.ourImage) {
+            cell.reviewerImageView.image = image
+        } else {
+            cell.reviewerImageView.image = UIImage(named: "splash")
         }
         
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath)
-            let review = reviews[indexPath.row]
-            
-            var content = cell.defaultContentConfiguration()
-            content.text = review.1
-            content.secondaryText = review.0
-          //  content.image = UIImage(named: review.2)
-            cell.contentConfiguration = content
-            
-            return cell
-        }
+        return cell
     }
+}
