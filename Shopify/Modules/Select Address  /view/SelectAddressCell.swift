@@ -7,6 +7,10 @@
 
 import UIKit
 
+
+protocol SelectAddressCellProtocol: AnyObject {
+    func editAddress(at indexPath: IndexPath)}
+
 class SelectAddressCell: UITableViewCell {
     
     
@@ -17,6 +21,8 @@ class SelectAddressCell: UITableViewCell {
     @IBOutlet weak var zipCodeLabel: UILabel!
     @IBOutlet weak var containerView: UIView!
     
+    weak var delegate: SelectAddressCellProtocol?
+    var indexPath: IndexPath?
     override func awakeFromNib() {
         super.awakeFromNib()
         containerView.clipsToBounds = false
@@ -38,5 +44,11 @@ class SelectAddressCell: UITableViewCell {
         super.layoutSubviews()
         containerView.layer.shadowPath = UIBezierPath(roundedRect: containerView.bounds, cornerRadius: containerView.layer.cornerRadius).cgPath
     }
+    
+    @IBAction func edit(_ sender: UIButton) {
+            if let indexPath = indexPath {
+                delegate?.editAddress(at: indexPath)
+            }
+        }
     
 }

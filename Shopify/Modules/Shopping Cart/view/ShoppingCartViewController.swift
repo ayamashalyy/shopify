@@ -2,18 +2,18 @@ import UIKit
 import Kingfisher
 
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var subtotalLabel: UILabel!
     @IBOutlet weak var getThemButton: UIButton!
     
     let shoppingCartViewModel = ShoppingCartViewModel()
-
+    
     var productViewModel = ProductViewModel()
     let settingsViewModel = SettingsViewModel()
     
     var cartItems = [(String, Int, Int,String?)]()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-
+    
     func fetchExchangeRates(){
         settingsViewModel.fetchExchangeRates { [weak self] error in
             if let error = error {
@@ -54,7 +54,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-
+    
     
     func setupButtons() {
         getThemButton.backgroundColor = UIColor(hex: "#FF7D29")
@@ -94,7 +94,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         } else {
             cell.productImageView.image = nil
         }
-
+        
         cell.incrementButton.tag = indexPath.row
         cell.decrementButton.tag = indexPath.row
         cell.incrementButton.addTarget(self, action: #selector(incrementQuantity(_:)), for: .touchUpInside)
@@ -107,7 +107,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
     }
-        
+    
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 50
@@ -126,49 +126,75 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     @objc func incrementQuantity(_ sender: UIButton) {
-           let row = sender.tag
-           let item = shoppingCartViewModel.cartItems[row]
-           let newQuantity = item.2 + 1
-           let maxQuantity = item.5 / 2
-           if newQuantity > maxQuantity {
-               showAlert(message: "You cannot order more than half of the available quantity.")
-           } else {
-               shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
-                   if let error = error {
-                       print("Error updating item quantity: \(error.localizedDescription)")
-                   } else {
-                       self.updateSubtotal()
-                   }
-               }
-           }
-       }
-       
-       @objc func decrementQuantity(_ sender: UIButton) {
-           let row = sender.tag
-           let item = shoppingCartViewModel.cartItems[row]
-           let newQuantity = max(0, item.2 - 1)
-
-           shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
-               if let error = error {
-                   print("Error updating item quantity: \(error.localizedDescription)")
-               } else {
-                   self.updateSubtotal()
-               }
-           }
-       }
-        
+        let row = sender.tag
+        let item = shoppingCartViewModel.cartItems[row]
+        let newQuantity = item.2 + 1
+        let maxQuantity = item.5 / 2
+        if newQuantity > maxQuantity {
+            showAlert(message: "You cannot order more than half of the available quantity.")
+        } else {
+            shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
+                if let error = error {
+                    print("Error updating item quantity: \(error.localizedDescription)")
+                } else {
+                    self.updateSubtotal()
+                }
+            }
+        }
+    }
     
-    func showAlert(message: String) {
-            let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    @objc func decrementQuantity(_ sender: UIButton) {
+        let row = sender.tag
+        let item = shoppingCartViewModel.cartItems[row]
+        let newQuantity = max(0, item.2 - 1)
+        
+        shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
+            if let error = error {
+                print("Error updating item quantity: \(error.localizedDescription)")
+            } else {
+                self.updateSubtotal()
+            }
+        }
+    }
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let item = shoppingCartViewModel.cartItems[indexPath.row]
+            let alert = UIAlertController(title: "Delete Item", message: "Are you sure you want to delete this item from your cart?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+                self?.shoppingCartViewModel.deleteLineItem(with: self?.shoppingCartViewModel.cartItems ?? [], variantId: item.4, newQuantity: item.2) { error in
+                    if let error = error {
+                        print("Error deleting item: \(error.localizedDescription)")
+                    } else {
+                        self?.shoppingCartViewModel.cartItems.remove(at: indexPath.row)
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
+                        self?.updateSubtotal()
+                    }
+                }
+            }))
+
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             present(alert, animated: true, completion: nil)
         }
+    }
+
+
+
+    
+    
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
     
     func updateSubtotal() {
-
+        
         let subtotal = shoppingCartViewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
         subtotalLabel.text = "\(subtotal)$"
-
+        
         
         // Convert subtotal using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD

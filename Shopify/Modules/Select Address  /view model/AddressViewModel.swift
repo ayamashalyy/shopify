@@ -182,7 +182,8 @@ class AddressViewModel {
                 "phone": address.phone ?? "",
                 "city": address.city,
                 "country": address.country,
-                "zip": address.zip ?? ""
+                "zip": address.zip ?? "",
+                "default": address.isDefault
             ]
         ]
         

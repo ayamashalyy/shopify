@@ -180,5 +180,35 @@ class NetworkManager {
             }
     }
     
+    static func deleteResource(endpoint: Endpoint, rootOfJson: Root, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
+        let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"
+        guard let url = URL(string: urlString) else {
+            completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
+            return
+        }
+        print("in deleteResource urlString\(urlString)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(TOKEN, forHTTPHeaderField: "X-Shopify-Access-Token")
+
+        Alamofire.request(request)
+            .validate()
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    print("Success in DELETE request")
+                    completion(data, nil)
+                case .failure(let error):
+                    if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                        print("Response Body: \(jsonString)")
+                    }
+                    print("Network request failed with error: \(error.localizedDescription)")
+                    completion(nil, error)
+                }
+            }
+    }
+
+    
 
 }
