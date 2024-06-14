@@ -40,6 +40,10 @@ class CategoriesViewController: UIViewController {
         fetchExchangeRates()
     }
     
+    
+    @IBAction func goToSearch(_ sender: UIBarButtonItem) {
+    }
+    
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
         switch segmentedControl.selectedSegmentIndex {
         case 0:
@@ -67,7 +71,7 @@ class CategoriesViewController: UIViewController {
         
         categoriesCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        categoriesCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 160).isActive = true
         categoriesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor , constant: -100).isActive = true
         categoriesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         categoriesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true

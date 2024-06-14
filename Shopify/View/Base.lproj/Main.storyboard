@@ -121,7 +121,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veq-b7-qsu">
-                                <rect key="frame" x="0.0" y="58" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="58" width="392" height="44"/>
                                 <items>
                                     <navigationItem id="MZw-qb-5cr">
                                         <rightBarButtonItems>
@@ -135,17 +135,15 @@
                                                     <action selector="goToCard:" destination="iVh-rI-z8y" id="Npm-PM-1Nh"/>
                                                 </connections>
                                             </barButtonItem>
+                                            <barButtonItem image="magnifyingglass" catalog="system" id="kEf-No-CWG">
+                                                <connections>
+                                                    <action selector="goToSearch:" destination="iVh-rI-z8y" id="xv8-3v-AF2"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-6V-BPT">
-                                <rect key="frame" x="0.0" y="102" width="393" height="56"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="iVh-rI-z8y" id="egL-yf-3Vf"/>
-                                </connections>
-                            </searchBar>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UL9-Wu-rbR">
                                 <rect key="frame" x="172" y="621" width="48" height="20"/>
                             </activityIndicatorView>
@@ -155,15 +153,12 @@
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cC5-Qy-GXr" firstAttribute="trailing" secondItem="UL9-Wu-rbR" secondAttribute="trailing" constant="173" id="17T-tx-MpD"/>
+                            <constraint firstItem="veq-b7-qsu" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" id="4Mc-25-lfj"/>
                             <constraint firstItem="veq-b7-qsu" firstAttribute="top" secondItem="vKb-bV-J6O" secondAttribute="topMargin" constant="-1" id="6Jd-V5-WNi"/>
                             <constraint firstItem="cC5-Qy-GXr" firstAttribute="bottom" secondItem="UL9-Wu-rbR" secondAttribute="bottom" constant="128" id="AFX-Lf-ggL"/>
-                            <constraint firstItem="LDp-6V-BPT" firstAttribute="trailing" secondItem="cC5-Qy-GXr" secondAttribute="trailing" id="DmI-lt-NrZ"/>
                             <constraint firstItem="UL9-Wu-rbR" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" constant="172" id="Pg7-nz-EmQ"/>
-                            <constraint firstItem="LDp-6V-BPT" firstAttribute="leading" secondItem="cC5-Qy-GXr" secondAttribute="leading" id="U79-90-XWY"/>
-                            <constraint firstItem="veq-b7-qsu" firstAttribute="leading" secondItem="LDp-6V-BPT" secondAttribute="leading" id="ac6-Bl-k8e"/>
-                            <constraint firstItem="LDp-6V-BPT" firstAttribute="top" secondItem="veq-b7-qsu" secondAttribute="bottom" id="hNu-NT-NsE"/>
-                            <constraint firstItem="UL9-Wu-rbR" firstAttribute="top" secondItem="LDp-6V-BPT" secondAttribute="bottom" constant="463" id="nvq-Zu-2zb"/>
-                            <constraint firstItem="veq-b7-qsu" firstAttribute="trailing" secondItem="LDp-6V-BPT" secondAttribute="trailing" id="tyq-To-i1b"/>
+                            <constraint firstItem="UL9-Wu-rbR" firstAttribute="top" secondItem="veq-b7-qsu" secondAttribute="bottom" constant="519" id="YoM-pi-rn8"/>
+                            <constraint firstItem="veq-b7-qsu" firstAttribute="centerX" secondItem="UL9-Wu-rbR" secondAttribute="centerX" id="kKs-RA-P97"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="IZz-Kb-ty7"/>
@@ -192,30 +187,30 @@
                                                 <action selector="backButton:" destination="WBw-X9-L8X" id="GPz-y2-GEJ"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" image="line.3.horizontal.decrease" catalog="system" id="U9r-CC-Cm9">
-                                            <connections>
-                                                <action selector="filterByPrice:" destination="WBw-X9-L8X" id="5X5-rN-q5B"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem image="line.3.horizontal.decrease" catalog="system" id="U9r-CC-Cm9">
+                                                <connections>
+                                                    <action selector="filterByPrice:" destination="WBw-X9-L8X" id="5X5-rN-q5B"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem image="magnifyingglass" catalog="system" id="7Yq-9y-gsw">
+                                                <connections>
+                                                    <action selector="goToSearch:" destination="WBw-X9-L8X" id="Hog-FP-N95"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="UY5-N1-Yj9">
-                                <rect key="frame" x="0.0" y="94" width="393" height="56"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="WBw-X9-L8X" id="qVF-AF-VQU"/>
-                                </connections>
-                            </searchBar>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="3n2-yp-Hmy">
+                                <rect key="frame" x="168" y="468" width="56" height="20"/>
+                            </activityIndicatorView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="DXp-vs-0dF">
-                                <rect key="frame" x="163" y="150" width="227" height="31"/>
+                                <rect key="frame" x="163" y="104" width="227" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="223" id="AU8-5H-Z4J"/>
                                 </constraints>
                             </slider>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="3n2-yp-Hmy">
-                                <rect key="frame" x="168" y="468" width="56" height="20"/>
-                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="KRT-99-nkg"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -223,21 +218,18 @@
                         <constraints>
                             <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="3n2-yp-Hmy" secondAttribute="trailing" constant="169" id="38R-4H-8aH"/>
                             <constraint firstAttribute="trailing" secondItem="I3B-R0-kGE" secondAttribute="trailing" id="9Mq-qq-0mi"/>
-                            <constraint firstItem="3n2-yp-Hmy" firstAttribute="top" secondItem="DXp-vs-0dF" secondAttribute="bottom" constant="288" id="Ehu-AZ-VcM"/>
                             <constraint firstItem="3n2-yp-Hmy" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" constant="168" id="Ep2-R0-faa"/>
-                            <constraint firstItem="UY5-N1-Yj9" firstAttribute="trailing" secondItem="KRT-99-nkg" secondAttribute="trailing" id="Ete-ig-uzw"/>
                             <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="DXp-vs-0dF" secondAttribute="trailing" constant="5" id="JsO-TX-cZO"/>
                             <constraint firstItem="I3B-R0-kGE" firstAttribute="top" secondItem="ef1-T1-4bc" secondAttribute="top" constant="50" id="PBD-6k-QRy"/>
-                            <constraint firstItem="DXp-vs-0dF" firstAttribute="top" secondItem="UY5-N1-Yj9" secondAttribute="bottom" id="RZE-he-khg"/>
+                            <constraint firstItem="DXp-vs-0dF" firstAttribute="top" secondItem="I3B-R0-kGE" secondAttribute="bottom" constant="10" id="Quy-sB-NVf"/>
                             <constraint firstItem="I3B-R0-kGE" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="VFc-vV-0Ff"/>
+                            <constraint firstItem="KRT-99-nkg" firstAttribute="trailing" secondItem="DXp-vs-0dF" secondAttribute="trailing" constant="5" id="ZRa-KX-fKl"/>
+                            <constraint firstItem="3n2-yp-Hmy" firstAttribute="top" secondItem="DXp-vs-0dF" secondAttribute="bottom" constant="334" id="b7p-fa-3qk"/>
                             <constraint firstItem="KRT-99-nkg" firstAttribute="bottom" secondItem="3n2-yp-Hmy" secondAttribute="bottom" constant="330" id="euD-SC-y1l"/>
-                            <constraint firstItem="UY5-N1-Yj9" firstAttribute="top" secondItem="I3B-R0-kGE" secondAttribute="bottom" id="hzw-OL-xnH"/>
-                            <constraint firstItem="UY5-N1-Yj9" firstAttribute="leading" secondItem="KRT-99-nkg" secondAttribute="leading" id="ula-da-2x3"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="indicator" destination="3n2-yp-Hmy" id="xUu-Et-EYV"/>
-                        <outlet property="searchBar" destination="UY5-N1-Yj9" id="0iF-2M-J15"/>
                         <outlet property="sliderFilter" destination="DXp-vs-0dF" id="Gcc-jZ-0oD"/>
                     </connections>
                 </viewController>
@@ -285,25 +277,22 @@
                                                 </connections>
                                             </barButtonItem>
                                             <barButtonItem image="cart.fill" catalog="system" id="5oh-kL-4wk"/>
+                                            <barButtonItem image="magnifyingglass" catalog="system" id="9PB-Ub-faM">
+                                                <connections>
+                                                    <action selector="goToSearch:" destination="2NJ-7v-iDD" id="oi8-P7-Dap"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <searchBar contentMode="redraw" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c7o-8O-5Vr">
-                                <rect key="frame" x="0.0" y="103" width="393" height="56"/>
-                                <offsetWrapper key="searchFieldBackgroundPositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="2NJ-7v-iDD" id="UUZ-dZ-78u"/>
-                                </connections>
-                            </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="lNn-8x-aJ3">
-                                <rect key="frame" x="5" y="159" width="383" height="32"/>
+                                <rect key="frame" x="5" y="108" width="383" height="32"/>
                                 <segments>
-                                    <segment title="Men"/>
-                                    <segment title="Women"/>
-                                    <segment title="Kids"/>
-                                    <segment title="Sale"/>
+                                    <segment title="MEN"/>
+                                    <segment title="WOMEN"/>
+                                    <segment title="KID"/>
+                                    <segment title="SALE"/>
                                 </segments>
                                 <connections>
                                     <action selector="segmentedControlChanged:" destination="2NJ-7v-iDD" eventType="valueChanged" id="oaD-3n-TD8"/>
@@ -317,19 +306,16 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="tintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="c7o-8O-5Vr" firstAttribute="leading" secondItem="eiV-pO-ytK" secondAttribute="leading" id="6Bw-84-iFB"/>
+                            <constraint firstItem="lNn-8x-aJ3" firstAttribute="top" secondItem="Ia7-LF-Udd" secondAttribute="bottom" constant="5" id="7yd-Nx-3jD"/>
+                            <constraint firstItem="sxN-O5-kh7" firstAttribute="top" secondItem="lNn-8x-aJ3" secondAttribute="bottom" constant="295" id="8tb-6v-stC"/>
                             <constraint firstItem="Ia7-LF-Udd" firstAttribute="trailing" secondItem="eiV-pO-ytK" secondAttribute="trailing" id="DEN-ky-kMT"/>
-                            <constraint firstItem="c7o-8O-5Vr" firstAttribute="top" secondItem="Ia7-LF-Udd" secondAttribute="bottom" id="MWe-TN-Ro5"/>
-                            <constraint firstItem="c7o-8O-5Vr" firstAttribute="trailing" secondItem="eiV-pO-ytK" secondAttribute="trailing" id="N0S-US-mGr"/>
                             <constraint firstItem="Ia7-LF-Udd" firstAttribute="leading" secondItem="eiV-pO-ytK" secondAttribute="leading" id="Td6-eA-FAG"/>
-                            <constraint firstItem="lNn-8x-aJ3" firstAttribute="top" secondItem="c7o-8O-5Vr" secondAttribute="bottom" id="aFq-QW-xfV"/>
                             <constraint firstAttribute="trailing" secondItem="lNn-8x-aJ3" secondAttribute="trailing" constant="5" id="aij-VK-Fmr"/>
                             <constraint firstItem="Ia7-LF-Udd" firstAttribute="top" secondItem="eiV-pO-ytK" secondAttribute="top" id="cNm-23-ZWK"/>
                             <constraint firstItem="sxN-O5-kh7" firstAttribute="leading" secondItem="eiV-pO-ytK" secondAttribute="leading" constant="165" id="pI4-uw-knk"/>
                             <constraint firstItem="lNn-8x-aJ3" firstAttribute="leading" secondItem="eiV-pO-ytK" secondAttribute="leading" constant="5" id="r3r-dy-PxI"/>
                             <constraint firstItem="eiV-pO-ytK" firstAttribute="bottom" secondItem="sxN-O5-kh7" secondAttribute="bottom" constant="315" id="s1P-Es-Rf1"/>
                             <constraint firstItem="eiV-pO-ytK" firstAttribute="trailing" secondItem="sxN-O5-kh7" secondAttribute="trailing" constant="165" id="tks-Jd-B2C"/>
-                            <constraint firstItem="sxN-O5-kh7" firstAttribute="top" secondItem="lNn-8x-aJ3" secondAttribute="bottom" constant="244" id="u24-bq-Bb6"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Categories" image="square.grid.3x3.fill" catalog="system" selectedImage="square.grid.3x3.fill" id="MVB-bi-zZU"/>
@@ -481,6 +467,7 @@
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="left" width="24" height="24"/>
         <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="profile" width="1200" height="1200"/>
         <image name="splash-img" width="624" height="652"/>

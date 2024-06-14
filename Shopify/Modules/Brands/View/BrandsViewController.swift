@@ -14,7 +14,6 @@ class BrandsViewController: UIViewController {
 
     @IBOutlet weak var indicator: UIActivityIndicatorView!
 
-    @IBOutlet weak var searchBar: UISearchBar!
     var brandProductsViewModel = BrandProductsViewModel()
     let settingsViewModel = SettingsViewModel()
     
@@ -32,6 +31,10 @@ class BrandsViewController: UIViewController {
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
+    }
+    
+    
+    @IBAction func goToSearch(_ sender: UIBarButtonItem) {
     }
     
     func setupUI(){
