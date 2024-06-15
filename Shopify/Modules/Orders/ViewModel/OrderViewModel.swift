@@ -10,6 +10,7 @@ import Foundation
 class OrderViewModel {
     
     var orders: [ConfirmOrder] = []
+    var selectedOrder: ConfirmOrder?
     
 //    func createOrder(completion: @escaping (ConfirmOrder?, Error?) -> Void) {
 //        let lineItem = LineItem(variant_id: 45293436961016, quantity: 10)
@@ -82,6 +83,11 @@ class OrderViewModel {
                 }
             }
         }
+    }
+    
+    func selectOrder(at index: Int) {
+        guard index >= 0 && index < orders.count else { return }
+        selectedOrder = orders[index]
     }
 
 }

@@ -8,6 +8,8 @@
 import UIKit
 
 class signUpViewController: UIViewController {
+    
+    var settingsViewModel = SettingsViewModel()
 
     @IBAction func dismis(_ sender: Any) {
         dismiss(animated: true)
@@ -90,6 +92,10 @@ class signUpViewController: UIViewController {
        
         signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, verifiedEmail: true, tags: passText) { createdNewCustomer in
             if createdNewCustomer {
+                
+                // Set the currency to USD when the user successfully signs up
+                self.settingsViewModel.saveCurrencySelection(.USD)
+                
                 print("Is a customer, go to home")
                 Navigation.ToHome(from: self)
             } else {
