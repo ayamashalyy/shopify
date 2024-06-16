@@ -15,7 +15,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let homeViewModel = HomeViewModel()
     let brandProductsViewModel = BrandProductsViewModel()
     
-    let coponesImages = ["coupon2.jpg", "coupon2.jpg"]
+    let coponesImages = ["sum1_disc30.jpeg", "sum2_disc30.jpeg", "sum3_disc30.jpeg"]
     var couponsCollectionView: UICollectionView!
     
     
@@ -56,6 +56,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    func fetchDiscountCodesAndShowAlert(for indexPath: IndexPath) {
+        homeViewModel.fetchDiscountCodes { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching discount codes: \(error)")
+            } else {
+                let discountCode = self.homeViewModel.discountCode(at: indexPath.item)?.code ?? "No Code"
+                self.showDiscountCodeAlert(code: discountCode)
+            }
+        }
+    }
     
     func setupUI(){
         //view.backgroundColor = UIColor(hex: "#F5F5F5")
@@ -157,7 +168,17 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             brandsVC.brandProductsViewModel.setCollectionId(brand.id)
             brandsVC.modalPresentationStyle = .fullScreen
             self.present(brandsVC, animated: true, completion: nil)
+            
+        } else if collectionView == couponsCollectionView {
+            fetchDiscountCodesAndShowAlert(for: indexPath)
         }
+    }
+    
+    private func showDiscountCodeAlert(code: String) {
+        let message = "You have a discount code with 30% off: \(code)"
+        let alert = UIAlertController(title: "Discount Code", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 
 }
