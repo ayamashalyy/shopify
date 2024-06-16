@@ -21,6 +21,7 @@
 		037955DC2C0E825D003A3AF9 /* PlaceOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037955DA2C0E825D003A3AF9 /* PlaceOrderCell.swift */; };
 		037955DD2C0E825D003A3AF9 /* PlaceOrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 037955DB2C0E825D003A3AF9 /* PlaceOrderCell.xib */; };
 		03CF26F02C15166C005A89D1 /* Common Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CF26EF2C15166C005A89D1 /* Common Methods.swift */; };
+		03D1AF142C1CE83D00741517 /* summaryCartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D1AF132C1CE83C00741517 /* summaryCartCell.swift */; };
 		03D2CE492C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D2CE482C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift */; };
 		03D35C852C0CEC1300523AF7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D35C842C0CEC1300523AF7 /* AppDelegate.swift */; };
 		03D35C872C0CEC1300523AF7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D35C862C0CEC1300523AF7 /* SceneDelegate.swift */; };
@@ -124,6 +125,7 @@
 		037955DA2C0E825D003A3AF9 /* PlaceOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceOrderCell.swift; sourceTree = "<group>"; };
 		037955DB2C0E825D003A3AF9 /* PlaceOrderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceOrderCell.xib; sourceTree = "<group>"; };
 		03CF26EF2C15166C005A89D1 /* Common Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Common Methods.swift"; sourceTree = "<group>"; };
+		03D1AF132C1CE83C00741517 /* summaryCartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = summaryCartCell.swift; sourceTree = "<group>"; };
 		03D2CE482C0F7BCE00196A4A /* PaymentSuccessfulViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSuccessfulViewController.swift; sourceTree = "<group>"; };
 		03D35C812C0CEC1300523AF7 /* Shopify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shopify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D35C842C0CEC1300523AF7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				037955D82C0E8144003A3AF9 /* PlaceOrderViewController.swift */,
 				037955DA2C0E825D003A3AF9 /* PlaceOrderCell.swift */,
 				037955DB2C0E825D003A3AF9 /* PlaceOrderCell.xib */,
+				03D1AF132C1CE83C00741517 /* summaryCartCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1173,6 +1176,7 @@
 				517F92642C165044006200C2 /* CategoriesViewModel.swift in Sources */,
 				7DDC92592C190472002B5AD6 /* FavViewModel.swift in Sources */,
 				517E826A2C1277D0004FBD00 /* NetworkManager.swift in Sources */,
+				03D1AF142C1CE83D00741517 /* summaryCartCell.swift in Sources */,
 				03CF26F02C15166C005A89D1 /* Common Methods.swift in Sources */,
 				03D35C872C0CEC1300523AF7 /* SceneDelegate.swift in Sources */,
 				7D30296D2C12981400B235B4 /* AllFavViewController.swift in Sources */,

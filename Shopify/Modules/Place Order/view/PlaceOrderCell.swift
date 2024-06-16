@@ -9,8 +9,11 @@ import UIKit
 
 class PlaceOrderCell: UITableViewCell {
 
-    @IBOutlet weak var titleLable: UILabel!
-    @IBOutlet weak var valueLable: UILabel!
+    @IBOutlet weak var subTotalLable: UILabel!
+    @IBOutlet weak var couponLable: UITextField!
+    @IBOutlet weak var discountLable: UILabel!
+    @IBOutlet weak var shippingFeesLable: UILabel!
+    @IBOutlet weak var gradeTotalLable: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
        

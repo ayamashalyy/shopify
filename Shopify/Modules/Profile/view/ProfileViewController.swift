@@ -16,6 +16,10 @@ struct Order {
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var setting: UIBarButtonItem!
+    var favViewModel: FavViewModel?
+    var myfavLineItem: [FavLineItem] = []
+    let indicator = UIActivityIndicatorView(style: .large)
+    let settingsViewModel = SettingsViewModel()
     
     @IBOutlet weak var tableview: UITableView!
     
@@ -31,34 +35,78 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.register(UINib(nibName: "OrderViewCell", bundle: nil), forCellReuseIdentifier: "OrderViewCell")
         tableview.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         tableview.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        favViewModel = FavViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if Authorize.isRegistedCustomer() {
             setting.isEnabled = true
+            indicator.startAnimating()
+            getWishList()
         } else {
             setting.isEnabled = false
-         self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
-                                       okAction: { action in
-               Navigation.ToALogin(from: self)
-               print("OK button tapped")
-           }
-           )
-       }
-   }
-   
-   private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
-       let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-       
-       let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
-       let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
-       
-       alertController.addAction(okAlertAction)
-       alertController.addAction(cancelAlertAction)
-       
-       present(alertController, animated: true, completion: nil)
-   }
+            self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
+                                        okAction: { action in
+                Navigation.ToALogin(from: self)
+                print("OK button tapped")
+            }
+            )
+        }
+        
+    }
+    
+    
+    func getWishList(){
+        myfavLineItem.removeAll()
+        tableview.reloadData()
+        
+        var numberOfFav = 0
+        print("get   WishListViewCell")
+        favViewModel?.bindResultToViewController = { [weak self] in
+            DispatchQueue.main.async {
+                guard let self = self, let lineItems = self.favViewModel?.LineItems else { return }
+                
+                for lineItem in lineItems {
+                    if let productId = lineItem.product_id,
+                       let imageUrl = lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value,
+                       let price = lineItem.price {
+                        let favLineItem = FavLineItem(name: lineItem.title ?? "", productId: lineItem.product_id!, image: imageUrl, price: price, firstVariantid: lineItem.variant_id!)
+                        if numberOfFav < 2
+                        {
+                            print("WishListViewCell\(numberOfFav)")
+                            self.myfavLineItem.append(favLineItem)
+                            numberOfFav += 1
+                            
+                        }
+                        else
+                        {
+                            print("does not WishListViewCell")
+                        }
+                        
+                        print("Fav: \(favLineItem)")
+                    } else {
+                        print("Error: Missing data in lineItem \(lineItem)")
+                    }
+                }
+                self.indicator.stopAnimating()
+                self.tableview.reloadData()
+            }
+        }
+        favViewModel?.getFavs()
+    }
+    
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -90,7 +138,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if section == 0 {
             return 1
         } else {
-            return 2
+            return myfavLineItem.count
         }
     }
     
@@ -113,10 +161,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 return UITableViewCell()
             }
             print("WishListViewCell")
-            cell.productName.text = "Converse | Toddler Chuck Taylor All Star Axel Mid"
-            cell.productPrice.text = "$70.00"
-            cell.favImage.image = UIImage(named: "4")
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: self.view.bounds.size.width)
+            let favItem = myfavLineItem[indexPath.row]
+            cell.productName.text = favItem.name
+            let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+            let convertedPriceString = settingsViewModel.convertPrice(favItem.price, to: selectedCurrency) ?? "\(favItem.price)$"
+            cell.productPrice.text = convertedPriceString
+            cell.favImage.kf.setImage(with: URL(string: favItem.image))
             return cell
         }
     }
@@ -190,7 +240,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             print("Failed to instantiate SettingsViewController")
         }
     }
-
+    
     
     @IBAction func navToShoppingCart(_ sender: UIBarButtonItem) {
         Navigation.ToOrders(from: self)

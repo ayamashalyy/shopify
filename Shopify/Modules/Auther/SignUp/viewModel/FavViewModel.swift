@@ -8,7 +8,7 @@
 import Foundation
 
 class FavViewModel {
-    
+   
     var bindResultToViewController : (()->()) = {}
     
     var LineItems : [LineItem]?{
@@ -20,6 +20,7 @@ class FavViewModel {
     }
     
     func getFavs() {
+        print("wishList getFavs")
         let addition = "\(Authorize.favDraftOrder()!).json"
         // for testin the get and show but real should be the above
        //let addition = "1184814104824.json"

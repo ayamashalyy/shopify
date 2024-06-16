@@ -88,8 +88,7 @@ class AddressViewModel {
         let customerID = Authorize.getCustomerIDFromUserDefaults()
         print("customerID: \(customerID!)")
         
-        
-        let urlString = ""
+       let urlString = ""
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
