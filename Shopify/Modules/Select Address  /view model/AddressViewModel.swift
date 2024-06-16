@@ -25,7 +25,8 @@ class AddressViewModel {
         let customerID = Authorize.getCustomerIDFromUserDefaults()
         print("customerID: \(customerID!)")
         
-        let urlString = ""
+        
+  let urlString = ""
         
         let addressDict: [String: Any] = [
             "address": [
@@ -88,7 +89,8 @@ class AddressViewModel {
         let customerID = Authorize.getCustomerIDFromUserDefaults()
         print("customerID: \(customerID!)")
         
-       let urlString = ""
+        
+  let urlString = ""
         var request = URLRequest(url: URL(string: urlString)!, cachePolicy:.useProtocolCachePolicy)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -138,7 +140,8 @@ class AddressViewModel {
         print("customerID: \(customerID!)")
         
         
-        let urlString = ""
+        
+    let urlString = ""
         var request = URLRequest(url: URL(string: urlString)!)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

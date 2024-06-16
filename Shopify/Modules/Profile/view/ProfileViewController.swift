@@ -20,7 +20,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     var myfavLineItem: [FavLineItem] = []
     let indicator = UIActivityIndicatorView(style: .large)
     let settingsViewModel = SettingsViewModel()
-    
+    var orderViewModel = OrderViewModel()
     @IBOutlet weak var tableview: UITableView!
     
     var orders: [Order] = [
@@ -44,6 +44,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             setting.isEnabled = true
             indicator.startAnimating()
             getWishList()
+            getOrders()
         } else {
             setting.isEnabled = false
             self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
@@ -96,6 +97,21 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         favViewModel?.getFavs()
     }
     
+    
+    func getOrders() {
+        orderViewModel.fetchOrders { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.tableview.reloadData()
+                case .failure(let error):
+                    print("Failed to fetch orders: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
@@ -136,7 +152,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 1
+            return orderViewModel.orders.count > 0 ? 1 : 0
         } else {
             return myfavLineItem.count
         }
@@ -148,11 +164,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "OrderViewCell", for: indexPath) as? OrderViewCell else {
                 return UITableViewCell()
             }
-            let order = orders[indexPath.row]
-            cell.TotalPriceValue.text = order.totalPrice
-            cell.CreationDateValue.text = order.creationDate
-            cell.ShippedToValue.text = order.shippedTo
-            cell.PhoneValue.text = order.phone
+            if orderViewModel.orders.count > 0 {
+                let order = orderViewModel.orders[0]
+                cell.TotalPriceValue.text = order.current_subtotal_price
+                cell.CreationDateValue.text = order.created_at
+                cell.ShippedToValue.text = order.shipping_address?.address1
+                cell.PhoneValue.text = order.shipping_address?.phone
+                print(order.email)
+            }
             return cell
         } else {
             print("WishListViewCell")
@@ -161,12 +180,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 return UITableViewCell()
             }
             print("WishListViewCell")
-            let favItem = myfavLineItem[indexPath.row]
-            cell.productName.text = favItem.name
-            let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-            let convertedPriceString = settingsViewModel.convertPrice(favItem.price, to: selectedCurrency) ?? "\(favItem.price)$"
-            cell.productPrice.text = convertedPriceString
-            cell.favImage.kf.setImage(with: URL(string: favItem.image))
+            if myfavLineItem.count > 0 {
+                let favItem = myfavLineItem[indexPath.row]
+                cell.productName.text = favItem.name
+                let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+                let convertedPriceString = settingsViewModel.convertPrice(favItem.price, to: selectedCurrency) ?? "\(favItem.price)$"
+                cell.productPrice.text = convertedPriceString
+                cell.favImage.kf.setImage(with: URL(string: favItem.image))
+            }
             return cell
         }
     }
