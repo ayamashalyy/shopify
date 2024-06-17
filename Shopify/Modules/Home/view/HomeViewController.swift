@@ -217,6 +217,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
                 print("Stored discount value: \(storedValue)")
             } else {
                 print("No stored discount value found")
+                print("No stored discount code found")
             }
         }))
         
