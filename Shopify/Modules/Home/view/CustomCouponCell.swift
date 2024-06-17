@@ -23,7 +23,7 @@ class CustomCouponCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 230)
         ])
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 10
         imageView.layer.masksToBounds = true
     }
