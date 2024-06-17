@@ -21,7 +21,7 @@ class ProductViewController: UIViewController {
     var isComeFromFaviourts: Bool?
     var selectedVarientId : Int?
     var isFav = false
-
+    
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var addToCart: UIButton!
@@ -52,14 +52,15 @@ class ProductViewController: UIViewController {
                 {
                     //            print("is come from fav")
                     self.updateFavButton(iscomefromFav: true)
+                    self.isFav =  true
                     
                 }
                 else{
                     //             print("is noooooot come from fav")
                     
-                    self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isFav in
-                        self.updateFavButton(iscomefromFav: isFav)
-                        self.isFav = isFav
+                    self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isInFav in
+                        self.updateFavButton(iscomefromFav: isInFav)
+                        self.isFav = isInFav
                         
                     }
                 }
@@ -181,6 +182,10 @@ class ProductViewController: UIViewController {
                     if let variantText = variantButton.titleLabel?.text {
                         selectedVariants.append(variantText)
                         
+                        
+                        print("the selectedVariants number = \(selectedVariants.count)")
+                        
+                        
                         for variant in productViewModel?.product?.variants ?? [] {
                             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
                                 let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
@@ -200,23 +205,34 @@ class ProductViewController: UIViewController {
                     }
                 }
             }
-            productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
-                DispatchQueue.main.async {
-                    if isSuccess {
-                        self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
-                        self.addToCard.isEnabled = true
-                        self.hideAllCheckmarkImages()
-                    } else {
-                        self.showAlert(message: "Failed to add to cart" )
-                        self.addToCard.isEnabled = true
-                        
+            
+            print("selectedVariantsIDsAndImageUrl number\(selectedVariantsIDsAndImageUrl.count)")
+            
+            if selectedVariantsIDsAndImageUrl.count == 0 {
+                self.showAlert(message: "Please choose your size and color first, then add to card" ){
+                               action in
+                    self.addToCard.isEnabled = true
+                }
+            }else {
+                productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
+                    DispatchQueue.main.async {
+                        if isSuccess {
+                            self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
+                            self.addToCard.isEnabled = true
+                            self.hideAllCheckmarkImages()
+                        } else {
+                            self.showAlert(message: "Failed to add to cart" )
+                            self.addToCard.isEnabled = true
+                     //       print("number is not succes")
+                        }
                     }
                 }
-            }}else {
+            }
+        } else {
                 self.showAlertWithTwoOption(message: "Login to add to faviourts?",
                                             okAction: { action in
                     Navigation.ToALogin(from: self)
-                    print("OK button tapped")
+               //     print("OK button tapped")
                 }
                 )
                 
@@ -280,11 +296,9 @@ class ProductViewController: UIViewController {
         stack.addArrangedSubview(descriptionTextView)
         stack.addArrangedSubview(availableSizeAndColorLabel)
         
-        
-        
+                
         // get it to save product to fav by it
         firstVariantId = variants.first?.id
-        
         
         
         for variant in variants {
@@ -418,7 +432,7 @@ extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewTableViewCell")
-
+        
         var arrayOfReviews = ProductViewModel.getReviews()
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewTableViewCell", for: indexPath) as! ReviewTableViewCell
         let review = arrayOfReviews[indexPath.row]

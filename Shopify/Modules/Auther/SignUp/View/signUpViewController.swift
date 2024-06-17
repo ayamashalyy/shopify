@@ -87,11 +87,12 @@ class signUpViewController: UIViewController {
              return
          }
         
-       
-        signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, verifiedEmail: true, tags: passText) { createdNewCustomer in
+        signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, tags: passText) { createdNewCustomer in
             if createdNewCustomer {
-                print("Is a customer, go to home")
-                Navigation.ToHome(from: self)
+                self.showAlert(message: "Pleace check youe email and make verifcation, then login"){action in
+                    Navigation.ToALogin(from: self)
+                }
+
             } else {
                 self.showAlert(message: "Sorry, Try reregiste with different email")
             }
@@ -127,9 +128,13 @@ class signUpViewController: UIViewController {
         return emailPredicate.evaluate(with: email)
     }
 
-     private func showAlert(message: String) {
-            let alertController = UIAlertController(title: "Validation Error", message: message, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alertController, animated: true, completion: nil)
-        }
+   
+    private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    
 }

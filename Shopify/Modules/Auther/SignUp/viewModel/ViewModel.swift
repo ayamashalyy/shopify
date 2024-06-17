@@ -8,54 +8,115 @@
 import Foundation
 
 class ViewModel {
-    func signUp(email: String, firstName: String, lastName: String, verifiedEmail: Bool, tags: String, completion: @escaping (Bool) -> Void) {
-        let newCustomer = Customer(
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
-            verifiedEmail: verifiedEmail,
-            tags: tags,
-            password: tags,
-            passwordConfirmation: tags
-        )
-        
-        let customerRequest = CustomerRequest(customer: newCustomer)
-        
-        // Encode the customerRequest
-        Decoding.encodeData(object: customerRequest) { jsonData, encodeError in
-            guard let jsonData = jsonData, encodeError == nil else {
-                print("Error encoding customer data:", encodeError?.localizedDescription ?? "Unknown error")
+    
+//    func signUp(email: String, firstName: String, lastName: String,  tags: String, completion: @escaping (Bool) -> Void) {
+//        
+//        // First, create the user and send a verification email
+//        AuthenticationManger.createUser(email: email, password: tags) { success, errorMessage in
+//            if success {
+//                // If user creation and email verification succeed, create the customer
+//                let newCustomer = Customer(
+//                    email: email,
+//                    firstName: firstName,
+//                    lastName: lastName,
+//                    verifiedEmail: true,
+//                    tags: tags,
+//                    password: tags,
+//                    passwordConfirmation: tags
+//                )
+//                
+//                let customerRequest = CustomerRequest(customer: newCustomer)
+//                
+//                // Encode the customerRequest
+//                Decoding.encodeData(object: customerRequest) { jsonData, encodeError in
+//                    guard let jsonData = jsonData, encodeError == nil else {
+//                        print("Error encoding customer data:", encodeError?.localizedDescription ?? "Unknown error")
+//                        completion(false)
+//                        return
+//                    }
+//                    
+//                    NetworkManager.postDataToApi(endpoint: .customers, rootOfJson: .customer, body: jsonData) { data, error in
+//                        guard let data = data, error == nil else {
+//                            print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
+//                            completion(false)
+//                            return
+//                        }
+//                        
+//                        Decoding.decodeData(data: data, objectType: CustomerResponse.self) { customerResponse, decodeError in
+//                            if let customerResponse = customerResponse {
+//                                print("New customer created with ID: \(customerResponse.customer.id ?? -1)")
+//                                Authorize.saveCustomerIDToUserDefaults(customerID: customerResponse.customer.id! )
+//                                self.createTwoDraftOrdersForThisCustomer(customerId: customerResponse.customer.id ?? 0 )
+//                                completion(true)
+//                            } else {
+//                                print("Error decoding customer data:", decodeError?.localizedDescription ?? "Unknown error")
+//                                completion(false)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
+//    
+    func signUp(email: String, firstName: String, lastName: String, tags: String, completion: @escaping (Bool) -> Void) {
+        AuthenticationManger.createUser(email: email, password: tags) { success, errorMessage in
+            if success {
+                self.createCustomer(email: email, firstName: firstName, lastName: lastName, tags: tags) { customerCreationSuccess in
+                    completion(customerCreationSuccess)
+                }
+            } else {
+                print("Error creating user:", errorMessage ?? "Unknown error")
                 completion(false)
-                return
-            }
-            
-            NetworkManager.postDataToApi(endpoint: .customers, rootOfJson: .customer, body: jsonData) { data, error in
-                guard let data = data, error == nil else {
-                    print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
-                    completion(false)
-                    return
-                }
-                
-                //                // Print the raw data received from the server
-                //                if let jsonString = String(data: data, encoding: .utf8) {
-                //                 //   print("Raw JSON response: \(jsonString)")
-                //                }
-                
-                // Decode the response
-                Decoding.decodeData(data: data, objectType: CustomerResponse.self) { customerResponse, decodeError in
-                    if let customerResponse = customerResponse {
-                        print("New customer created with ID: \(customerResponse.customer.id ?? -1)")
-                        Authorize.saveCustomerIDToUserDefaults(customerID: customerResponse.customer.id! )
-                        self.createTwoDraftOrdersForThisCustomer(customerId: customerResponse.customer.id ?? 0 )
-                        completion(true)
-                    } else {
-                        print("Error decoding customer data:", decodeError?.localizedDescription ?? "Unknown error")
-                        completion(false)
-                    }
-                }
             }
         }
     }
+    
+    
+    func createCustomer(email: String, firstName: String, lastName: String, tags: String, completion: @escaping (Bool) -> Void) {
+         let newCustomer = Customer(
+             email: email,
+             firstName: firstName,
+             lastName: lastName,
+             verifiedEmail: true,
+             tags: tags,
+             password: tags,
+             passwordConfirmation: tags
+         )
+         
+         let customerRequest = CustomerRequest(customer: newCustomer)
+         
+         // Encode the customerRequest
+         Decoding.encodeData(object: customerRequest) { jsonData, encodeError in
+             guard let jsonData = jsonData, encodeError == nil else {
+                 print("Error encoding customer data:", encodeError?.localizedDescription ?? "Unknown error")
+                 completion(false)
+                 return
+             }
+             
+             NetworkManager.postDataToApi(endpoint: .customers, rootOfJson: .customer, body: jsonData) { data, error in
+                 guard let data = data, error == nil else {
+                     print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
+                     completion(false)
+                     return
+                 }
+                 
+                 Decoding.decodeData(data: data, objectType: CustomerResponse.self) { customerResponse, decodeError in
+                     if let customerResponse = customerResponse {
+                         print("New customer created with ID: \(customerResponse.customer.id ?? -1)")
+                         Authorize.saveCustomerIDToUserDefaults(customerID: customerResponse.customer.id!)
+                         self.createTwoDraftOrdersForThisCustomer(customerId: customerResponse.customer.id ?? 0)
+                         completion(true)
+                     } else {
+                         print("Error decoding customer data:", decodeError?.localizedDescription ?? "Unknown error")
+                         completion(false)
+                     }
+                 }
+             }
+         }
+     }
+     
     
     
     func createTwoDraftOrdersForThisCustomer(customerId: Int) {
@@ -100,9 +161,9 @@ class ViewModel {
                     } else if let responseData = responseData {
                         Decoding.decodeData(data: responseData, objectType: creatingDraftOrderResponse.self) { response, decodeError in
                             if let decodeError = decodeError {
-                            //    print("Failed to decode draft order response: \(decodeError)")
+                                //    print("Failed to decode draft order response: \(decodeError)")
                             } else if let response = response {
-                                        
+                                
                                 let draftOrderID = response.draft_order.id
                                 if firsrtTime {
                                     // first is fav
@@ -110,9 +171,9 @@ class ViewModel {
                                     firsrtTime = false
                                 }else{
                                     Authorize.cardDraftOrderId(draftOrderIDTwo: draftOrderID!)
-                                    }
+                                }
                             } else {
-                               print("Received empty response data.")
+                                print("Received empty response data.")
                             }
                         }
                     } else {
