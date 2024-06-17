@@ -76,6 +76,7 @@
 		7D7CA1EC2C16A0C2003D8013 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7CA1EB2C16A0C2003D8013 /* Auth.swift */; };
 		7DB203652C17630800CFFC65 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB203642C17630800CFFC65 /* ViewModel.swift */; };
 		7DBCA50A2C1BBFED005DFD33 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBCA5092C1BBFED005DFD33 /* ReviewTableViewCell.swift */; };
+		7DBE8ACA2C1FCC2A00D466F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBE8AC92C1FCC2A00D466F0 /* GoogleService-Info.plist */; };
 		7DC183CA2C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC183C92C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift */; };
 		7DC25B472C13705B00D046D7 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC25B462C13705B00D046D7 /* Navigation.swift */; };
 		7DC25B4D2C1379A000D046D7 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC25B4C2C1379A000D046D7 /* SearchViewModel.swift */; };
@@ -185,6 +186,7 @@
 		7D7CA1EB2C16A0C2003D8013 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		7DB203642C17630800CFFC65 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		7DBCA5092C1BBFED005DFD33 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
+		7DBE8AC92C1FCC2A00D466F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7DC183C92C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsimagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		7DC25B462C13705B00D046D7 /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		7DC25B4C2C1379A000D046D7 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -372,6 +374,7 @@
 				03D35C862C0CEC1300523AF7 /* SceneDelegate.swift */,
 				03D35C882C0CEC1300523AF7 /* ViewController.swift */,
 				03D35C952C0CEC3300523AF7 /* Info.plist */,
+				7DBE8AC92C1FCC2A00D466F0 /* GoogleService-Info.plist */,
 				035FAF002C0F3809002EC3C8 /* Assets.xcassets */,
 				03D35C8D2C0CEC1300523AF7 /* Shopify.xcdatamodeld */,
 			);
@@ -998,6 +1001,7 @@
 				7D3029732C12A18900B235B4 /* FavCollectionViewCell.xib in Resources */,
 				03D35CC32C0CED2300523AF7 /* Second.storyboard in Resources */,
 				03E40D9F2C10D5AE00489854 /* WishListViewCell.xib in Resources */,
+				7DBE8ACA2C1FCC2A00D466F0 /* GoogleService-Info.plist in Resources */,
 				03E40D9B2C10C31500489854 /* OrderViewCell.xib in Resources */,
 				0337F1FC2C0E0C3B00D97CBD /* ShoppingCartableViewCell.xib in Resources */,
 				037955DD2C0E825D003A3AF9 /* PlaceOrderCell.xib in Resources */,
