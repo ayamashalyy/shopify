@@ -16,7 +16,7 @@ enum Endpoint: String {
     case customers = "customers.json"
     case addressCastomer = "customers/"
     case order = "orders.json"
-    case discount_code = "price_rules/1315735109880/discount_codes.json"
+    case discount_code = "price_rules"
     
     //case productsByCategory = "collections/"
     case allProduct = "products.json"
@@ -43,10 +43,10 @@ enum Root: String {
     case order = "order"
     case orders = "orders"
     case discountCodes = "discount_codes"
+    case priceRules = "price_rules"
 }
 
-// remove it every time before push 
- 
+// remove it every time before push
 
 
 class NetworkManager {
