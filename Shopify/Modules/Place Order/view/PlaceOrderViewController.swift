@@ -14,7 +14,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     var summeryCartCollectionView: UICollectionView!
     let coponesImages = ["coupon2.jpg", "coupon2.jpg"]
     var viewModel = ShoppingCartViewModel()
-    
+    let homeViewModel = HomeViewModel()
     
     
     @IBAction func placeOrder(_ sender: UIButton) {
@@ -55,14 +55,17 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         setUpUI()
         
         viewModel.updateCartItemsHandler = { [weak self] in
-            self?.summeryCartCollectionView.reloadData()
-        }
-        
-        viewModel.fetchDraftOrders { error in
-            if let error = error {
-                print("Failed to fetch draft orders: \(error)")
+                self?.summeryCartCollectionView.reloadData()
+                self?.tableview.reloadData()  
             }
-        }
+            
+            viewModel.fetchDraftOrders { error in
+                if let error = error {
+                    print("Failed to fetch draft orders: \(error)")
+                } else {
+                    self.tableview.reloadData()
+                }
+            }
     }
     
     func setupButtons() {
@@ -94,7 +97,15 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOrderCell", for: indexPath) as? PlaceOrderCell else {
             return UITableViewCell()
         }
-        
+        let totalPrice = viewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
+        cell.subTotalLable.text = "\(totalPrice)$"
+        print("totalPrice\(totalPrice)")
+        if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
+                   let storedCode = storedDiscountDict["code"] as? String {
+                    cell.couponLable.text = storedCode
+                } else {
+                    cell.couponLable.text = "No discount code found"
+                }
         return cell
     }
     

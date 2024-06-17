@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class PlaceOrderCell: UITableViewCell {
 
     @IBOutlet weak var subTotalLable: UILabel!

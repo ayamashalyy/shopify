@@ -80,11 +80,23 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Coupon Code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m88-U5-05U">
-                                <rect key="frame" x="170" y="85" width="155" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Coupon " textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m88-U5-05U">
+                                <rect key="frame" x="165" y="85" width="170" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="170" id="yg7-tS-2ui"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ojV-1X-rYW">
+                                <rect key="frame" x="335" y="84" width="48" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="bp9-oY-PFe"/>
+                                    <constraint firstAttribute="width" constant="48" id="mYE-z9-wbn"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="multiply"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
@@ -94,15 +106,17 @@
                             <constraint firstItem="K9c-3i-m2p" firstAttribute="trailing" secondItem="HCu-3S-675" secondAttribute="trailing" id="3x9-fM-5i6"/>
                             <constraint firstItem="J12-QU-861" firstAttribute="leading" secondItem="K9c-3i-m2p" secondAttribute="leading" id="6hZ-a5-NSW"/>
                             <constraint firstItem="2gm-dC-wT0" firstAttribute="leading" secondItem="Goa-rd-Drx" secondAttribute="trailing" constant="50" id="8F6-rj-ap7"/>
+                            <constraint firstItem="ojV-1X-rYW" firstAttribute="leading" secondItem="m88-U5-05U" secondAttribute="trailing" id="9XF-ge-VJN"/>
                             <constraint firstItem="Goa-rd-Drx" firstAttribute="top" secondItem="5EJ-zB-zia" secondAttribute="top" constant="42" id="9lp-bp-Vi0"/>
                             <constraint firstItem="Snu-pR-Fq6" firstAttribute="top" secondItem="J12-QU-861" secondAttribute="bottom" constant="30" id="AtU-Zd-zIz"/>
                             <constraint firstItem="J12-QU-861" firstAttribute="top" secondItem="K9c-3i-m2p" secondAttribute="bottom" constant="30" id="GaZ-3u-PuH"/>
                             <constraint firstItem="Snu-pR-Fq6" firstAttribute="trailing" secondItem="J12-QU-861" secondAttribute="trailing" id="Jdw-6Y-QC6"/>
                             <constraint firstItem="HCu-3S-675" firstAttribute="trailing" secondItem="Goa-rd-Drx" secondAttribute="trailing" id="KjI-Q0-mwo"/>
                             <constraint firstItem="pVt-0C-cxO" firstAttribute="leading" secondItem="2gm-dC-wT0" secondAttribute="leading" id="Pmb-hg-y4Z"/>
-                            <constraint firstItem="m88-U5-05U" firstAttribute="leading" secondItem="2gm-dC-wT0" secondAttribute="leading" constant="-40" id="TKe-FU-pOC"/>
+                            <constraint firstItem="m88-U5-05U" firstAttribute="leading" secondItem="2gm-dC-wT0" secondAttribute="leading" constant="-45" id="TKe-FU-pOC"/>
                             <constraint firstItem="K9c-3i-m2p" firstAttribute="leading" secondItem="HCu-3S-675" secondAttribute="leading" id="V2w-FJ-jfj"/>
                             <constraint firstItem="z8N-oA-KQb" firstAttribute="top" secondItem="ue4-RX-hrO" secondAttribute="bottom" constant="27" id="Z7F-4P-pUu"/>
+                            <constraint firstItem="pVt-0C-cxO" firstAttribute="top" secondItem="ojV-1X-rYW" secondAttribute="bottom" constant="21" id="bs2-EO-NRT"/>
                             <constraint firstItem="Goa-rd-Drx" firstAttribute="leading" secondItem="5EJ-zB-zia" secondAttribute="leading" constant="40" id="cIy-yb-VWX"/>
                             <constraint firstItem="z8N-oA-KQb" firstAttribute="trailing" secondItem="ue4-RX-hrO" secondAttribute="trailing" id="eKn-hy-CNN"/>
                             <constraint firstItem="pVt-0C-cxO" firstAttribute="trailing" secondItem="2gm-dC-wT0" secondAttribute="trailing" id="ish-fj-yg2"/>
@@ -115,6 +129,7 @@
                             <constraint firstItem="m88-U5-05U" firstAttribute="top" secondItem="2gm-dC-wT0" secondAttribute="bottom" constant="22" id="wIe-Pk-vET"/>
                             <constraint firstItem="HCu-3S-675" firstAttribute="top" secondItem="Goa-rd-Drx" secondAttribute="bottom" constant="30" id="wRm-DN-jcK"/>
                             <constraint firstItem="2gm-dC-wT0" firstAttribute="top" secondItem="5EJ-zB-zia" secondAttribute="top" constant="42" id="zRM-Hf-tbp"/>
+                            <constraint firstItem="ojV-1X-rYW" firstAttribute="top" secondItem="2gm-dC-wT0" secondAttribute="bottom" constant="21" id="zec-yG-edd"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -137,6 +152,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="multiply" width="24" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

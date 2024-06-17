@@ -23,8 +23,8 @@ enum Endpoint: String {
     
     case draftOrder = "draft_orders.json"
     case specficDraftOeder = "draft_orders/"
-
-
+    
+    
     
     //    8575848153336.json
 }
@@ -37,7 +37,7 @@ enum Root: String {
     case customer = "customer"
     case address = "addresses"
     
-   case allDraftOrderRoot = "draft_orders"
+    case allDraftOrderRoot = "draft_orders"
     
     case specificDraftOrder = "draft_order"
     case order = "order"
@@ -57,8 +57,8 @@ class NetworkManager {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-       print("url in fetching    \(urlString)")
-
+        print("url in fetching    \(urlString)")
+        
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -69,9 +69,9 @@ class NetworkManager {
                 }
                 //   print("JSON Response:", json)
                 
-         //       print("Raw JSON: \(json)")
-
-
+                //       print("Raw JSON: \(json)")
+                
+                
                 var jsonData: Data?
                 
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
@@ -102,8 +102,8 @@ class NetworkManager {
         }
     }
     
-    static func postDataToApi(endpoint: Endpoint, rootOfJson: Root, body: Data, completion: @escaping (Data?, Error?) -> Void) {
-        let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)"
+    static func postDataToApi(endpoint: Endpoint, rootOfJson: Root, body: Data, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
+        let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"
         guard let url = URL(string: urlString) else {
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
@@ -140,9 +140,9 @@ class NetworkManager {
         
     }
     
-
+    
     static func fetchExchangeRates(urlString: String ,completion: @escaping (Data?, Error?) -> Void) {
-//        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
+        //        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
         Alamofire.request(urlString).responseData { response in
             switch response.result {
             case .success(let data):
@@ -152,7 +152,7 @@ class NetworkManager {
             }
         }
     }
-
+    
     static func updateResource(endpoint: Endpoint, rootOfJson: Root, body: Data, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
         let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"
         guard let url = URL(string: urlString) else {
@@ -195,7 +195,7 @@ class NetworkManager {
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(TOKEN, forHTTPHeaderField: "X-Shopify-Access-Token")
-
+        
         Alamofire.request(request)
             .validate()
             .responseData { response in
@@ -212,7 +212,7 @@ class NetworkManager {
                 }
             }
     }
-
     
-
+    
+    
 }
