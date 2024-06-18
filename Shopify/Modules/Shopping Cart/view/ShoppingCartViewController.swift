@@ -36,7 +36,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         super.viewWillAppear(animated)
         if Authorize.isRegistedCustomer() {
             getThemButton.isEnabled = true
-
+            
         }else{
             getThemButton.isEnabled = false
             self.showAlertWithTwoOption(message: "Login to add to cart?",
@@ -158,11 +158,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         let row = sender.tag
         let item = shoppingCartViewModel.cartItems[row]
         let newQuantity = item.2 + 1
+        print("newQuantity\(newQuantity)")
         let maxQuantity = item.5 / 2
+        print("maxQuantity\(maxQuantity)")
+        
         if newQuantity > maxQuantity {
             showAlert(message: "You cannot order more than half of the available quantity.")
         } else {
             shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
+                print("shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity)\(newQuantity)")
                 if let error = error {
                     print("Error updating item quantity: \(error.localizedDescription)")
                 } else {
@@ -177,14 +181,34 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         let item = shoppingCartViewModel.cartItems[row]
         let newQuantity = max(0, item.2 - 1)
         
-        shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
-            if let error = error {
-                print("Error updating item quantity: \(error.localizedDescription)")
-            } else {
-                self.updateSubtotal()
+        if newQuantity == 0 {
+            let alert = UIAlertController(title: "Delete Item", message: "Do you want to remove this item from your cart?", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+                self?.shoppingCartViewModel.deleteLineItem(with: self?.shoppingCartViewModel.cartItems ?? [], variantId: item.4, newQuantity: newQuantity) { error in
+                    if let error = error {
+                        print("Error deleting item: \(error.localizedDescription)")
+                    } else {
+                        self?.shoppingCartViewModel.cartItems.remove(at: row)
+                        self?.tableView.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+                        self?.updateSubtotal()
+                    }
+                }
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+        } else {
+            shoppingCartViewModel.updateItemQuantity(itemId: item.4, newQuantity: newQuantity) { error in
+                if let error = error {
+                    print("Error updating item quantity: \(error.localizedDescription)")
+                } else {
+                    self.updateSubtotal()
+                }
             }
         }
     }
+    
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

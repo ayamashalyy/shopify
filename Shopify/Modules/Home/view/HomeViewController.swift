@@ -15,7 +15,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let homeViewModel = HomeViewModel()
     let brandProductsViewModel = BrandProductsViewModel()
     
-    let coponesImages = ["coupon2.jpg", "coupon2.jpg"]
+    let coponesImages = ["eid_sale.jpeg", "sum3_disc30.jpeg","sum1_disc30.jpeg"]
     var couponsCollectionView: UICollectionView!
     
     
@@ -41,7 +41,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         self.indicator.startAnimating()
         setupUI()
         fetchBrands()
-        
+        fetchPriceRules()
     }
     func fetchBrands() {
         homeViewModel.fetchBrands { [weak self] error in
@@ -56,6 +56,34 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    func fetchDiscountCodesAndShowAlert(for indexPath: IndexPath) {
+        guard let priceRule = homeViewModel.priceRule(at: indexPath.item) else {
+            print("Invalid price rule at index \(indexPath.item)")
+            return
+        }
+        
+        homeViewModel.fetchDiscountCodes { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching discount codes: \(error)")
+            } else {
+                let discountCode = self.homeViewModel.discountCodes.first(where: { $0.price_rule_id == priceRule.id })?.code ?? "No Code"
+                self.showDiscountCodeAlert(code: discountCode, discountPercentage: priceRule.value, indexPath: indexPath)
+            }
+        }
+    }
+    
+    func fetchPriceRules(){
+        homeViewModel.fetchPriceRules { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Error fetching price rules: \(error)")
+            } else {
+                // Price rules fetched successfully
+                print("Price rules IDs: \(self.homeViewModel.priceRules.map { $0.id })")
+            }
+        }
+    }
     
     func setupUI(){
         //view.backgroundColor = UIColor(hex: "#F5F5F5")
@@ -157,7 +185,43 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             brandsVC.brandProductsViewModel.setCollectionId(brand.id)
             brandsVC.modalPresentationStyle = .fullScreen
             self.present(brandsVC, animated: true, completion: nil)
+            
+        } else if collectionView == couponsCollectionView {
+            fetchDiscountCodesAndShowAlert(for: indexPath)
         }
+    }
+    
+    private func showDiscountCodeAlert(code: String, discountPercentage: String, indexPath: IndexPath) {
+        guard let priceRuleValue = homeViewModel.priceRules[indexPath.item].discountValue else {
+            print("Error: Price rule value not available")
+            return
+        }
+        
+        let message = "Here is a discount code with \(priceRuleValue)% off: \(code) , do you want to get it"
+        let alert = UIAlertController(title: "Discount Code", message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            // Store discount code with price rule value in UserDefaults
+            self.homeViewModel.storeDiscountCodeWithPriceRule(code: code, priceRuleValue: priceRuleValue)
+            print("added to the user defaults")
+            if let storedDiscountDict = self.homeViewModel.fetchStoredDiscountCode(),
+               let storedCode = storedDiscountDict["code"] as? String {
+                print("Stored discount code: \(storedCode)")
+            } else {
+                print("No stored discount code found")
+            }
+            if let storedDiscountDict2 = self.homeViewModel.fetchStoredDiscountCode(),
+               let storedValue = storedDiscountDict2["priceRuleValue"] as? Int {
+                print("Stored discount value: \(storedValue)")
+            } else {
+                print("No stored discount value found")
+                print("No stored discount code found")
+            }
+        }))
+        
+        present(alert, animated: true, completion: nil)
     }
 
 }

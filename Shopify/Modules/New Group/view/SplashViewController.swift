@@ -12,23 +12,21 @@ class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Ayaaaaaaaaaaaaaaaaaaa")
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
          // for codding only the next line:
-          // Authorize.logout()
-      self.checkCustomerID()
-         //   Navigation.ToSearch(from: self, comeFromHome: true , products: [])
+        // Authorize.logout()
 
+      self.checkCustomerID()
         }
     }
     
     func checkCustomerID() {
      var  customerID = Authorize.getCustomerIDFromUserDefaults()
         if customerID == 0  {
-            print(" nottttt customerID")
+         //   print(" nottttt customerID")
             Navigation.ToALogin(from: self)
         } else {
-            print("customerID\(customerID)")
+        //    print("customerID\(customerID)")
             Navigation.ToHome(from: self)
        }
     }

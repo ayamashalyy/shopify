@@ -86,6 +86,16 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        orderViewModel.selectOrder(at: indexPath.row)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let orderDetailsVC = storyboard.instantiateViewController(withIdentifier: "OrderDetailsViewController") as? OrderDetailsViewController {
+            orderDetailsVC.modalPresentationStyle = .fullScreen
+            orderDetailsVC.orderViewModel = orderViewModel
+            self.present(orderDetailsVC, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }

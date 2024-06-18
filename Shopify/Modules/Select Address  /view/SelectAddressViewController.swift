@@ -147,7 +147,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         }
         
         let address = viewModel.addresses[indexPath.row]
-       // print("addressTest\(address)")
+        // print("addressTest\(address)")
         print("addressTest..............................\(address.isDefault)")
         cell.addressLabel.text = address.address1
         cell.phoneLabel.text = address.phone
@@ -186,26 +186,33 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     func showConfirmDeleteAlert(address: Address, indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "Confirm Delete", message: "Are you sure you want to delete this address?", preferredStyle:.alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style:.cancel, handler: nil)
-        let deleteAction = UIAlertAction(title: "Delete", style:.destructive) { [weak self] _ in
-            self?.viewModel.deleteAddress(address) { result in
+        let alertController = UIAlertController(title: "Confirm Delete", message: "Are you sure you want to delete this address?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.deleteAddress(address) { result in
                 switch result {
-                case.success:
+                case .success:
                     print("Address deleted successfully")
-                    self?.viewModel.addresses.remove(at: indexPath.row)
-                    self?.tableView.deleteRows(at: [indexPath], with:.fade)
-                    self?.showAlert(title: "Success", message: "Address deleted successfully")
-                case.failure(let error):
+                    self.viewModel.addresses.remove(at: indexPath.row)
+                    DispatchQueue.main.async {
+                        self.tableView.deleteRows(at: [indexPath], with: .fade)
+                        self.showAlert(title: "Success", message: "Address deleted successfully")
+                    }
+                case .failure(let error):
                     print("Error deleting address: \(error)")
-                    self?.showAlert(title: "Error", message: "Failed to delete address: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.showAlert(title: "Error", message: "Failed to delete address,Cannot delete the customer’s default address")
+                    }
                 }
             }
         }
         alertController.addAction(cancelAction)
         alertController.addAction(deleteAction)
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
+    
+    
     
     func showAlert(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle:.alert)
