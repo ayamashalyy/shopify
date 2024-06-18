@@ -8,6 +8,8 @@
 import UIKit
 
 class signUpViewController: UIViewController {
+    
+    var settingsViewModel = SettingsViewModel()
 
     @IBAction func dismis(_ sender: Any) {
         dismiss(animated: true)
@@ -89,6 +91,8 @@ class signUpViewController: UIViewController {
         
         signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, tags: passText) { createdNewCustomer in
             if createdNewCustomer {
+                self.settingsViewModel.saveCurrencySelection(.USD)
+
                 self.showAlert(message: "Pleace check youe email and make verifcation, then login"){action in
                     Navigation.ToALogin(from: self)
                 }

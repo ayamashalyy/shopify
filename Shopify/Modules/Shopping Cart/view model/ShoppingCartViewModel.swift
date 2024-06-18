@@ -68,7 +68,7 @@ class ShoppingCartViewModel {
         }
         
         cartItems[itemIndex].2 = newQuantity
-
+        print("updateItemQuantity\(newQuantity)")
         updateDraftOrder(with: cartItems,variantId: itemId,newQuantity: newQuantity) { error in
             
             if let error = error {
@@ -80,32 +80,41 @@ class ShoppingCartViewModel {
         }
     }
     
-    
-    func updateDraftOrder(with cartItems: [(String, Int, Int, String?, Int, Int, String, Int)],variantId: Int,newQuantity: Int, completion: @escaping (Error?) -> Void) {
+    func updateDraftOrder(with cartItems: [(String, Int, Int, String?, Int, Int, String, Int)], variantId: Int, newQuantity: Int, completion: @escaping (Error?) -> Void) {
         let updateEndpoint = Endpoint.specficDraftOeder
         let rootOfJson = Root.specificDraftOrder
         let draftOrderId = "\(Authorize.cardDraftOrderId()!).json"
         var lineItemsDict: [[String: Any]] = []
         
         for item in cartItems {
+            var properties: [[String: Any]] = []
             
-            if item.4 == variantId
-            {
+            if let imageUrl = item.3 {
+                properties.append([
+                    "name": "imageUrl",
+                    "value": imageUrl
+                ])
+            }
+            properties.append([
+                "name": "quantityInString",
+                "value": String(item.5)
+            ])
+            print("quantity item ..........................")
+            print("quantity item \(item.5)")
+            if item.4 == variantId {
                 lineItemsDict.append([
                     "variant_id": variantId,
-                    "quantity": newQuantity
+                    "quantity": newQuantity,
+                    "properties": properties
                 ])
-                
-            }
-            else
-            {
+            } else {
                 lineItemsDict.append([
                     "variant_id": item.4,
-                    "quantity": item.2
+                    "quantity": item.2,
+                    "properties": properties
                 ])
             }
         }
-        
         
         let body: [String: Any] = [
             "draft_order": [
@@ -121,11 +130,12 @@ class ShoppingCartViewModel {
         if let jsonString = String(data: bodyData, encoding: .utf8) {
             print("Request Body JSON: \(jsonString)")
         }
+        
         NetworkManager.updateResource(endpoint: updateEndpoint, rootOfJson: rootOfJson, body: bodyData, addition: draftOrderId) { (data, error) in
             completion(error)
         }
     }
-    
+
     func deleteLineItem (with cartItems: [(String, Int, Int, String?, Int, Int, String, Int)],variantId: Int,newQuantity: Int, completion: @escaping (Error?) -> Void) {
         let updateEndpoint = Endpoint.specficDraftOeder
         let rootOfJson = Root.specificDraftOrder
@@ -133,6 +143,18 @@ class ShoppingCartViewModel {
         var lineItemsDict: [[String: Any]] = []
         
         for item in cartItems {
+            var properties: [[String: Any]] = []
+            
+            if let imageUrl = item.3 {
+                properties.append([
+                    "name": "imageUrl",
+                    "value": imageUrl
+                ])
+            }
+            properties.append([
+                "name": "quantityInString",
+                "value": String(item.5)
+            ])
             
             if item.4 == variantId
             {
@@ -142,7 +164,8 @@ class ShoppingCartViewModel {
             {
                 lineItemsDict.append([
                     "variant_id": item.4,
-                    "quantity": item.2
+                    "quantity": item.2,
+                    "properties": properties
                 ])
             }
         }

@@ -113,7 +113,7 @@ class ProductViewController: UIViewController {
                 alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
                 alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
                     guard let self = self else { return }
-                    self.productViewModel?.removeFromFavDraftOrders(VariantsId: firstVariantId!) { isSuccess in
+                    self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
                         DispatchQueue.main.async {
                             if isSuccess {
                                 self.isFav = false
