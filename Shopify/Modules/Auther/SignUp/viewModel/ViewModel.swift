@@ -63,6 +63,7 @@ class ViewModel {
     func signUp(email: String, firstName: String, lastName: String, tags: String, completion: @escaping (Bool) -> Void) {
         AuthenticationManger.createUser(email: email, password: tags) { success, errorMessage in
             if success {
+                print(" email signUp \(email)")
                 self.createCustomer(email: email, firstName: firstName, lastName: lastName, tags: tags) { customerCreationSuccess in
                     completion(customerCreationSuccess)
                 }

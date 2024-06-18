@@ -43,7 +43,9 @@
                                 </constraints>
                                 <color key="tintColor" systemColor="groupTableViewBackgroundColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Login"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Login">
+                                    <color key="baseForegroundColor" systemColor="tableBackgroundColor"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="loginBtx:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="tM5-Iz-MQ0"/>
                                 </connections>
@@ -61,10 +63,10 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-img" translatesAutoresizingMaskIntoConstraints="NO" id="ijr-Zq-Cav">
-                                <rect key="frame" x="16" y="86" width="320" height="277"/>
+                                <rect key="frame" x="16" y="86" width="320" height="350"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HXd-Xe-Iy7">
-                                <rect key="frame" x="162" y="751" width="80" height="35"/>
+                                <rect key="frame" x="263" y="751" width="80" height="35"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="SignUp"/>
@@ -82,20 +84,31 @@
                                     <action selector="showHideButtonTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="QfQ-dU-7Pi"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7h-cq-16N">
+                                <rect key="frame" x="30" y="737.66666666666663" width="163" height="62"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="g" title="Sign-In with">
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="loginWithGoogle:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="hpc-CI-GcH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="ijr-Zq-Cav" secondAttribute="trailing" constant="54" id="3pP-kc-4PX"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="HXd-Xe-Iy7" secondAttribute="trailing" constant="47" id="4VR-BH-xMa"/>
                             <constraint firstItem="ijr-Zq-Cav" firstAttribute="top" secondItem="2rf-Ps-poK" secondAttribute="bottom" id="5gb-8O-662"/>
+                            <constraint firstItem="U7h-cq-16N" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="64J-Xk-cDx"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="vct-gn-mPK" secondAttribute="trailing" constant="30" id="9Hb-Ge-ol3"/>
                             <constraint firstItem="x8u-MV-0bQ" firstAttribute="height" secondItem="vct-gn-mPK" secondAttribute="height" id="9JT-kv-nlk"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="2rf-Ps-poK" secondAttribute="trailing" constant="25" id="CR9-k3-WuX"/>
                             <constraint firstItem="oev-ZH-AMF" firstAttribute="top" secondItem="2rf-Ps-poK" secondAttribute="bottom" constant="350" id="DIs-KX-A0f"/>
-                            <constraint firstItem="HXd-Xe-Iy7" firstAttribute="leading" secondItem="B9x-A7-L5d" secondAttribute="leading" id="Gpd-lV-Cr6"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="HXd-Xe-Iy7" secondAttribute="bottom" constant="32" id="JzN-8F-htj"/>
                             <constraint firstItem="B9x-A7-L5d" firstAttribute="top" secondItem="vct-gn-mPK" secondAttribute="bottom" constant="25" id="R9m-Js-Jz7"/>
-                            <constraint firstItem="oev-ZH-AMF" firstAttribute="top" secondItem="ijr-Zq-Cav" secondAttribute="bottom" constant="73" id="RJ4-UC-xtz"/>
+                            <constraint firstItem="oev-ZH-AMF" firstAttribute="top" secondItem="ijr-Zq-Cav" secondAttribute="bottom" id="RJ4-UC-xtz"/>
                             <constraint firstItem="vct-gn-mPK" firstAttribute="top" secondItem="oev-ZH-AMF" secondAttribute="bottom" constant="25" id="TnG-tf-YCF"/>
                             <constraint firstItem="oev-ZH-AMF" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="UB7-Ot-PRK"/>
                             <constraint firstItem="x8u-MV-0bQ" firstAttribute="centerY" secondItem="vct-gn-mPK" secondAttribute="centerY" id="VRg-4i-p4O"/>
@@ -103,9 +116,10 @@
                             <constraint firstItem="vct-gn-mPK" firstAttribute="leading" secondItem="oev-ZH-AMF" secondAttribute="leading" id="XOe-xP-uZA"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="x8u-MV-0bQ" secondAttribute="trailing" constant="47" id="Yn7-Fm-r7k"/>
                             <constraint firstItem="2rf-Ps-poK" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="5" id="czZ-c7-d72"/>
-                            <constraint firstItem="HXd-Xe-Iy7" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="162" id="dGF-tQ-qtm"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="oev-ZH-AMF" secondAttribute="trailing" constant="30" id="i0D-6q-VGB"/>
+                            <constraint firstItem="U7h-cq-16N" firstAttribute="centerY" secondItem="HXd-Xe-Iy7" secondAttribute="centerY" id="pJH-Nr-JH5"/>
                             <constraint firstItem="ijr-Zq-Cav" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leadingMargin" id="vST-mR-YJC"/>
+                            <constraint firstItem="B9x-A7-L5d" firstAttribute="centerX" secondItem="vct-gn-mPK" secondAttribute="centerX" id="yVo-Hl-f4v"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="byA-6S-xkp"/>
@@ -702,6 +716,7 @@
     </scenes>
     <resources>
         <image name="cart.fill" catalog="system" width="128" height="102"/>
+        <image name="g" width="48" height="48"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="left" width="24" height="24"/>
@@ -709,6 +724,9 @@
         <image name="splash-img" width="624" height="652"/>
         <systemColor name="groupTableViewBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">
             <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -727,6 +745,9 @@
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tableBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

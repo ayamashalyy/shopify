@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class LoginViewController: UIViewController {
     
     
@@ -17,6 +18,18 @@ class LoginViewController: UIViewController {
         
      
     }
+    
+    
+    
+    @IBAction func loginWithGoogle(_ sender: UIButton) {
+        
+        
+        
+        
+        
+        
+    }
+    
     
     
     var loginViewModel : LoginViewModel?

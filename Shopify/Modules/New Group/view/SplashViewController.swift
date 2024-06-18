@@ -15,7 +15,7 @@ class SplashViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
          // for codding only the next line:
-          // Authorize.logout()
+        // Authorize.logout()
       self.checkCustomerID()
          //   Navigation.ToSearch(from: self, comeFromHome: true , products: [])
 
@@ -25,10 +25,10 @@ class SplashViewController: UIViewController {
     func checkCustomerID() {
      var  customerID = Authorize.getCustomerIDFromUserDefaults()
         if customerID == 0  {
-            print(" nottttt customerID")
+         //   print(" nottttt customerID")
             Navigation.ToALogin(from: self)
         } else {
-            print("customerID\(customerID)")
+        //    print("customerID\(customerID)")
             Navigation.ToHome(from: self)
        }
     }
