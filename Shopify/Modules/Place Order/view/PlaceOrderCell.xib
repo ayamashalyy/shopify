@@ -74,7 +74,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="250 $" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8N-oA-KQb">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="250 $" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8N-oA-KQb">
                                 <rect key="frame" x="210" y="245" width="239" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -96,6 +96,9 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="multiply"/>
+                                <connections>
+                                    <action selector="cancelDiscount:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="IXJ-Q6-AM7"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -142,6 +145,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="cancelButton" destination="ojV-1X-rYW" id="BlG-WB-nbK"/>
                 <outlet property="couponLable" destination="m88-U5-05U" id="9N8-N2-g1F"/>
                 <outlet property="discountLable" destination="pVt-0C-cxO" id="h7P-OU-Kya"/>
                 <outlet property="gradeTotalLable" destination="z8N-oA-KQb" id="mNO-L4-ylN"/>

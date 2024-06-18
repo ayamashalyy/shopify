@@ -9,70 +9,61 @@ import UIKit
 
 class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet weak var tableview: UITableView!
-    @IBOutlet weak var placeOrder: UIButton!
-    var summeryCartCollectionView: UICollectionView!
-    let coponesImages = ["coupon2.jpg", "coupon2.jpg"]
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var placeOrderButton: UIButton!
+    var summaryCartCollectionView: UICollectionView!
+    let couponImages = ["coupon2.jpg", "coupon2.jpg"]
     var viewModel = ShoppingCartViewModel()
     let homeViewModel = HomeViewModel()
     
-    
-    @IBAction func placeOrder(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Second", bundle: nil)
-        if let PaymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
-            PaymentViewController.modalPresentationStyle = .fullScreen
-            present(PaymentViewController, animated: true, completion: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        setupButtons()
+        tableView.register(UINib(nibName: "PlaceOrderCell", bundle: nil), forCellReuseIdentifier: "PlaceOrderCell")
+        setUpUI()
+        
+        viewModel.updateCartItemsHandler = { [weak self] in
+            self?.summaryCartCollectionView.reloadData()
+            self?.tableView.reloadData()
         }
+        
+        viewModel.fetchDraftOrders { error in
+            if let error = error {
+                print("Failed to fetch draft orders: \(error)")
+            } else {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func setupButtons() {
+        placeOrderButton.backgroundColor = UIColor(hex: "#FF7D29")
+        placeOrderButton.setTitleColor(UIColor.white, for: .normal)
+        placeOrderButton.layer.cornerRadius = 10
+        placeOrderButton.clipsToBounds = true
     }
     
     func setUpUI() {
         let cartLayout = UICollectionViewFlowLayout()
         cartLayout.scrollDirection = .horizontal
-        summeryCartCollectionView = UICollectionView(frame: .zero, collectionViewLayout: cartLayout)
-        view.addSubview(summeryCartCollectionView)
-        summeryCartCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        summaryCartCollectionView = UICollectionView(frame: .zero, collectionViewLayout: cartLayout)
+        view.addSubview(summaryCartCollectionView)
+        summaryCartCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            summeryCartCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 90),
-            summeryCartCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            summeryCartCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            summeryCartCollectionView.heightAnchor.constraint(equalToConstant: 250)
+            summaryCartCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 90),
+            summaryCartCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            summaryCartCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            summaryCartCollectionView.heightAnchor.constraint(equalToConstant: 250)
         ])
         
-        summeryCartCollectionView.backgroundColor = UIColor.clear
-        summeryCartCollectionView.dataSource = self
-        summeryCartCollectionView.delegate = self
+        summaryCartCollectionView.backgroundColor = UIColor.clear
+        summaryCartCollectionView.dataSource = self
+        summaryCartCollectionView.delegate = self
         
-        summeryCartCollectionView.register(SummaryCartCell.self, forCellWithReuseIdentifier: "SummaryCartCell")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableview.dataSource = self
-        tableview.delegate = self
-        setupButtons()
-        tableview.register(UINib(nibName: "PlaceOrderCell", bundle: nil), forCellReuseIdentifier: "PlaceOrderCell")
-        setUpUI()
-        
-        viewModel.updateCartItemsHandler = { [weak self] in
-                self?.summeryCartCollectionView.reloadData()
-                self?.tableview.reloadData()  
-            }
-            
-            viewModel.fetchDraftOrders { error in
-                if let error = error {
-                    print("Failed to fetch draft orders: \(error)")
-                } else {
-                    self.tableview.reloadData()
-                }
-            }
-    }
-    
-    func setupButtons() {
-        placeOrder.backgroundColor = UIColor(hex: "#FF7D29")
-        placeOrder.setTitleColor(UIColor.white, for: .normal)
-        placeOrder.layer.cornerRadius = 10
-        placeOrder.clipsToBounds = true
+        summaryCartCollectionView.register(SummaryCartCell.self, forCellWithReuseIdentifier: "SummaryCartCell")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,19 +88,62 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOrderCell", for: indexPath) as? PlaceOrderCell else {
             return UITableViewCell()
         }
+        
         let totalPrice = viewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
         cell.subTotalLable.text = "\(totalPrice)$"
-        print("totalPrice\(totalPrice)")
+        
         if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
-                   let storedCode = storedDiscountDict["code"] as? String {
-                    cell.couponLable.text = storedCode
-                } else {
-                    cell.couponLable.text = "No discount code found"
-                }
+           let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
+            let discountAmount = totalPrice * discountPercentage / 100
+            let discountedTotal = totalPrice - discountAmount
+            cell.discountLable.text = "\(discountPercentage)%"
+            cell.gradeTotalLable.text = "\(discountedTotal + 5)$"
+        } else {
+            cell.discountLable.text = "0.0 %"
+            cell.gradeTotalLable.text = "\(totalPrice + 5)$"
+        }
+        
+        cell.shippingFeesLable.text = "5 $"
+        
+        cell.cancelDiscountHandler = { [weak self] in
+            self?.cancelDiscount(for: cell)
+        }
+        
+        if let storedDiscountDict = self.homeViewModel.fetchStoredDiscountCode(),
+           let storedCode = storedDiscountDict["code"] as? String {
+            cell.couponLable.text = "\(storedCode)"
+            cell.couponLable.isEnabled = false
+        } else {
+            cell.couponLable.text = "No discount code found"
+        }
+        
         return cell
     }
     
-    @IBAction func backToPSelectAddress(_ sender: UIBarButtonItem) {
+    
+    
+    func cancelDiscount(for cell: PlaceOrderCell) {
+        cell.couponLable.text = ""
+        self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+        cell.couponLable.isEnabled = false
+        let totalPrice = viewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
+        cell.discountLable.text = "0.0 %"
+        cell.gradeTotalLable.text = "\(totalPrice + 5)$"
+        
+    }
+    
+    
+    
+    
+    @IBAction func placeOrder(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
+            paymentViewController.modalPresentationStyle = .fullScreen
+            present(paymentViewController, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func backToSelectAddress(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
 }

@@ -135,7 +135,7 @@ class ShoppingCartViewModel {
             completion(error)
         }
     }
-
+    
     func deleteLineItem (with cartItems: [(String, Int, Int, String?, Int, Int, String, Int)],variantId: Int,newQuantity: Int, completion: @escaping (Error?) -> Void) {
         let updateEndpoint = Endpoint.specficDraftOeder
         let rootOfJson = Root.specificDraftOrder
@@ -158,7 +158,7 @@ class ShoppingCartViewModel {
             
             if item.4 == variantId
             {
-               
+                
             }
             else
             {
@@ -189,6 +189,6 @@ class ShoppingCartViewModel {
             completion(error)
         }
     }
-
-
+    
+    
 }
