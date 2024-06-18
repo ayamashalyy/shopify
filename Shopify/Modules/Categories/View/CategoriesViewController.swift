@@ -20,6 +20,7 @@ class CategoriesViewController: UIViewController {
     var selectedProductType: ProductType = .all
     
     var categoriesCollectionView: UICollectionView!
+    var backgroundImageView: UIImageView!
     
     var fabButton: JJFloatingActionButton!
     var additionalFABsVisible = false
@@ -28,7 +29,7 @@ class CategoriesViewController: UIViewController {
     
     @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
         Navigation.ToAllFavourite(from: self)
-
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +84,19 @@ class CategoriesViewController: UIViewController {
         
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "categoriesCell")
         
+        // Add background image view
+        backgroundImageView = UIImageView(image: UIImage(named: "no_items.jpg"))
+        backgroundImageView.contentMode = .scaleAspectFit
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(backgroundImageView)
+        
+        NSLayoutConstraint.activate([
+            backgroundImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            backgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            backgroundImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.8)
+        ])
+        
         fabButton = createFABButton()
         view.addSubview(fabButton)
         fabButton.buttonColor = UIColor(hex: "#FF7D29")
@@ -92,13 +106,18 @@ class CategoriesViewController: UIViewController {
             fabButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             fabButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -120)
         ])
+        updateBackgroundImageViewVisibility()
+    }
+    
+    func updateBackgroundImageViewVisibility() {
+        backgroundImageView.isHidden = categoriesViewModel.numberOfCategoryProducts() != 0
     }
     
     func createLabel(withText text: String) -> UILabel {
         let label = UILabel()
         label.text = text
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .black
+        label.textColor = .white
         return label
     }
     
@@ -219,6 +238,7 @@ class CategoriesViewController: UIViewController {
                 print("Error fetching category products: \(error)")
             } else {
                 self.categoriesCollectionView.reloadData()
+                self.updateBackgroundImageViewVisibility()
             }
         }
     }
@@ -248,14 +268,18 @@ class CategoriesViewController: UIViewController {
     }
     
     func applyBlurEffect() {
-        let blurEffect = UIBlurEffect(style: .extraLight)
+        let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView?.frame = view.bounds
         blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
         if let blurEffectView = blurEffectView {
+            // Adjust the alpha of the blur effect view to make it very light
+            blurEffectView.alpha = 0.6
             view.insertSubview(blurEffectView, belowSubview: fabButton)
         }
     }
+
     
     func removeBlurEffect() {
         blurEffectView?.removeFromSuperview()
