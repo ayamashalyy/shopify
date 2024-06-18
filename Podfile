@@ -16,6 +16,7 @@ target 'Shopify' do
     pod 'Firebase/Auth'
     pod 'Firebase/Database'
     pod 'Firebase/Firestore'
+    pod 'GoogleSignIn'
 
   target 'ShopifyTests' do
     inherit! :search_paths
