@@ -33,7 +33,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="min-l6-kfs">
-                                <rect key="frame" x="138" y="22" width="200" height="26.333333333333329"/>
+                                <rect key="frame" x="138" y="22" width="200" height="20.333333333333329"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="qOg-4Y-Q7V"/>
                                 </constraints>
@@ -42,7 +42,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TwM-2S-t9t">
-                                <rect key="frame" x="139" y="68.333333333333329" width="250" height="20.333333333333329"/>
+                                <rect key="frame" x="139" y="62.333333333333336" width="250" height="20.333333333333336"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="Xwe-F8-bGd"/>
                                 </constraints>
@@ -87,7 +87,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBg-6I-7fH">
-                                <rect key="frame" x="348" y="0.0" width="44" height="46"/>
+                                <rect key="frame" x="348" y="0.0" width="44" height="46.333333333333336"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="compose (1)"/>
                                 <connections>
@@ -115,7 +115,7 @@
                             <constraint firstItem="5QJ-dK-Svk" firstAttribute="top" secondItem="sv7-il-Iap" secondAttribute="bottom" constant="12" id="Msh-7X-7KP"/>
                             <constraint firstItem="7Cn-f5-JdD" firstAttribute="leading" secondItem="IQQ-9Y-1Tf" secondAttribute="leading" id="MxI-jT-bnE"/>
                             <constraint firstItem="1p3-zk-uC7" firstAttribute="leading" secondItem="xjL-80-Y8a" secondAttribute="leading" id="Ncv-rD-sRU"/>
-                            <constraint firstItem="TwM-2S-t9t" firstAttribute="top" secondItem="sBg-6I-7fH" secondAttribute="bottom" constant="22.329999999999998" id="Q0b-EU-73k"/>
+                            <constraint firstItem="TwM-2S-t9t" firstAttribute="top" secondItem="sBg-6I-7fH" secondAttribute="bottom" constant="16" id="Q0b-EU-73k"/>
                             <constraint firstItem="sv7-il-Iap" firstAttribute="leading" secondItem="JO6-zN-Pn1" secondAttribute="leading" id="T8N-gz-eSI"/>
                             <constraint firstItem="xjL-80-Y8a" firstAttribute="top" secondItem="7Cn-f5-JdD" secondAttribute="bottom" constant="15" id="X2d-Cg-Ohc"/>
                             <constraint firstItem="IQQ-9Y-1Tf" firstAttribute="leading" secondItem="Byd-92-yNa" secondAttribute="leading" constant="20" id="bry-J3-cg6"/>

@@ -36,7 +36,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         super.viewWillAppear(animated)
         if Authorize.isRegistedCustomer() {
             getThemButton.isEnabled = true
-
+            
         }else{
             getThemButton.isEnabled = false
             self.showAlertWithTwoOption(message: "Login to add to cart?",
@@ -161,7 +161,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         print("newQuantity\(newQuantity)")
         let maxQuantity = item.5 / 2
         print("maxQuantity\(maxQuantity)")
-
+        
         if newQuantity > maxQuantity {
             showAlert(message: "You cannot order more than half of the available quantity.")
         } else {
@@ -208,7 +208,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             }
         }
     }
-
+    
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

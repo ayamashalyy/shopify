@@ -66,19 +66,19 @@ class SummaryCartCell: UICollectionViewCell {
     }
     
     func configureCell(imageUrl: String?, title: String, price: String, quantity: Int) {
-           if let imageUrl = imageUrl, let url = URL(string: imageUrl) {
-               DispatchQueue.global().async {
-                   if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                       DispatchQueue.main.async {
-                           self.lineItemimageView.image = image
-                       }
-                   }
-               }
-           } else {
-               lineItemimageView.image = UIImage(named: "4")
-           }
-           titleLabel.text = title
-           priceLabel.text = price
-           quantityLabel.text = "Quantity: \(quantity)"
-       }
+        if let imageUrl = imageUrl, let url = URL(string: imageUrl) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.lineItemimageView.image = image
+                    }
+                }
+            }
+        } else {
+            lineItemimageView.image = UIImage(named: "4")
+        }
+        titleLabel.text = title
+        priceLabel.text = price
+        quantityLabel.text = "Quantity: \(quantity)"
+    }
 }
