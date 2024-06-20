@@ -130,6 +130,8 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.decrementButton.addTarget(self, action: #selector(decrementQuantity(_:)), for: .touchUpInside)
         customizeButton(button: cell.incrementButton)
         customizeButton(button: cell.decrementButton)
+       
+
         return cell
     }
     
@@ -144,10 +146,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var productId = shoppingCartViewModel.cartItems[indexPath.row].7
-        
-        
-        Navigation.ToProduct(productId: "\(productId)", from: self)
+        let storyboard = UIStoryboard(name: "third", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as? ProductViewController {
+            vc.productId = String(productId)
+            vc.selectedVarientId = shoppingCartViewModel.cartItems[indexPath.row].4
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true, completion: nil)
+        }
     }
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
         footerView.backgroundColor = UIColor.clear
@@ -263,3 +270,4 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         dismiss(animated: true)
     }
 }
+
