@@ -7,12 +7,6 @@
 
 import UIKit
 
-struct Order {
-    let totalPrice: String
-    let creationDate: String
-    let shippedTo: String
-    let phone: String
-}
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var setting: UIBarButtonItem!
@@ -21,12 +15,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     let indicator = UIActivityIndicatorView(style: .large)
     let settingsViewModel = SettingsViewModel()
     var orderViewModel = OrderViewModel()
+    @IBOutlet weak var cartButton: UIBarButtonItem!
     @IBOutlet weak var tableview: UITableView!
-    
-    var orders: [Order] = [
-        Order(totalPrice: "$100", creationDate: "2023-05-01", shippedTo: "New York", phone: "123-456-7890"),
-        Order(totalPrice: "$200", creationDate: "2023-06-01", shippedTo: "Los Angeles", phone: "098-765-4321")
-    ]
+    let shoppingCartViewModel = ShoppingCartViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +27,59 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         tableview.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         favViewModel = FavViewModel()
+        setupCartButton()
+        
+        
     }
+    
+    func updateCartBadge() {
+        let itemCount = shoppingCartViewModel.cartItemCount
+        print("Item count: \(itemCount)")
+        if itemCount > 0 {
+            cartButton.addBadge(text: "\(itemCount)", color: .orange)
+        } else {
+            cartButton.removeBadge()
+        }
+    }
+    
+    
+    private func fetchCartItemsAndUpdateBadge() {
+        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Failed to fetch cart items: \(error.localizedDescription)")
+            } else {
+                self.updateCartBadge()
+            }
+        }
+    }
+    
+    func setupCartButton() {
+        let button = UIButton(type: .custom)
+        
+        if let cartImage = UIImage(systemName: "cart.fill") {
+            print("System cart image loaded successfully")
+            let tintedImage = cartImage.withTintColor(.orange, renderingMode: .alwaysOriginal)
+            let scaledImage = pondsize(image: tintedImage, size: CGSize(width: 30, height: 25))
+            button.setImage(scaledImage, for: .normal)
+        } else {
+            print("Failed to load system cart image")
+        }
+        
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(navToShoppingCart(_:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 60, height: 80)
+        cartButton.customView = button
+    }
+    
+    func pondsize(image: UIImage, size: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let scaledImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return scaledImage
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -45,6 +88,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             indicator.startAnimating()
             getWishList()
             getOrders()
+            updateCartBadge()
+            fetchCartItemsAndUpdateBadge()
         } else {
             setting.isEnabled = false
             self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
@@ -188,6 +233,9 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.productPrice.text = convertedPriceString
                 cell.favImage.kf.setImage(with: URL(string: favItem.image))
             }
+            cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.size.width, bottom: 0, right: 0)
+            cell.layoutMargins = UIEdgeInsets.zero
+            cell.preservesSuperviewLayoutMargins = false
             return cell
         }
     }
@@ -267,3 +315,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         Navigation.ToOrders(from: self)
     }
 }
+
+
+

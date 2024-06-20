@@ -14,12 +14,14 @@ class PaymentViewController: UIViewController {
     @IBOutlet weak var appleButton: UIButton!
     @IBOutlet weak var confirmPay: UIButton!
     @IBOutlet weak var totalPrice: UILabel!
-    
+    var grandTotal: Int = 0
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIButton()
         setupConfirmPayButton()
+        totalPrice.text = "\(grandTotal)$"
         
     }
     func setupConfirmPayButton() {
@@ -60,22 +62,25 @@ class PaymentViewController: UIViewController {
     @IBAction func backToPlaceOrders(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
-    private var paymentRequest : PKPaymentRequest = {
-            let request = PKPaymentRequest()
-            request.merchantIdentifier = "merchant.com.pushpendra.pay"
-            request.supportedNetworks = [.quicPay, .masterCard, .visa]
-            request.supportedCountries = ["EG", "US"]
-            request.merchantCapabilities = .capability3DS
-            request.countryCode = "EG"
-            if UserDefaults.standard.string(forKey: "Currency") == "EGP" {
-                request.currencyCode = "EGP"
-            } else {
-                request.currencyCode = "USD"
-            }
-            request.paymentSummaryItems = [PKPaymentSummaryItem(label: "Shopify", amount: NSDecimalNumber(string: "100.00"))]
-            return request
-        }()
-   // let totalAmount = NSDecimalNumber(value: UserDefaults.standard.integer(forKey: "final"))
+    private var paymentRequest: PKPaymentRequest {
+        let request = PKPaymentRequest()
+        request.merchantIdentifier = "merchant.com.pushpendra.pay"
+        request.supportedNetworks = [.quicPay, .masterCard, .visa]
+        request.supportedCountries = ["EG", "US"]
+        request.merchantCapabilities = .capability3DS
+        request.countryCode = "EG"
+        
+        if UserDefaults.standard.string(forKey: "Currency") == "EGP" {
+            request.currencyCode = "EGP"
+        } else {
+            request.currencyCode = "USD"
+        }
+        
+        let paymentItem = PKPaymentSummaryItem(label: "Shopify", amount: NSDecimalNumber(value: grandTotal))
+        request.paymentSummaryItems = [paymentItem]
+        
+        return request
+    }
 
     func startApplePay() {
         

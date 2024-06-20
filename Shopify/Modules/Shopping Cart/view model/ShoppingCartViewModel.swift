@@ -4,7 +4,7 @@ class ShoppingCartViewModel {
     var cartItems = [(String, Int, Int, String?, Int, Int, String, Int)]()
     var updateCartItemsHandler: (() -> Void)?
     var productViewModel = ProductViewModel()
-    
+    var draftOrders: DraftOrder?
     func fetchDraftOrders(completion: @escaping (Error?) -> Void) {
         let additionDraftOrder = "\(Authorize.cardDraftOrderId()!).json"
         
@@ -23,6 +23,7 @@ class ShoppingCartViewModel {
             do {
                 print("Received data: \(String(data: data, encoding: .utf8) ?? "No data")")
                 let draftOrders = try JSONDecoder().decode(DraftOrder.self, from: data)
+                self.draftOrders = draftOrders
                 self.updateCartItems(with: draftOrders)
                 completion(nil)
             } catch let decodingError {
@@ -189,6 +190,76 @@ class ShoppingCartViewModel {
             completion(error)
         }
     }
+    
+    
+    func deleteLineItems(completion: @escaping (Error?) -> Void) {
+        fetchDraftOrders { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            guard let draftOrders = self.draftOrders else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No draft order found"]))
+                return
+            }
+            
+            let updateEndpoint = Endpoint.specficDraftOeder
+            let rootOfJson = Root.specificDraftOrder
+            let draftOrderId = "\(Authorize.cardDraftOrderId()!).json"
+            var lineItemsDict: [[String: Any]] = []
+            
+            for lineItem in draftOrders.line_items ?? [] {
+                var properties: [[String: Any]] = []
+                
+                if let imageUrl = lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value {
+                    properties.append([
+                        "name": "imageUrl",
+                        "value": imageUrl
+                    ])
+                }
+                properties.append([
+                    "name": "quantityInString",
+                    "value": String(lineItem.properties?.first(where: { $0.name == "quantityInString" })?.value ?? "0")
+                ])
+                
+                if lineItem.variant_id == 45293446398200 {
+                    lineItemsDict.append([
+                        "variant_id": lineItem.variant_id ?? 0,
+                        "quantity": lineItem.quantity ?? 0,
+                        "properties": properties
+                    ])
+                }
+            }
+            
+            let body: [String: Any] = [
+                "draft_order": [
+                    "id": Authorize.cardDraftOrderId()!,
+                    "line_items": lineItemsDict
+                ]
+            ]
+            
+            guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to serialize JSON"]))
+                return
+            }
+            
+            if let jsonString = String(data: bodyData, encoding: .utf8) {
+                print("Request Body JSON: \(jsonString)")
+            }
+            
+            NetworkManager.updateResource(endpoint: updateEndpoint, rootOfJson: rootOfJson, body: bodyData, addition: draftOrderId) { (data, error) in
+                completion(error)
+            }
+        }
+    }
+    
+    
+    var cartItemCount: Int {
+        return cartItems.count
+    }
+    
     
     
 }

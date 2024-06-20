@@ -139,7 +139,22 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
             paymentViewController.modalPresentationStyle = .fullScreen
+            let totalPrice = calculateGrandTotal()
+            paymentViewController.grandTotal = totalPrice
             present(paymentViewController, animated: true, completion: nil)
+        }
+    }
+    
+    
+    private func calculateGrandTotal() -> Int {
+        let totalPrice = viewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
+        if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
+           let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
+            let discountAmount = totalPrice * discountPercentage / 100
+            let discountedTotal = totalPrice - discountAmount
+            return discountedTotal + 5
+        } else {
+            return totalPrice + 5
         }
     }
     
