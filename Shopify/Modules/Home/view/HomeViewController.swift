@@ -9,11 +9,15 @@ import UIKit
 import Kingfisher
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
-        
+    
+    
+    @IBOutlet weak var cartButton: UIBarButtonItem!
+    
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     var brandsCollectionView: UICollectionView!
     let homeViewModel = HomeViewModel()
     let brandProductsViewModel = BrandProductsViewModel()
+    let shoppingCartViewModel = ShoppingCartViewModel()
     
     let coponesImages = ["eid_sale.jpeg", "sum3_disc30.jpeg","sum1_disc30.jpeg"]
     var couponsCollectionView: UICollectionView!
@@ -31,7 +35,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
         Navigation.ToOrders(from: self)
-
+        
     }
     
     
@@ -42,7 +46,63 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         setupUI()
         fetchBrands()
         fetchPriceRules()
+        setupCartButton()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateCartBadge()
+        fetchCartItemsAndUpdateBadge()
+    }
+    
+    func updateCartBadge() {
+        let itemCount = shoppingCartViewModel.cartItemCount
+        print("Item count: \(itemCount)")
+        if itemCount > 0 {
+            cartButton.addBadge(text: "\(itemCount)", color: .orange)
+        } else {
+            cartButton.removeBadge()
+        }
+    }
+    
+    
+    private func fetchCartItemsAndUpdateBadge() {
+        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Failed to fetch cart items: \(error.localizedDescription)")
+            } else {
+                self.updateCartBadge()
+            }
+        }
+    }
+    
+    func setupCartButton() {
+        let button = UIButton(type: .custom)
+        
+        if let cartImage = UIImage(systemName: "cart.fill") {
+            print("System cart image loaded successfully")
+            let tintedImage = cartImage.withTintColor(.orange, renderingMode: .alwaysOriginal)
+            let scaledImage = pondsize(image: tintedImage, size: CGSize(width: 30, height: 25))
+            button.setImage(scaledImage, for: .normal)
+        } else {
+            print("Failed to load system cart image")
+        }
+        
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(goToCard(_:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 60, height: 80)
+        cartButton.customView = button
+    }
+    
+    func pondsize(image: UIImage, size: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let scaledImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return scaledImage
+    }
+    
     func fetchBrands() {
         homeViewModel.fetchBrands { [weak self] error in
             guard let self = self else { return }
@@ -87,10 +147,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupUI(){
         //view.backgroundColor = UIColor(hex: "#F5F5F5")
-
+        
         let layout = UICollectionViewFlowLayout()
         brandsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
+        
         view.addSubview(brandsCollectionView)
         
         // Setup couponsCollectionView
@@ -106,11 +166,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             couponsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             couponsCollectionView.heightAnchor.constraint(equalToConstant: 190)
         ])
-
+        
         couponsCollectionView.backgroundColor = UIColor.clear
         couponsCollectionView.dataSource = self
         couponsCollectionView.delegate = self
-
+        
         couponsCollectionView.register(CustomCouponCell.self, forCellWithReuseIdentifier: "couponCell")
         
         //Setup Brands Label
@@ -126,7 +186,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             brandsTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             brandsTitleLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
-
+        
         //Setup BrandsCollectionView
         brandsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -144,7 +204,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 }
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == couponsCollectionView {
             return coponesImages.count
@@ -152,7 +212,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return homeViewModel.numberOfBrands()
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == couponsCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "couponCell", for: indexPath) as! CustomCouponCell
@@ -166,7 +226,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return cell
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == couponsCollectionView {
             return CGSize(width: view.frame.width, height: 260)
@@ -223,5 +283,5 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         present(alert, animated: true, completion: nil)
     }
-
+    
 }

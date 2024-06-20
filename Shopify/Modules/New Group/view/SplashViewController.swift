@@ -8,7 +8,7 @@
 import UIKit
 
 class SplashViewController: UIViewController {
-
+    let viewModel = ShoppingCartViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +18,16 @@ class SplashViewController: UIViewController {
 
       self.checkCustomerID()
         }
+        
+//        viewModel.deleteLineItems { error in
+//               if let error = error {
+//                   print("Failed to delete line items: \(error.localizedDescription)")
+//               } else {
+//                   print("Line items deleted successfully")
+//               }
+//           }
+        
+        
     }
     
     func checkCustomerID() {
