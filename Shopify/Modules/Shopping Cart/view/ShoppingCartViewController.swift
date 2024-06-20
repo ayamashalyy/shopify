@@ -112,7 +112,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         
         // Convert price using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-        let convertedPriceString = settingsViewModel.convertPrice(String(item.1), to: selectedCurrency) ?? "\(item.1)$"
+        let convertedPriceString = settingsViewModel.convertPrice(String(item.1), to: selectedCurrency) ?? "\(item.1)USD"
         cell.productPriceLabel.text = convertedPriceString
         
         cell.quantityLabel.text = "\(item.2)"

@@ -177,4 +177,22 @@ class AddressViewModel {
             completion(.failure(error))
         }
     }
+    
+//    func setDefaultAddress(at index: Int) {
+//        guard index < addresses.count else {
+//            print("Invalid index")
+//            return
+//        }
+//        
+//        // Set the selected address as default
+//        let selectedAddress = addresses[index]
+//        for i in 0..<addresses.count {
+//            addresses[i].isDefault = (i == index)
+//        }
+//    }
+    
+    func getDefaultAddress() -> Address? {
+        print(addresses.first(where: { $0.isDefault })?.zip ?? 0)
+        return addresses.first(where: { $0.isDefault })
+    }
 }

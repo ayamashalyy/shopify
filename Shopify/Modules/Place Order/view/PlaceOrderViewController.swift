@@ -15,6 +15,8 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     let couponImages = ["coupon2.jpg", "coupon2.jpg"]
     var viewModel = ShoppingCartViewModel()
     let homeViewModel = HomeViewModel()
+    var orderViewModel = OrderViewModel.shared
+    let settingsViewModel = SettingsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +24,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         tableView.delegate = self
         setupButtons()
         tableView.register(UINib(nibName: "PlaceOrderCell", bundle: nil), forCellReuseIdentifier: "PlaceOrderCell")
+        fetchExchangeRates()
         setUpUI()
         
         viewModel.updateCartItemsHandler = { [weak self] in
@@ -35,6 +38,18 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
             } else {
                 self.tableView.reloadData()
             }
+        }
+    }
+    
+    func fetchExchangeRates() {
+        settingsViewModel.fetchExchangeRates { error in
+            if let error = error {
+                print("Failed to fetch exchange rates: \(error.localizedDescription)")
+                return
+            }
+            // Fetch orders after exchange rates are fetched
+            self.tableView.reloadData()
+            self.setUpUI()
         }
     }
     
@@ -89,21 +104,36 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
             return UITableViewCell()
         }
         
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+
         let totalPrice = viewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
-        cell.subTotalLable.text = "\(totalPrice)$"
+        let convertedTotalPriceString = settingsViewModel.convertPrice("\(totalPrice)" , to: selectedCurrency) ?? "\(totalPrice)USD"
+        
+        cell.subTotalLable.text = convertedTotalPriceString
         
         if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
            let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
             let discountAmount = totalPrice * discountPercentage / 100
             let discountedTotal = totalPrice - discountAmount
+            
+            let convertedDiscountedTotalString = settingsViewModel.convertPrice("\(discountedTotal)" , to: selectedCurrency) ?? "\(discountedTotal)USD"
+            
             cell.discountLable.text = "\(discountPercentage)%"
-            cell.gradeTotalLable.text = "\(discountedTotal + 5)$"
+            
+            let convertedGradeTotalString = settingsViewModel.convertPrice("\(discountedTotal + 5)" , to: selectedCurrency) ?? "\(discountedTotal + 5)USD"
+            
+            cell.gradeTotalLable.text = convertedGradeTotalString
         } else {
             cell.discountLable.text = "0.0 %"
-            cell.gradeTotalLable.text = "\(totalPrice + 5)$"
+            
+            let convertedGradeTotalString = settingsViewModel.convertPrice("\(totalPrice + 5)" , to: selectedCurrency) ?? "\(totalPrice + 5)USD"
+            
+            cell.gradeTotalLable.text = convertedGradeTotalString
         }
         
-        cell.shippingFeesLable.text = "5 $"
+        let convertedShippingFeesString = settingsViewModel.convertPrice("\(5)" , to: selectedCurrency) ?? "\(5)USD"
+        
+        cell.shippingFeesLable.text = convertedShippingFeesString
         
         cell.cancelDiscountHandler = { [weak self] in
             self?.cancelDiscount(for: cell)
@@ -136,6 +166,26 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     
     
     @IBAction func placeOrder(_ sender: UIButton) {
+        
+        let totalPrice = viewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
+        
+        var subtotalPrice = "\(totalPrice)" // Convert to string as per your model definition
+        
+        var totalDiscounts = "0.0" // Default if no discount applied
+        
+        var grandTotal = "\(totalPrice + 5)" // Adding $5 shipping fee
+        
+        if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
+           let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
+            let discountAmount = totalPrice * discountPercentage / 100
+            subtotalPrice = "\(totalPrice)"
+            totalDiscounts = "\(discountAmount)"
+            grandTotal = "\(totalPrice - discountAmount + 5)"
+        }
+        
+        // Set order details in OrderViewModel
+        orderViewModel.setOrderDetails(subtotalPrice: subtotalPrice, totalDiscounts: totalDiscounts, totalPrice: grandTotal)
+        
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
             paymentViewController.modalPresentationStyle = .fullScreen
@@ -157,7 +207,12 @@ extension PlaceOrderViewController: UICollectionViewDataSource, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SummaryCartCell", for: indexPath) as! SummaryCartCell
         let item = viewModel.cartItems[indexPath.item]
-        cell.configureCell(imageUrl: item.3, title: item.0, price: "\(item.1)", quantity: item.2)
+        
+        // Convert price using SettingsViewModel
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        let convertedPriceString = settingsViewModel.convertPrice("\(item.1)" , to: selectedCurrency) ?? "\(item.1)USD"
+        
+        cell.configureCell(imageUrl: item.3, title: item.0, price: convertedPriceString , quantity: item.2)
         return cell
     }
     

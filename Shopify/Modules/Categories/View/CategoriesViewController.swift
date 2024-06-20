@@ -41,6 +41,10 @@ class CategoriesViewController: UIViewController {
         fetchExchangeRates()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        fetchExchangeRates()
+    }
+    
     
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
         Navigation.ToSearch(from: self, comeFromHome: false, products: categoriesViewModel.categoryProducts)

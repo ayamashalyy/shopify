@@ -9,8 +9,6 @@ import UIKit
 
 
 class LoginViewController: UIViewController {
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
@@ -73,6 +71,8 @@ class LoginViewController: UIViewController {
             loginViewModel?.isACustomer(email: email, password: password) { isACustomer in
                 if isACustomer {
                     print("Is a customer, go to home")
+                    print("customer id \(Authorize.getCustomerIDFromUserDefaults())")
+                    OrderViewModel.shared.setEmail(email: email)
                     Navigation.ToHome(from: self)
                 } else {
                     self.showAlert(message: "Sorry, you do not have an account. Click on Sign up.")

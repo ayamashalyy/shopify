@@ -55,28 +55,31 @@ class LoginViewModel {
 
             Decoding.decodeData(data: data, objectType: [DraftOrder].self) { allDraftOrders, decodeError in
                 guard let allDraftOrders = allDraftOrders, decodeError == nil else {
-                    print("Decoding error: \(decodeError?.localizedDescription ?? "Unknown error")")
+                    print("Decoding error before deaft order: \(decodeError?.localizedDescription ?? "Unknown error")")
                     return
                 }
+                print("allDraftOrders.count \(allDraftOrders.count)")
                 for draftOrder in allDraftOrders {
                     if draftOrder.email == email {
+                        print("Email is found")
                         allCustomerDraftOrders.append(draftOrder)
+                        print("Email \(allCustomerDraftOrders.count)")
                     }
                 }
 
                 if let firstDraftOrderId = allCustomerDraftOrders[0].id{
-                    print("after login fav draft is \(firstDraftOrderId)")
+                    print("Email after login fav draft is \(firstDraftOrderId)")
                     Authorize.favDraftOrder(draftOrderIDOne: firstDraftOrderId)
                 } else {
-                    print("First draft order ID is nil")
+                    print("Email First draft order ID is nil")
                 }
 
                 if let secondDraftOrderId = allCustomerDraftOrders[1].id {
-                    print("after login secondDraftOrderId \(secondDraftOrderId)")
+                    print("Email after login secondDraftOrderId \(secondDraftOrderId)")
 
                     Authorize.cardDraftOrderId(draftOrderIDTwo: secondDraftOrderId)
                 } else {
-                    print("Second draft order ID is nil")
+                    print("Email Second draft order ID is nil")
                 }
             }
         }
