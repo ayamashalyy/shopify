@@ -6,26 +6,39 @@
 //
 
 import Foundation
+import FirebaseAuth
 import GoogleSignIn
 
 class LoginViewModel {
-
-    func isACustomer(email: String, password: String, completion: @escaping (Bool) -> Void) {
-               
+    
+    
+    func isValidedEmail (email: String, password: String, completion: @escaping (Bool) -> Void){
+        AuthenticationManger.signInUser(email: email, password: password) { success, errorMessage in
+            DispatchQueue.main.async {
+                if success {
+                    print( "Sign-in successful. Email is verified.")
+                    self.isACustomer(email: email, password: password)
+                    completion(true)
+                } else {
+                    print( "Sign-in nottttt successful. Email is not verified.")
+                 completion(false)
+                }
+            }
+        }
+    }
+    
+  private  func isACustomer(email: String, password: String) {
         NetworkManager.fetchDataFromApi(endpoint: .customers, rootOfJson: .customers) { data, error in
             guard let data = data, error == nil else {
-                print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
-                completion(false) 
+                print("Error fetching all customers data:", error?.localizedDescription ?? "Unknown error")
                 return
             }
             print("Data received from API:", data)
-
+            
             Decoding.decodeData(data: data, objectType: [Customer].self) { [weak self] (allCustomers, decodeError) in
                 guard let self = self else {
-                    completion(false)
                     return
                 }
-                print("all customers: \(allCustomers)")
                 
                 if let allCustomers = allCustomers {
                     let isCustomer = allCustomers.contains { $0.email == email && $0.tags == password }
@@ -36,24 +49,29 @@ class LoginViewModel {
                             self.getDraftOrdersIdsByCustomerEmail(email:email)
                         }
                     }
-                    completion(isCustomer)
                 } else {
                     print("Error decoding customer data:", decodeError?.localizedDescription ?? "Unknown error")
-                    completion(false)
                 }
             }
         }
     }
     
+    
+    func googleLogin () {
+        //
+        //        GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
+        
+        
+    }
     func getDraftOrdersIdsByCustomerEmail( email: String) {
         var allCustomerDraftOrders: [DraftOrder] = []
-
+        
         NetworkManager.fetchDataFromApi(endpoint: .draftOrder, rootOfJson: .allDraftOrderRoot) { data, error in
             guard let data = data, error == nil else {
                 print("Error in data: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-
+            
             Decoding.decodeData(data: data, objectType: [DraftOrder].self) { allDraftOrders, decodeError in
                 guard let allDraftOrders = allDraftOrders, decodeError == nil else {
                     print("Decoding error: \(decodeError?.localizedDescription ?? "Unknown error")")
@@ -64,17 +82,17 @@ class LoginViewModel {
                         allCustomerDraftOrders.append(draftOrder)
                     }
                 }
-
+                
                 if let firstDraftOrderId = allCustomerDraftOrders[0].id{
                     print("after login fav draft is \(firstDraftOrderId)")
                     Authorize.favDraftOrder(draftOrderIDOne: firstDraftOrderId)
                 } else {
                     print("First draft order ID is nil")
                 }
-
+                
                 if let secondDraftOrderId = allCustomerDraftOrders[1].id {
                     print("after login secondDraftOrderId \(secondDraftOrderId)")
-
+                    
                     Authorize.cardDraftOrderId(draftOrderIDTwo: secondDraftOrderId)
                 } else {
                     print("Second draft order ID is nil")
@@ -82,5 +100,5 @@ class LoginViewModel {
             }
         }
     }
-
+    
 }

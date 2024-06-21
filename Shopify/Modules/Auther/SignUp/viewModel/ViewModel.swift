@@ -8,58 +8,7 @@
 import Foundation
 
 class ViewModel {
-    
-//    func signUp(email: String, firstName: String, lastName: String,  tags: String, completion: @escaping (Bool) -> Void) {
-//        
-//        // First, create the user and send a verification email
-//        AuthenticationManger.createUser(email: email, password: tags) { success, errorMessage in
-//            if success {
-//                // If user creation and email verification succeed, create the customer
-//                let newCustomer = Customer(
-//                    email: email,
-//                    firstName: firstName,
-//                    lastName: lastName,
-//                    verifiedEmail: true,
-//                    tags: tags,
-//                    password: tags,
-//                    passwordConfirmation: tags
-//                )
-//                
-//                let customerRequest = CustomerRequest(customer: newCustomer)
-//                
-//                // Encode the customerRequest
-//                Decoding.encodeData(object: customerRequest) { jsonData, encodeError in
-//                    guard let jsonData = jsonData, encodeError == nil else {
-//                        print("Error encoding customer data:", encodeError?.localizedDescription ?? "Unknown error")
-//                        completion(false)
-//                        return
-//                    }
-//                    
-//                    NetworkManager.postDataToApi(endpoint: .customers, rootOfJson: .customer, body: jsonData) { data, error in
-//                        guard let data = data, error == nil else {
-//                            print("Error fetching customer data:", error?.localizedDescription ?? "Unknown error")
-//                            completion(false)
-//                            return
-//                        }
-//                        
-//                        Decoding.decodeData(data: data, objectType: CustomerResponse.self) { customerResponse, decodeError in
-//                            if let customerResponse = customerResponse {
-//                                print("New customer created with ID: \(customerResponse.customer.id ?? -1)")
-//                                Authorize.saveCustomerIDToUserDefaults(customerID: customerResponse.customer.id! )
-//                                self.createTwoDraftOrdersForThisCustomer(customerId: customerResponse.customer.id ?? 0 )
-//                                completion(true)
-//                            } else {
-//                                print("Error decoding customer data:", decodeError?.localizedDescription ?? "Unknown error")
-//                                completion(false)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    
-//    
+     
     func signUp(email: String, firstName: String, lastName: String, tags: String, completion: @escaping (Bool) -> Void) {
         AuthenticationManger.createUser(email: email, password: tags) { success, errorMessage in
             if success {
@@ -76,6 +25,12 @@ class ViewModel {
     
     
     func createCustomer(email: String, firstName: String, lastName: String, tags: String, completion: @escaping (Bool) -> Void) {
+        
+        
+        print("email\(email), firstName\(firstName), lastName:\(lastName) , tags: \(tags)")
+        
+        
+        
          let newCustomer = Customer(
              email: email,
              firstName: firstName,
@@ -88,6 +43,9 @@ class ViewModel {
          
          let customerRequest = CustomerRequest(customer: newCustomer)
          
+        
+        print("customerRequest \(customerRequest)")
+             
          // Encode the customerRequest
          Decoding.encodeData(object: customerRequest) { jsonData, encodeError in
              guard let jsonData = jsonData, encodeError == nil else {

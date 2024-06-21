@@ -37,4 +37,29 @@ final class AuthenticationManger {
             }
         }
     }
+    
+    
+    static func signInUser(email: String, password: String, completion: @escaping (Bool, String?) -> Void) {
+           
+           Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+               if let error = error {
+                   print("Error signing in user: \(error.localizedDescription)")
+                   completion(false, error.localizedDescription)
+                   return
+               }
+               
+               guard let user = authResult?.user else {
+                   completion(false, "User sign-in failed.")
+                   return
+               }
+               print("User sign-in")
+
+               // Check if the email is verified
+               if user.isEmailVerified {
+                   completion(true, nil)
+               } else {
+                   completion(false, "Email not verified.")
+               }
+           }
+       }
 }

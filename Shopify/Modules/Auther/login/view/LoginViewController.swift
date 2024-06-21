@@ -7,6 +7,8 @@
 
 import UIKit
 
+import GoogleSignIn
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -15,31 +17,22 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         setUpUI()
         loginViewModel = LoginViewModel()
+        GIDSignIn.sharedInstance()?.presentingViewController = self
         
-     
+        
+
+       
     }
     
-    
-    
-    @IBAction func loginWithGoogle(_ sender: UIButton) {
-        
-        
-        
-        
-        
-        
-    }
-    
-    
-    
+    @IBOutlet weak var siginUP: UIButton!
+    @IBOutlet weak var siginInGoogle: GIDSignInButton!
+
     var loginViewModel : LoginViewModel?
     @IBOutlet weak var guestBtn: UIButton!
     @IBOutlet weak var emailTxt: UITextField!
     @IBOutlet weak var passwordTxt: UITextField!
-    @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     
-    @IBOutlet weak var image: UIImageView!
     
     @IBOutlet weak var showHideButton: UIButton!
         
@@ -70,12 +63,12 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            loginViewModel?.isACustomer(email: email, password: password) { isACustomer in
+            loginViewModel?.isValidedEmail(email: email, password: password) { isACustomer in
                 if isACustomer {
                     print("Is a customer, go to home")
                     Navigation.ToHome(from: self)
                 } else {
-                    self.showAlert(message: "Sorry, you do not have an account. Click on Sign up.")
+                    self.showAlert(message: "Please create acount and verify it througth the email,then login again")
                 }
             }
     }
@@ -94,17 +87,16 @@ class LoginViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
    }
 
-        
     
     func setUpUI (){
         guestBtn.backgroundColor = UIColor(hex: "#FF7D29")
         guestBtn.layer.cornerRadius = 8
         loginButton.backgroundColor = UIColor(hex: "#FF7D29")
         loginButton.layer.cornerRadius = 8
+        
         passwordTxt.isSecureTextEntry = true
         let orangeColor = UIColor(hex: "#FFA500")
                showHideButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
-         
 
     }
     
