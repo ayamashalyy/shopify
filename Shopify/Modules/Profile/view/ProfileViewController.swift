@@ -238,8 +238,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 cell.TotalPriceValue.text = convertedPriceString
                 cell.CreationDateValue.text = order.created_at
-                //cell.ShippedToValue.text = order.shipping_address?.address1
-                //cell.PhoneValue.text = order.shipping_address?.phone
+                cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+                cell.PhoneValue.text = order.customer?.default_address?.phone
                 //print(order.email)
             }
             return cell

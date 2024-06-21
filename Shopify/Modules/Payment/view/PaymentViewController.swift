@@ -15,12 +15,12 @@ class PaymentViewController: UIViewController {
     @IBOutlet weak var confirmPay: UIButton!
     @IBOutlet weak var totalPrice: UILabel!
     
-    let viewModel = ShoppingCartViewModel()
 
     let shoppingCartViewModel = ShoppingCartViewModel()
     let orderViewModel = OrderViewModel.shared
     let homeViewModel = HomeViewModel()
     let settingsViewModel = SettingsViewModel()
+    let viewModel = ShoppingCartViewModel()
 
     var grandTotal: Int = 0
 
@@ -30,6 +30,7 @@ class PaymentViewController: UIViewController {
         setUIButton()
         setupConfirmPayButton()
 
+        //deleteLineItems()
         confirmOrder()
         fetchExchangeRates()
 
@@ -54,6 +55,7 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
+                        self.deleteLineItems()
                         self.viewModel.deleteLineItems { error in
                                        if let error = error {
                                            print("Failed to delete line items: \(error.localizedDescription)")
@@ -66,6 +68,16 @@ class PaymentViewController: UIViewController {
                         
                     }
                 }
+            }
+        }
+    }
+    
+    func deleteLineItems(){
+        viewModel.deleteLineItems { error in
+            if let error = error {
+                print("Failed to delete line items: \(error.localizedDescription)")
+            } else {
+                print("Line items deleted successfully")
             }
         }
     }

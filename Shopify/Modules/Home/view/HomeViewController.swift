@@ -19,8 +19,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let brandProductsViewModel = BrandProductsViewModel()
     let shoppingCartViewModel = ShoppingCartViewModel()
     
-    let coponesImages = ["eid_sale.jpeg", "sum3_disc30.jpeg","sum1_disc30.jpeg"]
+    let coponesImages = ["special_offer.jpg","best_offer3.jpeg","eid_sale.jpeg"]
     var couponsCollectionView: UICollectionView!
+    
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPage = 0
+        pageControl.currentPageIndicatorTintColor = .orange
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        return pageControl
+    }()
     
     
     @IBAction func goToFav(_ sender: UIBarButtonItem) {
@@ -152,6 +161,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         brandsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
         view.addSubview(brandsCollectionView)
+        view.addSubview(pageControl)
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
         
         // Setup couponsCollectionView
         let couponLayout = UICollectionViewFlowLayout()
@@ -159,12 +170,18 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         couponsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: couponLayout)
         view.addSubview(couponsCollectionView)
         couponsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        couponsCollectionView.contentInsetAdjustmentBehavior = .never
+        couponsCollectionView.showsHorizontalScrollIndicator = false
         
         NSLayoutConstraint.activate([
             couponsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 110),
             couponsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             couponsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            couponsCollectionView.heightAnchor.constraint(equalToConstant: 190)
+            couponsCollectionView.heightAnchor.constraint(equalToConstant: 190),
+            pageControl.topAnchor.constraint(equalTo: couponsCollectionView.bottomAnchor, constant: 10),
+            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            pageControl.heightAnchor.constraint(equalToConstant: 20)
         ])
         
         couponsCollectionView.backgroundColor = UIColor.clear
@@ -172,6 +189,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         couponsCollectionView.delegate = self
         
         couponsCollectionView.register(CustomCouponCell.self, forCellWithReuseIdentifier: "couponCell")
+        pageControl.numberOfPages = coponesImages.count
         
         //Setup Brands Label
         let brandsTitleLabel = UILabel()
@@ -201,6 +219,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         brandsCollectionView.register(CustomBrandCell.self, forCellWithReuseIdentifier: "brandCell")
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == couponsCollectionView {
+            let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
+            pageControl.currentPage = Int(pageIndex)
+        }
+    }
+    
 }
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

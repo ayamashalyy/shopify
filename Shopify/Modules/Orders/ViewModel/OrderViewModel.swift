@@ -11,8 +11,8 @@ class OrderViewModel {
     
     static let shared = OrderViewModel()
     
-    var orders: [ConfirmOrder] = []
-    var selectedOrder: ConfirmOrder?
+    var orders: [GetOrder] = []
+    var selectedOrder: GetOrder?
     var cartViewModel: ShoppingCartViewModel?
     var addressViewModel: AddressViewModel?
     var settingViewModel: SettingsViewModel?
@@ -118,7 +118,7 @@ class OrderViewModel {
                 return
             }
             
-            Decoding.decodeData(data: data, objectType: [ConfirmOrder].self) { decodedOrders, decodeError in
+            Decoding.decodeData(data: data, objectType: [GetOrder].self) { decodedOrders, decodeError in
                 if let decodedOrders = decodedOrders {
                     //self.orders = decodedOrders
                     // Filter orders by customer ID
