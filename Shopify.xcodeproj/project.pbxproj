@@ -78,6 +78,7 @@
 		7D7CA1EA2C168355003D8013 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7CA1E92C168355003D8013 /* LoginViewModel.swift */; };
 		7D7CA1EC2C16A0C2003D8013 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7CA1EB2C16A0C2003D8013 /* Auth.swift */; };
 		7D89BF9B2C26001E00F1C761 /* CheckNetworkReachiability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89BF9A2C26001E00F1C761 /* CheckNetworkReachiability.swift */; };
+		7D89BF9D2C261B8500F1C761 /* googleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D89BF9C2C261B8500F1C761 /* googleViewModel.swift */; };
 		7D9231842C239427005E611D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D9231832C239427005E611D /* GoogleService-Info.plist */; };
 		7D9231862C23A9B2005E611D /* GoogleService-Info-3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D9231852C23A9B0005E611D /* GoogleService-Info-3.plist */; };
 		7DB203652C17630800CFFC65 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB203642C17630800CFFC65 /* ViewModel.swift */; };
@@ -194,6 +195,7 @@
 		7D7CA1E92C168355003D8013 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewModel.swift; path = Shopify/Model/LoginViewModel.swift; sourceTree = SOURCE_ROOT; };
 		7D7CA1EB2C16A0C2003D8013 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		7D89BF9A2C26001E00F1C761 /* CheckNetworkReachiability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckNetworkReachiability.swift; sourceTree = "<group>"; };
+		7D89BF9C2C261B8500F1C761 /* googleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = googleViewModel.swift; sourceTree = "<group>"; };
 		7D9231832C239427005E611D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7D9231852C23A9B0005E611D /* GoogleService-Info-3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-3.plist"; sourceTree = "<group>"; };
 		7DB203642C17630800CFFC65 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
@@ -909,6 +911,7 @@
 			children = (
 				7DC25B552C1379FF00D046D7 /* SignUp */,
 				7DC25B522C1379DA00D046D7 /* login */,
+				7D89BF9C2C261B8500F1C761 /* googleViewModel.swift */,
 			);
 			path = Auther;
 			sourceTree = "<group>";
@@ -1211,6 +1214,7 @@
 				7DB203652C17630800CFFC65 /* ViewModel.swift in Sources */,
 				03678AD32C13B3490046E6E8 /* DraftOrder.swift in Sources */,
 				03D35C892C0CEC1300523AF7 /* ViewController.swift in Sources */,
+				7D89BF9D2C261B8500F1C761 /* googleViewModel.swift in Sources */,
 				7D89BF9B2C26001E00F1C761 /* CheckNetworkReachiability.swift in Sources */,
 				0337F1FB2C0E0C3B00D97CBD /* ShoppingCartableViewCell.swift in Sources */,
 				037955D42C0E7715003A3AF9 /* SelectAddressViewController.swift in Sources */,

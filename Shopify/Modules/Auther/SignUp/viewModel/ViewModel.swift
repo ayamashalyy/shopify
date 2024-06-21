@@ -43,9 +43,6 @@ class ViewModel {
          
          let customerRequest = CustomerRequest(customer: newCustomer)
          
-        
-        print("customerRequest \(customerRequest)")
-             
          // Encode the customerRequest
          Decoding.encodeData(object: customerRequest) { jsonData, encodeError in
              guard let jsonData = jsonData, encodeError == nil else {

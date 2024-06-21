@@ -17,8 +17,10 @@ class LoginViewModel {
             DispatchQueue.main.async {
                 if success {
                     print( "Sign-in successful. Email is verified.")
-                    self.isACustomer(email: email, password: password)
-                    completion(true)
+                    self.isACustomer(email: email, password: password){ finish in
+                        completion(finish)
+
+                    }
                 } else {
                     print( "Sign-in nottttt successful. Email is not verified.")
                  completion(false)
@@ -27,7 +29,7 @@ class LoginViewModel {
         }
     }
     
-  private  func isACustomer(email: String, password: String) {
+    func isACustomer(email: String, password: String, completion: @escaping (Bool) -> Void) {
         NetworkManager.fetchDataFromApi(endpoint: .customers, rootOfJson: .customers) { data, error in
             guard let data = data, error == nil else {
                 print("Error fetching all customers data:", error?.localizedDescription ?? "Unknown error")
@@ -46,23 +48,27 @@ class LoginViewModel {
                         if let customerID = allCustomers.first(where: { $0.email == email && $0.tags == password })?.id {
                             print("customerID\(customerID)")
                             Authorize.saveCustomerIDToUserDefaults(customerID: customerID)
+                            
+                            Authorize.saveCustomerEmail(Customeremail: email)
+                            
+                            let name = allCustomers.first(where: { $0.email == email && $0.tags == password })?.firstName
+                            print("full name \(name!)")
+                            
+                            Authorize.saveCustomerFullName(customerFullName: name!)
                             self.getDraftOrdersIdsByCustomerEmail(email:email)
+                            completion(true)
                         }
                     }
                 } else {
                     print("Error decoding customer data:", decodeError?.localizedDescription ?? "Unknown error")
+                    completion(false)
                 }
             }
         }
     }
     
     
-    func googleLogin () {
-        //
-        //        GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: FirebaseApp.app()?.options.clientID ?? "")
-        
-        
-    }
+ 
     func getDraftOrdersIdsByCustomerEmail( email: String) {
         var allCustomerDraftOrders: [DraftOrder] = []
         

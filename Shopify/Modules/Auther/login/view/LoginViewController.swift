@@ -16,14 +16,12 @@ class LoginViewController: UIViewController {
         setUpUI()
         loginViewModel = LoginViewModel()
         GIDSignIn.sharedInstance()?.presentingViewController = self
-        
-        
+        GIDSignIn.sharedInstance()?.delegate = self  
 
-       
     }
     
     @IBOutlet weak var siginUP: UIButton!
-    @IBOutlet weak var siginInGoogle: GIDSignInButton!
+    @IBOutlet weak var siginInGoogle: UIButton!
 
     var loginViewModel : LoginViewModel?
     @IBOutlet weak var guestBtn: UIButton!
@@ -105,5 +103,41 @@ class LoginViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func signInWithGoogle(_ sender: UIButton) {
+          GIDSignIn.sharedInstance().signIn()
+      }
+
+}
+
+// MARK: - GIDSignInDelegate
+extension LoginViewController: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if let error = error {
+            print("Google sign in error: \(error.localizedDescription)")
+            return
+        }
+        
+        guard let userEmail = user.profile.email else {
+            print("No user email found")
+            return
+        }
+        
+        let firstName = user.profile.givenName ?? ""
+        let lastName = user.profile.familyName ?? ""
+        
+        Authorize.saveCustomerEmail(Customeremail: userEmail)
+        
+        GoogleViewModel.siginInWithGoogleEmail(googleEmail: userEmail, firstName: firstName, lastName: lastName){ success in
+                if success {
+                  print("handle goole data succesfully")
+                    Navigation.ToHome(from: self)
+                        }
+                    else {
+                    print("No user email found")
+           }
+        }
     }
 }
