@@ -17,10 +17,13 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     let tableView = UITableView()
     var orderViewModel: OrderViewModel?
+    let settingsViewModel = SettingsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        
+        fetchExchangeRates()
         updateUI()
     }
     
@@ -48,11 +51,28 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private func updateUI() {
         guard let order = orderViewModel?.selectedOrder else { return }
-        totalPrice.text = order.current_subtotal_price
+        
+        // Convert price using SettingsViewModel
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(String(describing: order.total_price))USD"
+                
+        totalPrice.text = convertedPriceString
         creationDate.text = order.created_at
-        shipedTo.text = order.shipping_address?.address1
-        phone.text = order.shipping_address?.phone
+        //shipedTo.text = order.shipping_address?.address1
+        //phone.text = order.shipping_address?.phone
         tableView.reloadData()
+    }
+    
+    func fetchExchangeRates() {
+        settingsViewModel.fetchExchangeRates { error in
+            if let error = error {
+                print("Failed to fetch exchange rates: \(error.localizedDescription)")
+                return
+            }
+            // Fetch orders after exchange rates are fetched
+            self.tableView.reloadData()
+            self.updateUI()
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,7 +83,12 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
         let cell = tableView.dequeueReusableCell(withIdentifier: "OrderItemCell", for: indexPath) as! OrderItemCell
         if let item = orderViewModel?.selectedOrder?.line_items?[indexPath.row] {
             cell.titleLabel.text = item.title
-            cell.priceLabel.text = "Price: \(item.price ?? "0.00") USD"
+            
+            // Convert price using SettingsViewModel
+            let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+            let convertedPriceString = settingsViewModel.convertPrice(item.price ?? "0", to: selectedCurrency) ?? "\(item.price)USD"
+            
+            cell.priceLabel.text = "Price: \(convertedPriceString)"
             cell.quantityLabel.text = "Quantity: \(item.quantity ?? 0)"
         }
         return cell

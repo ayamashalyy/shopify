@@ -15,13 +15,61 @@ class PaymentViewController: UIViewController {
     @IBOutlet weak var confirmPay: UIButton!
     @IBOutlet weak var totalPrice: UILabel!
     
+    let shoppingCartViewModel = ShoppingCartViewModel()
+    let orderViewModel = OrderViewModel.shared
+    let homeViewModel = HomeViewModel()
+    let settingsViewModel = SettingsViewModel()
+
+    var grandTotal: Int = 0
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIButton()
         setupConfirmPayButton()
+
+        confirmOrder()
+        fetchExchangeRates()
+
+        totalPrice.text = "\(grandTotal)$"
         
+
     }
+
+    func confirmOrder(){
+        shoppingCartViewModel.fetchDraftOrders { error in
+            if let error = error {
+                print("Error fetching draft orders: \(error)")
+            } else {
+                print("Draft orders fetched successfully")
+                self.orderViewModel.cartViewModel = self.shoppingCartViewModel
+                self.orderViewModel.addressViewModel = AddressViewModel()
+                self.orderViewModel.settingViewModel = SettingsViewModel()
+                
+                // create the order
+                self.orderViewModel.createOrder { order, error in
+                    if let error = error {
+                        print("Error creating order: \(error)")
+                    } else if let order = order {
+                        print("Order created successfully: \(order)")
+                        self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+                    }
+                }
+            }
+        }
+    }
+    
+    func fetchExchangeRates() {
+        settingsViewModel.fetchExchangeRates { error in
+            if let error = error {
+                print("Failed to fetch exchange rates: \(error.localizedDescription)")
+                return
+            }
+            // Update total price after exchange rates are fetched
+            
+        }
+    }
+    
     func setupConfirmPayButton() {
         confirmPay.backgroundColor = UIColor(hex: "#FF7D29")
         confirmPay.setTitleColor(UIColor.white, for: .normal)
@@ -60,22 +108,25 @@ class PaymentViewController: UIViewController {
     @IBAction func backToPlaceOrders(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
-    private var paymentRequest : PKPaymentRequest = {
-            let request = PKPaymentRequest()
-            request.merchantIdentifier = "merchant.com.pushpendra.pay"
-            request.supportedNetworks = [.quicPay, .masterCard, .visa]
-            request.supportedCountries = ["EG", "US"]
-            request.merchantCapabilities = .capability3DS
-            request.countryCode = "EG"
-            if UserDefaults.standard.string(forKey: "Currency") == "EGP" {
-                request.currencyCode = "EGP"
-            } else {
-                request.currencyCode = "USD"
-            }
-            request.paymentSummaryItems = [PKPaymentSummaryItem(label: "Shopify", amount: NSDecimalNumber(string: "100.00"))]
-            return request
-        }()
-   // let totalAmount = NSDecimalNumber(value: UserDefaults.standard.integer(forKey: "final"))
+    private var paymentRequest: PKPaymentRequest {
+        let request = PKPaymentRequest()
+        request.merchantIdentifier = "merchant.com.pushpendra.pay"
+        request.supportedNetworks = [.quicPay, .masterCard, .visa]
+        request.supportedCountries = ["EG", "US"]
+        request.merchantCapabilities = .capability3DS
+        request.countryCode = "EG"
+        
+        if UserDefaults.standard.string(forKey: "Currency") == "EGP" {
+            request.currencyCode = "EGP"
+        } else {
+            request.currencyCode = "USD"
+        }
+        
+        let paymentItem = PKPaymentSummaryItem(label: "Shopify", amount: NSDecimalNumber(value: grandTotal))
+        request.paymentSummaryItems = [paymentItem]
+        
+        return request
+    }
 
     func startApplePay() {
         

@@ -11,8 +11,6 @@ import GoogleSignIn
 import FirebaseAuth
 
 class LoginViewController: UIViewController {
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
@@ -66,6 +64,8 @@ class LoginViewController: UIViewController {
             loginViewModel?.isValidedEmail(email: email, password: password) { isACustomer in
                 if isACustomer {
                     print("Is a customer, go to home")
+                    print("customer id \(Authorize.getCustomerIDFromUserDefaults())")
+                    OrderViewModel.shared.setEmail(email: email)
                     Navigation.ToHome(from: self)
                 } else {
                     self.showAlert(message: "Please create acount and verify it througth the email,then login again")

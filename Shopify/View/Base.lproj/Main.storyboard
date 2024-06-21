@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yRd-gQ-vfL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yRd-gQ-vfL">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -163,6 +162,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Home" image="house.fill" catalog="system" id="IZz-Kb-ty7"/>
                     <connections>
+                        <outlet property="cartButton" destination="D3N-EX-Ja0" id="4HK-W8-idJ"/>
                         <outlet property="indicator" destination="UL9-Wu-rbR" id="5fW-wN-tLd"/>
                     </connections>
                 </viewController>
@@ -246,7 +246,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="selectedImageTintColor" red="1" green="0.49019607843137253" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="1" green="0.37902179168282435" blue="0.0035694299824012843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="iVh-rI-z8y" kind="relationship" relationship="viewControllers" id="RWY-2j-JMq"/>
@@ -276,7 +276,11 @@
                                                     <action selector="goToAllFav:" destination="2NJ-7v-iDD" id="wNF-Zw-VEk"/>
                                                 </connections>
                                             </barButtonItem>
-                                            <barButtonItem image="cart.fill" catalog="system" id="5oh-kL-4wk"/>
+                                            <barButtonItem image="cart.fill" catalog="system" id="5oh-kL-4wk">
+                                                <connections>
+                                                    <action selector="goToCard:" destination="2NJ-7v-iDD" id="O4F-qH-vL0"/>
+                                                </connections>
+                                            </barButtonItem>
                                             <barButtonItem image="magnifyingglass" catalog="system" id="9PB-Ub-faM">
                                                 <connections>
                                                     <action selector="goToSearch:" destination="2NJ-7v-iDD" id="oi8-P7-Dap"/>
@@ -320,6 +324,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Categories" image="square.grid.3x3.fill" catalog="system" selectedImage="square.grid.3x3.fill" id="MVB-bi-zZU"/>
                     <connections>
+                        <outlet property="cartButton" destination="5oh-kL-4wk" id="kXo-h2-NPZ"/>
                         <outlet property="indicator" destination="sxN-O5-kh7" id="jdW-77-ICP"/>
                         <outlet property="segmentedControl" destination="lNn-8x-aJ3" id="GWU-QV-Ra6"/>
                     </connections>
@@ -383,7 +388,7 @@
                                 </constraints>
                             </view>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ron-fu-qgY">
-                                <rect key="frame" x="-2" y="65" width="394" height="44"/>
+                                <rect key="frame" x="-4" y="65" width="396" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" red="1" green="0.40429029960000001" blue="0.15705770390000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -452,6 +457,7 @@
                     <tabBarItem key="tabBarItem" title="Me" image="person.circle" catalog="system" id="3wy-Cl-Dog"/>
                     <navigationItem key="navigationItem" id="eWm-1U-qyP"/>
                     <connections>
+                        <outlet property="cartButton" destination="Bvz-hL-4qG" id="s3n-16-tkp"/>
                         <outlet property="setting" destination="Fik-ka-m8H" id="RSu-5K-H6T"/>
                         <outlet property="tableview" destination="EEY-B4-vdU" id="r8n-84-0Gu"/>
                     </connections>
@@ -468,8 +474,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ocy-Op-DKU">
+                            <navigationBar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="ocy-Op-DKU">
                                 <rect key="frame" x="0.0" y="51" width="393" height="44"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </textAttributes>
                                 <items>
                                     <navigationItem title="Order Details" id="N94-jZ-afM">
                                         <barButtonItem key="leftBarButtonItem" image="left" id="3Rp-L7-6nb">

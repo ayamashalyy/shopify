@@ -11,6 +11,9 @@ import JJFloatingActionButton
 class CategoriesViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    let shoppingCartViewModel = ShoppingCartViewModel()
+    
+    @IBOutlet weak var cartButton: UIBarButtonItem!
     
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
@@ -39,8 +42,70 @@ class CategoriesViewController: UIViewController {
         setupUI()
         fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
         fetchExchangeRates()
+        setupCartButton()
     }
     
+
+    
+    func updateCartBadge() {
+        let itemCount = shoppingCartViewModel.cartItemCount
+        print("Item count: \(itemCount)")
+        if itemCount > 0 {
+            cartButton.addBadge(text: "\(itemCount)", color: .orange)
+        } else {
+            cartButton.removeBadge()
+        }
+    }
+    
+    
+    private func fetchCartItemsAndUpdateBadge() {
+        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                print("Failed to fetch cart items: \(error.localizedDescription)")
+            } else {
+                self.updateCartBadge()
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateCartBadge()
+        fetchCartItemsAndUpdateBadge()
+        fetchExchangeRates()
+    }
+    
+    func setupCartButton() {
+        let button = UIButton(type: .custom)
+        
+        if let cartImage = UIImage(systemName: "cart.fill") {
+            print("System cart image loaded successfully")
+            let tintedImage = cartImage.withTintColor(.orange, renderingMode: .alwaysOriginal)
+            let scaledImage = pondsize(image: tintedImage, size: CGSize(width: 30, height: 25))
+            button.setImage(scaledImage, for: .normal)
+        } else {
+            print("Failed to load system cart image")
+        }
+        
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(goToCard(_:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 60, height: 80)
+        cartButton.customView = button
+    }
+    
+    func pondsize(image: UIImage, size: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let scaledImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return scaledImage
+    }
+    
+    @IBAction func goToCard(_ sender: UIBarButtonItem) {
+        Navigation.ToOrders(from: self)
+        
+    }
     
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
         Navigation.ToSearch(from: self, comeFromHome: false, products: categoriesViewModel.categoryProducts)
@@ -279,7 +344,7 @@ class CategoriesViewController: UIViewController {
             view.insertSubview(blurEffectView, belowSubview: fabButton)
         }
     }
-
+    
     
     func removeBlurEffect() {
         blurEffectView?.removeFromSuperview()
@@ -338,16 +403,16 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
             guard let product = categoriesViewModel.product(at: indexPath.row) else {
                 return
             }
-
+            
             if Authorize.isRegistedCustomer() {
                 cell.heartButton.isEnabled = false
-// deafult now if false
+                // deafult now if false
                 if product.variants[0].isSelected {
                     // Remove from fav
                     showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
                                            okAction: { [weak self] _ in
                         print("OK button remove tapped")
-                      productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                        productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
                             DispatchQueue.main.async {
                                 if isSuccess {
                                     product.variants[0].isSelected = false
@@ -371,7 +436,7 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                                 print("added succesfully ")
                                 product.variants[0].isSelected = true
                                 self?.showCheckMarkAnimation(mark: "heart.fill")
-
+                                
                             } else {
                                 self?.showAlertWithTwoOption(message: "Failed to add to favorites")
                                 cell.heartButton.isEnabled = true
@@ -388,7 +453,7 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
             }
         }
     }
-
+    
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
@@ -397,7 +462,7 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         alertController.addAction(cancelAlertAction)
         present(alertController, animated: true, completion: nil)
     }
-
+    
     
     
     

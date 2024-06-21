@@ -11,7 +11,16 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
     
     @IBOutlet weak var ordersTable: UITableView!
     
-    var orderViewModel = OrderViewModel()
+    var orderViewModel = OrderViewModel.shared
+    let settingsViewModel = SettingsViewModel()
+    
+    private let noOrdersImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "no_items.jpg")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,9 +28,21 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         ordersTable.delegate = self
         ordersTable.register(UINib(nibName: "OrderViewCell", bundle: nil), forCellReuseIdentifier: "OrderViewCell")
         
-        fetchOrders()
-        // Example for post dummy order
+        view.addSubview(noOrdersImageView)
+        setupNoOrdersImageViewConstraints()
         
+        fetchOrders()
+        fetchExchangeRates()
+        
+    }
+    
+    private func setupNoOrdersImageViewConstraints() {
+        NSLayoutConstraint.activate([
+            noOrdersImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noOrdersImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noOrdersImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            noOrdersImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4)
+        ])
     }
     
     func fetchOrders() {
@@ -32,6 +53,8 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
                 switch result {
                 case .success:
                     self.ordersTable.reloadData()
+                    
+                    self.noOrdersImageView.isHidden = !self.orderViewModel.orders.isEmpty
                 case .failure(let error):
                     print("Failed to fetch orders: \(error.localizedDescription)")
                     // Show an alert or handle error appropriately
@@ -40,7 +63,18 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         }
     }
     
-    func confirmOrder(){
+    func fetchExchangeRates() {
+        settingsViewModel.fetchExchangeRates { error in
+            if let error = error {
+                print("Failed to fetch exchange rates: \(error.localizedDescription)")
+                return
+            }
+            // Fetch orders after exchange rates are fetched
+            self.ordersTable.reloadData()
+        }
+    }
+    
+//    func confirmOrder(){
 //        orderViewModel.createOrder { order, error in
 //            if let order = order {
 //                print("Order created successfully: \(order)")
@@ -48,7 +82,7 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
 //                print("Failed to create order: \(error.localizedDescription)")
 //            }
 //        }
-    }
+//    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -78,11 +112,16 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
             return UITableViewCell()
         }
         let order = orderViewModel.orders[indexPath.row]
-        cell.TotalPriceValue.text = order.current_subtotal_price
+        
+        // Convert price using SettingsViewModel
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(order.total_price)USD"
+        
+        cell.TotalPriceValue.text = convertedPriceString
         cell.CreationDateValue.text = order.created_at
-        cell.ShippedToValue.text = order.shipping_address?.address1
-        cell.PhoneValue.text = order.shipping_address?.phone
-        print(order.email)
+        //cell.ShippedToValue.text = order.shipping_address?.address1
+        //cell.PhoneValue.text = order.shipping_address?.phone
+        //print(order.email)
         return cell
     }
     
