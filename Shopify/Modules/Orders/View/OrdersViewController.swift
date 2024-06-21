@@ -19,6 +19,7 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         imageView.image = UIImage(named: "no_items.jpg")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isHidden = true
         return imageView
     }()
     
@@ -57,6 +58,7 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
                     self.noOrdersImageView.isHidden = !self.orderViewModel.orders.isEmpty
                 case .failure(let error):
                     print("Failed to fetch orders: \(error.localizedDescription)")
+                    self.noOrdersImageView.isHidden = false
                     // Show an alert or handle error appropriately
                 }
             }
@@ -119,8 +121,8 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         
         cell.TotalPriceValue.text = convertedPriceString
         cell.CreationDateValue.text = order.created_at
-        //cell.ShippedToValue.text = order.shipping_address?.address1
-        //cell.PhoneValue.text = order.shipping_address?.phone
+        cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+        cell.PhoneValue.text = order.customer?.default_address?.phone
         //print(order.email)
         return cell
     }

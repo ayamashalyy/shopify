@@ -58,8 +58,8 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
                 
         totalPrice.text = convertedPriceString
         creationDate.text = order.created_at
-        //shipedTo.text = order.shipping_address?.address1
-        //phone.text = order.shipping_address?.phone
+        shipedTo.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+        phone.text = order.customer?.default_address?.phone
         tableView.reloadData()
     }
     

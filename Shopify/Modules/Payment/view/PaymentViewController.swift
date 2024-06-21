@@ -19,6 +19,7 @@ class PaymentViewController: UIViewController {
     let orderViewModel = OrderViewModel.shared
     let homeViewModel = HomeViewModel()
     let settingsViewModel = SettingsViewModel()
+    let viewModel = ShoppingCartViewModel()
 
     var grandTotal: Int = 0
 
@@ -28,6 +29,7 @@ class PaymentViewController: UIViewController {
         setUIButton()
         setupConfirmPayButton()
 
+        //deleteLineItems()
         confirmOrder()
         fetchExchangeRates()
 
@@ -52,9 +54,20 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
+                        self.deleteLineItems()
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
                     }
                 }
+            }
+        }
+    }
+    
+    func deleteLineItems(){
+        viewModel.deleteLineItems { error in
+            if let error = error {
+                print("Failed to delete line items: \(error.localizedDescription)")
+            } else {
+                print("Line items deleted successfully")
             }
         }
     }
