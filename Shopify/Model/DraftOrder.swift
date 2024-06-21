@@ -99,7 +99,8 @@ struct CustomerDraftOrder: Codable  {
     let first_name, last_name: String?
     let orders_count: Int?
     let state, total_spent: String?
-    let last_order_id, note: String?
+    let last_order_id : Int?
+    let note: String?
     let verified_email: Bool?
     let multipass_identifier: String?
     let tax_exempt: Bool?

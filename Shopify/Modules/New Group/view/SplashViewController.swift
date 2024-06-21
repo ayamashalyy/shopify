@@ -14,19 +14,10 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
          // for codding only the next line:
-        //Authorize.logout()
 
+     //  Authorize.logout()
       self.checkCustomerID()
-        }
-        
-//        viewModel.deleteLineItems { error in
-//               if let error = error {
-//                   print("Failed to delete line items: \(error.localizedDescription)")
-//               } else {
-//                   print("Line items deleted successfully")
-//               }
-//           }
-        
+        }       
         
     }
     

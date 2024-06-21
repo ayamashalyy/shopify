@@ -98,6 +98,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
             let alertController = UIAlertController(title: "Confirm Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
                 Authorize.logout()
+                Navigation.ToALogin(from: self)
             }))
             
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
