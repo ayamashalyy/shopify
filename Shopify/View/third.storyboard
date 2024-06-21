@@ -392,7 +392,7 @@
                                         <rect key="frame" x="30" y="20" width="333" height="40"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Add to card ">
+                                        <buttonConfiguration key="configuration" style="plain" title="Add to cart">
                                             <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle1"/>
                                         </buttonConfiguration>
                                         <connections>

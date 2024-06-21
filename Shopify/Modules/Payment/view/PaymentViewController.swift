@@ -15,6 +15,8 @@ class PaymentViewController: UIViewController {
     @IBOutlet weak var confirmPay: UIButton!
     @IBOutlet weak var totalPrice: UILabel!
     
+    let viewModel = ShoppingCartViewModel()
+
     let shoppingCartViewModel = ShoppingCartViewModel()
     let orderViewModel = OrderViewModel.shared
     let homeViewModel = HomeViewModel()
@@ -52,7 +54,16 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
+                        self.viewModel.deleteLineItems { error in
+                                       if let error = error {
+                                           print("Failed to delete line items: \(error.localizedDescription)")
+                                       } else {
+                                           print("Line items deleted successfully")
+                                       }
+                                   }
+                                
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+                        
                     }
                 }
             }
