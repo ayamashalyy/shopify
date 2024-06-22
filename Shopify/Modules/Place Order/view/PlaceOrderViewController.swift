@@ -17,6 +17,10 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     let homeViewModel = HomeViewModel()
     var orderViewModel = OrderViewModel.shared
     let settingsViewModel = SettingsViewModel()
+    var selectedAddress: String?
+    var selectedPhone: String?
+    var selectedCountry: String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,7 +90,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 260
+        return 400
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -146,6 +150,8 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         } else {
             cell.couponLable.text = "No discount code found"
         }
+        cell.addressLabel.text = (selectedAddress ?? "") + "," + (selectedCountry ?? "")
+        cell.phoneLabel.text = selectedPhone
         
         return cell
     }

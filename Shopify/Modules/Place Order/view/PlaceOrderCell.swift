@@ -15,7 +15,8 @@ class PlaceOrderCell: UITableViewCell {
     @IBOutlet weak var shippingFeesLable: UILabel!
     @IBOutlet weak var gradeTotalLable: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
-    
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var phoneLabel: UILabel!
     var cancelDiscountHandler: (() -> Void)?
     override func awakeFromNib() {
         super.awakeFromNib()

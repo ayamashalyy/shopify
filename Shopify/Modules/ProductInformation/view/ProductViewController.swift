@@ -70,10 +70,14 @@ class ProductViewController: UIViewController {
                 self.indicator.stopAnimating()
             }
         }
-        productViewModel?.getProductDetails(id: productId!)
-        
+        if  CheckNetworkReachability.checkNetworkReachability(){
+            productViewModel?.getProductDetails(id: productId!)
+        }else {
+            showAlert(message: "Failed to get product details as lost network connection")
+        }
         
     }
+    
     func updateFavButton(iscomefromFav: Bool) {
         if iscomefromFav {
             productFavButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
@@ -107,12 +111,17 @@ class ProductViewController: UIViewController {
             }
             // i need variant id not product id as draft order deal with it
             if isFav{
-                
                 // remove from fav
                 let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                    self.productFavButton.isEnabled = true
+
+                }))
+
+                alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
                     guard let self = self else { return }
+                    
+                    if  CheckNetworkReachability.checkNetworkReachability(){
                     self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
                         DispatchQueue.main.async {
                             if isSuccess {
@@ -123,11 +132,19 @@ class ProductViewController: UIViewController {
                             }
                         }
                     }
+                    }else {
+                        productFavButton.isEnabled = true
+                        showAlert(message: "Failed to remove from faviourt as lost network connection")
+                    }
                 }))
                 present(alertController, animated: true, completion: nil)
             }
             else{
                 // add to fav
+//                print("firstVariantId\(firstVariantId)!")
+                
+                if  CheckNetworkReachability.checkNetworkReachability(){
+
                 productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
                     DispatchQueue.main.async {
                         if isSuccess {
@@ -141,6 +158,11 @@ class ProductViewController: UIViewController {
                             self?.productFavButton.isEnabled = true
                         }
                     }
+                }
+                }else {
+                 productFavButton.isEnabled = true
+
+                    showAlert(message: "Failed to add from faviourt as lost network connection")
                 }
             }}else {
                 
@@ -156,7 +178,7 @@ class ProductViewController: UIViewController {
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
-        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
         
         alertController.addAction(okAlertAction)
@@ -214,25 +236,30 @@ class ProductViewController: UIViewController {
                     self.addToCard.isEnabled = true
                 }
             }else {
-                productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
-                    DispatchQueue.main.async {
-                        if isSuccess {
-                            self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
-                            self.addToCard.isEnabled = true
-                            self.hideAllCheckmarkImages()
-                        } else {
-                            self.showAlert(message: "Failed to add to cart" )
-                            self.addToCard.isEnabled = true
-                     //       print("number is not succes")
+                    if  CheckNetworkReachability.checkNetworkReachability(){
+                    productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
+                        DispatchQueue.main.async {
+                            if isSuccess {
+                                self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
+                                self.addToCard.isEnabled = true
+                                self.hideAllCheckmarkImages()
+                            } else {
+                                self.showAlert(message: "Failed to add to cart" )
+                                self.addToCard.isEnabled = true
+                                //       print("number is not succes")
+                            }
                         }
                     }
+                }else {
+                    showAlert(message: "Failed to add product to cart as lost network connection")
+                    addToCard.isEnabled = true
+
                 }
             }
         } else {
                 self.showAlertWithTwoOption(message: "Login to add to faviourts?",
                                             okAction: { action in
                     Navigation.ToALogin(from: self)
-               //     print("OK button tapped")
                 }
                 )
                 

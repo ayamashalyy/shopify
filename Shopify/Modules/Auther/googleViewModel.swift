@@ -34,7 +34,7 @@ class GoogleViewModel {
                 completion(true)
             }
             else {
-                print(" not customerCreationSuccess here creat cutomer and draft order")
+                print(" aleardy user deal with it as normal login")
                 
                 // aleardy user deal with it as normal login
                 loginViewModel.isACustomer(email: googleEmail, password: ""){ isAcusotmer in

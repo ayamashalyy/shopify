@@ -16,7 +16,7 @@ struct FavLineItem {
 }
 
 class AllFavViewController: UIViewController {
-    
+ 
     var favViewModel: FavViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
     var myfavLineItem: [FavLineItem] = []
@@ -32,7 +32,6 @@ class AllFavViewController: UIViewController {
         super.viewDidLoad()
         allFavTable.dataSource = self
         allFavTable.delegate = self
-        fetchExchangeRates()
         allFavTable.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         allFavTable.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
@@ -68,7 +67,15 @@ class AllFavViewController: UIViewController {
                     self.allFavTable.reloadData()
                 }
             }
-            favViewModel?.getFavs()
+           
+            if CheckNetworkReachability.checkNetworkReachability() {
+                favViewModel?.getFavs()
+                fetchExchangeRates()
+            }
+            else {
+                self.indicator.stopAnimating()
+                self.alartWithOneOption(message: "Sorry we can not bring your faviourts products, please connect network and try again")
+            }
         }else{
             self.showAlertWithTwoOption(message: "Login to add to faviourts?",
                                         okAction: { action in
@@ -77,6 +84,15 @@ class AllFavViewController: UIViewController {
             }
             )
         }
+    }
+    
+    func alartWithOneOption (message: String) {
+        let alertController = UIAlertController(title: "Failed to load", message: message, preferredStyle: .alert)
+        let okAlertAction = UIAlertAction(title: "OK", style: .default) { _ in
+              alertController.dismiss(animated: true, completion: nil)
+          }
+        alertController.addAction(okAlertAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
@@ -92,10 +108,12 @@ class AllFavViewController: UIViewController {
     }
     
     func checkIfNoData() {
-        if myfavLineItem.count <= 1 {
-            allFavTable.backgroundView = createNoDataBackgroundView()
-        } else {
-            allFavTable.backgroundView = nil
+        if indicator.isHidden{
+            if myfavLineItem.count <= 1 {
+                allFavTable.backgroundView = createNoDataBackgroundView()
+            } else {
+                allFavTable.backgroundView = nil
+            }
         }
     }
     
@@ -198,26 +216,31 @@ extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             
             self.indicator.startAnimating()
-            
-            favViewModel?.removeLineItem(index: indexPath.row)
-            
             let alertController = UIAlertController(title: "Confirmation", message: "Are you sure? Remove from favorites?", preferredStyle: .alert)
             
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+            alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
                 guard let self = self else { return }
-                self.productViewModel.removeFromFavDraftOrders(VariantsId: firstVariantId) { isSuccess in
-                    DispatchQueue.main.async {
-                        if isSuccess {
-                            print("Removed from favorites table")
-                            self.myfavLineItem.remove(at: indexPath.row)
-                            tableView.deleteRows(at: [indexPath], with: .fade)
-                            self.checkIfNoData()
-                            self.indicator.stopAnimating()
-                            
+                
+                
+                if CheckNetworkReachability.checkNetworkReachability() {
+                    self.productViewModel.removeFromFavDraftOrders(VariantsId: firstVariantId) { isSuccess in
+                        DispatchQueue.main.async {
+                            if isSuccess {
+                                print("Removed from favorites table")
+                                self.myfavLineItem.remove(at: indexPath.row)
+                                tableView.deleteRows(at: [indexPath], with: .fade)
+                                self.checkIfNoData()
+                                self.indicator.stopAnimating()
+                                
+                            }
                         }
                     }
+                }
+                else {
+                    self.indicator.stopAnimating()
+                    self.alartWithOneOption(message: "Sorry we can not delecte the products, please connect network and try again")
                 }
             }))
             present(alertController, animated: true, completion: nil)
