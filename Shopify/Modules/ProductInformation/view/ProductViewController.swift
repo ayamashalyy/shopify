@@ -110,8 +110,12 @@ class ProductViewController: UIViewController {
                 
                 // remove from fav
                 let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                    self.productFavButton.isEnabled = true
+
+                }))
+
+                alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
                     guard let self = self else { return }
                     self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
                         DispatchQueue.main.async {
@@ -128,6 +132,7 @@ class ProductViewController: UIViewController {
             }
             else{
                 // add to fav
+                print("firstVariantId\(firstVariantId)!")
                 productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
                     DispatchQueue.main.async {
                         if isSuccess {
@@ -156,7 +161,7 @@ class ProductViewController: UIViewController {
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
-        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
         
         alertController.addAction(okAlertAction)

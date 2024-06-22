@@ -69,10 +69,14 @@ class BrandProductsViewModel{
                     let favoriteVariantIds = lineItems.compactMap { $0.variant_id }
 
                     let updatedProducts = productFromApi.map { product -> Product in
+                        
                         var updatedProduct = product
-                        if let variantId = product.variants.first?.id, favoriteVariantIds.contains(variantId) {
-                            updatedProduct.variants[0].isSelected = true
-                        }
+                        
+                        if let variantId = product.variants.first?.id {
+                                           if favoriteVariantIds.contains(variantId) && variantId != fakeProductInDraftOrder {
+                                               updatedProduct.variants[0].isSelected = true
+                                           }
+                                       }
                         return updatedProduct
                     }
 

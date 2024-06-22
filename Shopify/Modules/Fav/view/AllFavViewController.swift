@@ -92,10 +92,12 @@ class AllFavViewController: UIViewController {
     }
     
     func checkIfNoData() {
-        if myfavLineItem.count <= 1 {
-            allFavTable.backgroundView = createNoDataBackgroundView()
-        } else {
-            allFavTable.backgroundView = nil
+        if indicator.isHidden{
+            if myfavLineItem.count <= 1 {
+                allFavTable.backgroundView = createNoDataBackgroundView()
+            } else {
+                allFavTable.backgroundView = nil
+            }
         }
     }
     
@@ -205,7 +207,7 @@ extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
             
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+            alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.productViewModel.removeFromFavDraftOrders(VariantsId: firstVariantId) { isSuccess in
                     DispatchQueue.main.async {
