@@ -30,8 +30,12 @@ class PaymentViewController: UIViewController {
         setUIButton()
         setupConfirmPayButton()
 
+
         deleteLineItems()
 //        confirmOrder()
+
+        //deleteLineItems()
+
         fetchExchangeRates()
 
         totalPrice.text = "\(grandTotal)$"
@@ -126,8 +130,13 @@ class PaymentViewController: UIViewController {
             //confirmOrder()
             print("grade total : \(orderViewModel.fetchGradeTotal())")
         } else {
+
             // Handle COD payment
             deleteLineItems()
+
+            confirmOrder()
+            print("post Successfull of COD")
+
         }
     }
     
@@ -174,6 +183,7 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
         if success {
             completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
             showAlert(title: "Success", message: "Payment was successful!")
+            performCustomActionForApplePaySuccess()
         } else {
             completion(PKPaymentAuthorizationResult(status: .failure, errors: nil))
             showAlert(title: "Failure", message: "Payment failed. Please try again.")
@@ -190,6 +200,12 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+    
+    
+    func performCustomActionForApplePaySuccess() {
+        confirmOrder()
+            print("post Successfull")
+        }
 }
 
 
