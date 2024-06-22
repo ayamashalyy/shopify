@@ -286,6 +286,12 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+            return
+        }
+        
         if collectionView == brandsCollectionView {
             guard let brand = homeViewModel.brand(at: indexPath.item) else { return }
             

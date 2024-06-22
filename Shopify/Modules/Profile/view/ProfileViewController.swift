@@ -198,7 +198,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 190
+            return 120
         } else {
             return 100
         }
@@ -241,8 +241,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 cell.TotalPriceValue.text = convertedPriceString
                 cell.CreationDateValue.text = order.created_at
-                cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
-                cell.PhoneValue.text = order.customer?.default_address?.phone
+                //cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+                //cell.PhoneValue.text = order.customer?.default_address?.phone
                 //print(order.email)
             }
             return cell

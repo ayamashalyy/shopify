@@ -30,11 +30,12 @@ class PaymentViewController: UIViewController {
         setUIButton()
         setupConfirmPayButton()
 
-        //deleteLineItems()
-        confirmOrder()
+        deleteLineItems()
+//        confirmOrder()
         fetchExchangeRates()
 
         totalPrice.text = "\(grandTotal)$"
+        orderViewModel.storeGradeTotal("\(grandTotal)")
         
 
     }
@@ -55,15 +56,15 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
-                        self.deleteLineItems()
-                        self.viewModel.deleteLineItems { error in
-                                       if let error = error {
-                                           print("Failed to delete line items: \(error.localizedDescription)")
-                                       } else {
-                                           print("Line items deleted successfully")
-                                       }
-                                   }
-                                
+                        //self.deleteLineItems()
+//                        self.viewModel.deleteLineItems { error in
+//                                       if let error = error {
+//                                           print("Failed to delete line items: \(error.localizedDescription)")
+//                                       } else {
+//                                           print("Line items deleted successfully")
+//                                       }
+//                                   }
+                        self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
                         
                     }
@@ -122,8 +123,11 @@ class PaymentViewController: UIViewController {
     @IBAction func Payment(_ sender: UIButton) {
         if appleButton.isSelected {
             startApplePay()
+            //confirmOrder()
+            print("grade total : \(orderViewModel.fetchGradeTotal())")
         } else {
             // Handle COD payment
+            deleteLineItems()
         }
     }
     
