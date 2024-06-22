@@ -103,9 +103,12 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbQ-QT-mJN">
-                                <rect key="frame" x="141" y="746" width="72" height="62"/>
+                                <rect key="frame" x="159" y="746" width="72" height="62"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="g"/>
+                                <connections>
+                                    <action selector="signInWithGoogle:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="pxd-J4-7nP"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -133,6 +136,7 @@
                             <constraint firstItem="2rf-Ps-poK" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="5" id="czZ-c7-d72"/>
                             <constraint firstItem="hSA-lq-r2v" firstAttribute="top" secondItem="B9x-A7-L5d" secondAttribute="bottom" constant="19" id="eMe-6y-bAf"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="oev-ZH-AMF" secondAttribute="trailing" constant="30" id="i0D-6q-VGB"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="cbQ-QT-mJN" secondAttribute="bottom" constant="10" id="obt-o7-TRh"/>
                             <constraint firstItem="ijr-Zq-Cav" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leadingMargin" id="vST-mR-YJC"/>
                             <constraint firstItem="B9x-A7-L5d" firstAttribute="centerX" secondItem="vct-gn-mPK" secondAttribute="centerX" id="yVo-Hl-f4v"/>
                             <constraint firstItem="cbQ-QT-mJN" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="yXM-bi-Ri6"/>
@@ -145,6 +149,7 @@
                         <outlet property="loginButton" destination="B9x-A7-L5d" id="LKw-YO-i4a"/>
                         <outlet property="passwordTxt" destination="vct-gn-mPK" id="pfr-Wh-t7H"/>
                         <outlet property="showHideButton" destination="x8u-MV-0bQ" id="df9-3e-R9I"/>
+                        <outlet property="siginInGoogle" destination="cbQ-QT-mJN" id="VmO-hf-Bup"/>
                         <outlet property="siginUP" destination="HXd-Xe-Iy7" id="WIL-V6-JNe"/>
                     </connections>
                 </viewController>
