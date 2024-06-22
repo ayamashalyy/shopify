@@ -70,6 +70,10 @@ extension UIBarButtonItem {
         guard let customView = self.customView else {
             return
         }
-        customView.subviews.filter { $0.tag == badgeViewTag }.forEach { $0.removeFromSuperview() }
+        customView.subviews.forEach { view in
+            if view is BadgeView {
+                view.removeFromSuperview()
+            }
+        }
     }
 }

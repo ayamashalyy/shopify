@@ -50,6 +50,8 @@
 		03ED90F52C0DCED600EE0A50 /* OnbordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03ED90F42C0DCED600EE0A50 /* OnbordingViewController.swift */; };
 		03ED90F82C0DD2E400EE0A50 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03ED90F72C0DD2E400EE0A50 /* Color.swift */; };
 		03EFE7782C0F120800B2F51E /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EFE7772C0F120800B2F51E /* PaymentViewController.swift */; };
+		03FD80402C26025C005A3674 /* AddAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FD803F2C26025C005A3674 /* AddAddressViewController.swift */; };
+		03FD80422C261DB7005A3674 /* EditAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FD80412C261DB7005A3674 /* EditAddressViewController.swift */; };
 		3E9062E48B8C093AB275CAB3 /* Pods_Shopify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F670E37743DB839BF0AE2DB2 /* Pods_Shopify.framework */; };
 		517E826A2C1277D0004FBD00 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517E82692C1277D0004FBD00 /* NetworkManager.swift */; };
 		517E826C2C1278A3004FBD00 /* Brands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517E826B2C1278A3004FBD00 /* Brands.swift */; };
@@ -162,6 +164,8 @@
 		03ED90F42C0DCED600EE0A50 /* OnbordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnbordingViewController.swift; sourceTree = "<group>"; };
 		03ED90F72C0DD2E400EE0A50 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		03EFE7772C0F120800B2F51E /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		03FD803F2C26025C005A3674 /* AddAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAddressViewController.swift; sourceTree = "<group>"; };
+		03FD80412C261DB7005A3674 /* EditAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressViewController.swift; sourceTree = "<group>"; };
 		32F3EAF027D02D4428DBD6A9 /* Pods-Shopify-ShopifyUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shopify-ShopifyUITests.release.xcconfig"; path = "Target Support Files/Pods-Shopify-ShopifyUITests/Pods-Shopify-ShopifyUITests.release.xcconfig"; sourceTree = "<group>"; };
 		517E82692C1277D0004FBD00 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NetworkManager.swift; path = Shopify/Modules/Orders/View/NetworkManager.swift; sourceTree = SOURCE_ROOT; };
 		517E826B2C1278A3004FBD00 /* Brands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Brands.swift; path = Shopify/Modules/Orders/View/Brands.swift; sourceTree = SOURCE_ROOT; };
@@ -309,6 +313,8 @@
 				037955CF2C0E7250003A3AF9 /* SelectAddressCell.swift */,
 				037955D02C0E7250003A3AF9 /* SelectAddressCell.xib */,
 				037955D32C0E7715003A3AF9 /* SelectAddressViewController.swift */,
+				03FD803F2C26025C005A3674 /* AddAddressViewController.swift */,
+				03FD80412C261DB7005A3674 /* EditAddressViewController.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1157,6 +1163,7 @@
 				03678AD12C13B1920046E6E8 /* ShoppingCartViewModel.swift in Sources */,
 				51871C462C0F122F0045676F /* CategoriesViewController.swift in Sources */,
 				7DCAADC12C132FA6000FC551 /* Product.swift in Sources */,
+				03FD80402C26025C005A3674 /* AddAddressViewController.swift in Sources */,
 				7DB203652C17630800CFFC65 /* ViewModel.swift in Sources */,
 				03678AD32C13B3490046E6E8 /* DraftOrder.swift in Sources */,
 				03D35C892C0CEC1300523AF7 /* ViewController.swift in Sources */,
@@ -1193,6 +1200,7 @@
 				03D1AF142C1CE83D00741517 /* summaryCartCell.swift in Sources */,
 				03CF26F02C15166C005A89D1 /* Common Methods.swift in Sources */,
 				03D35C872C0CEC1300523AF7 /* SceneDelegate.swift in Sources */,
+				03FD80422C261DB7005A3674 /* EditAddressViewController.swift in Sources */,
 				7D30296D2C12981400B235B4 /* AllFavViewController.swift in Sources */,
 				03ED90ED2C0DCCC700EE0A50 /* HomeViewController.swift in Sources */,
 				03E3E5B52C19071200F0164C /* ContactUsViewController.swift in Sources */,
