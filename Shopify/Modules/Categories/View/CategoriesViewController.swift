@@ -54,8 +54,7 @@ class CategoriesViewController: UIViewController {
     
 
     
-    func updateCartBadge() {
-        let itemCount = shoppingCartViewModel.cartItemCount
+    func updateCartBadge(itemCount:Int) {
         print("Item count: \(itemCount)")
         if itemCount > 0 {
             cartButton.addBadge(text: "\(itemCount)", color: .orange)
@@ -66,19 +65,15 @@ class CategoriesViewController: UIViewController {
     
     
     private func fetchCartItemsAndUpdateBadge() {
-        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Failed to fetch cart items: \(error.localizedDescription)")
-            } else {
-                self.updateCartBadge()
-            }
+
+        categoriesViewModel.getShoppingCartItemsCount { count, error in
+            guard let count = count else {return}
+            self.updateCartBadge(itemCount: count - 1)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateCartBadge()
         fetchCartItemsAndUpdateBadge()
         fetchExchangeRates()
         checkNetworkConnection()

@@ -11,6 +11,7 @@ class HomeViewModel {
     var brands: [Brand] = []
     var discountCodes: [DiscountCode] = []
     var priceRules: [PriceRule] = []
+    var cartItemsCount = 0
     
     private let reachabilityChecker: CheckNetworkReachability.Type
     
@@ -110,6 +111,16 @@ class HomeViewModel {
         }
         return priceRules[index]
     }
+    
+        
+   
+    
+    func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
+    {
+        NetworkManager.getShoppingCartItemsCount(completion: completion)
+    }
+    
+    
     
     func fetchPriceRules(completion: @escaping (Error?) -> Void) {
         NetworkManager.fetchDataFromApi(endpoint: .discount_code, rootOfJson: .priceRules, addition: ".json") { [weak self] data, error in

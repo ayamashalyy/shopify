@@ -128,8 +128,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.decrementButton.addTarget(self, action: #selector(decrementQuantity(_:)), for: .touchUpInside)
         customizeButton(button: cell.incrementButton)
         customizeButton(button: cell.decrementButton)
-        
-        
+        cell.isHidden = item.4 == 45293432635640 ? true : false
         return cell
     }
     
@@ -244,17 +243,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func updateSubtotal() {
-        
-        let subtotal = shoppingCartViewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
-        subtotalLabel.text = "\(subtotal)$"
-        
-        
-        // Convert subtotal using SettingsViewModel
+        let filteredItems = shoppingCartViewModel.cartItems.filter { $0.4 != 45293432635640 }
+        let subtotal = filteredItems.reduce(0) { ($0 + $1.1 * $1.2) }
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let convertedSubtotalString = settingsViewModel.convertPrice(String(subtotal), to: selectedCurrency) ?? "\(subtotal)$"
-        
         subtotalLabel.text = convertedSubtotalString
     }
+
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "Second", bundle: nil)

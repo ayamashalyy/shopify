@@ -43,29 +43,25 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     
-    func updateCartBadge() {
-        let itemCount = shoppingCartViewModel.cartItemCount
+    
+    func updateCartBadge(itemCount:Int) {
         print("Item count: \(itemCount)")
         if itemCount > 0 {
             cartButton.addBadge(text: "\(itemCount)", color: .orange)
         } else {
             cartButton.removeBadge()
         }
-    }  
+    }
     
     
     private func fetchCartItemsAndUpdateBadge() {
-        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Failed to fetch cart items: \(error.localizedDescription)")
-            } else {
-                DispatchQueue.main.async {
-                    self.updateCartBadge()
-                }
-            }
+
+        shoppingCartViewModel.getShoppingCartItemsCount { count, error in
+            guard let count = count else {return}
+            self.updateCartBadge(itemCount: count - 1)
         }
     }
+    
         
     func setupCartButton() {
         let button = UIButton(type: .custom)
@@ -102,7 +98,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             getWishList()
             getOrders()
             fetchCartItemsAndUpdateBadge()
-            updateCartBadge()
         } else {
             setting.isEnabled = false
             self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",

@@ -15,29 +15,29 @@ class PaymentViewController: UIViewController {
     @IBOutlet weak var confirmPay: UIButton!
     @IBOutlet weak var totalPrice: UILabel!
     
-
+    
     let shoppingCartViewModel = ShoppingCartViewModel()
     let orderViewModel = OrderViewModel.shared
     let homeViewModel = HomeViewModel()
     let settingsViewModel = SettingsViewModel()
     let viewModel = ShoppingCartViewModel()
-
+    
     var grandTotal: Int = 0
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIButton()
         setupConfirmPayButton()
-
+        
         //deleteLineItems()
         fetchExchangeRates()
-
+        
         totalPrice.text = "\(grandTotal)$"
         
-
+        
     }
-
+    
     func confirmOrder(){
         shoppingCartViewModel.fetchDraftOrders { error in
             if let error = error {
@@ -56,13 +56,13 @@ class PaymentViewController: UIViewController {
                         print("Order created successfully: \(order)")
                         self.deleteLineItems()
                         self.viewModel.deleteLineItems { error in
-                                       if let error = error {
-                                           print("Failed to delete line items: \(error.localizedDescription)")
-                                       } else {
-                                           print("Line items deleted successfully")
-                                       }
-                                   }
-                                
+                            if let error = error {
+                                print("Failed to delete line items: \(error.localizedDescription)")
+                            } else {
+                                print("Line items deleted successfully")
+                            }
+                        }
+                        
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
                         
                     }
@@ -121,9 +121,11 @@ class PaymentViewController: UIViewController {
     @IBAction func Payment(_ sender: UIButton) {
         if appleButton.isSelected {
             startApplePay()
+            Navigation.ToHome(from: self)
         } else {
             confirmOrder()
             print("post Successfull of COD")
+            Navigation.ToHome(from: self)
         }
     }
     
@@ -150,7 +152,7 @@ class PaymentViewController: UIViewController {
         
         return request
     }
-
+    
     func startApplePay() {
         
         if let paymentVC = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest) {
@@ -191,8 +193,9 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
     
     func performCustomActionForApplePaySuccess() {
         confirmOrder()
-            print("post Successfull")
-        }
+        print("post Successfull")
+        Navigation.ToHome(from: self)
+    }
 }
 
 

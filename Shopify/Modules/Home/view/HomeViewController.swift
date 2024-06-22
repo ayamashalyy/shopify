@@ -72,13 +72,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchBrands()
-        updateCartBadge()
         fetchCartItemsAndUpdateBadge()
         checkNetworkConnection()
     }
     
-    func updateCartBadge() {
-        let itemCount = shoppingCartViewModel.cartItemCount
+    func updateCartBadge(itemCount:Int) {
         print("Item count: \(itemCount)")
         if itemCount > 0 {
             cartButton.addBadge(text: "\(itemCount)", color: .orange)
@@ -89,13 +87,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     
     private func fetchCartItemsAndUpdateBadge() {
-        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Failed to fetch cart items: \(error.localizedDescription)")
-            } else {
-                self.updateCartBadge()
-            }
+
+        homeViewModel.getShoppingCartItemsCount { count, error in
+            guard let count = count else {return}
+            self.updateCartBadge(itemCount: count - 1)
         }
     }
     
@@ -232,7 +227,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         brandsCollectionView.register(CustomBrandCell.self, forCellWithReuseIdentifier: "brandCell")
     }
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == couponsCollectionView {
             let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
@@ -245,7 +240,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             showNoInternetAlert()
         }
     }
-
+    
     private func showNoInternetAlert() {
         let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
