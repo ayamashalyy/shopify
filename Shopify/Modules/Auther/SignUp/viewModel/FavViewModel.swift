@@ -13,20 +13,13 @@ class FavViewModel {
     
     var LineItems : [LineItem]?{
         didSet{
-           
             bindResultToViewController()
-         //   print("LineItems     is    \(LineItems?.count)")
         }
     }
     
     func getFavs() {
-        print("wishList getFavs")
         let addition = "\(Authorize.favDraftOrder()!).json"
-        // for testin the get and show but real should be the above
-       //let addition = "1184814104824.json"
         
-      //  print( "additon in fav Authorize.favDraftOrder \(addition)")
-
         NetworkManager.fetchDataFromApi(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, addition: addition) { data , error in
             guard let data = data, error == nil else {
                 print("error in data")
@@ -42,14 +35,4 @@ class FavViewModel {
             }
         }
     }
-    
-    
-    func removeLineItem(index:Int){
-        print("index is \(index)")
-        
-    }
-
-    
-    
-    
 }

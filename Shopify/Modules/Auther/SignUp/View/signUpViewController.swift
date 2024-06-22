@@ -46,11 +46,7 @@ class signUpViewController: UIViewController {
       
        
     @IBAction func signUpBtn(_ sender: UIButton) {
-        print("insignin screen after press signup button")
-        // Validate fields
         guard let firstNameText = firstName.text, !firstNameText.isEmpty else {
-            print("firstNameText")
-
             showAlert(message: "First name is required.")
             return
         }
@@ -89,18 +85,25 @@ class signUpViewController: UIViewController {
              return
          }
         
-        signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, tags: passText) { createdNewCustomer in
-            if createdNewCustomer {
-                self.settingsViewModel.saveCurrencySelection(.USD)
-
-                self.showAlert(message: "Pleace check youe email and make verifcation, then login"){action in
-                    Navigation.ToALogin(from: self)
+        if  CheckNetworkReachability.checkNetworkReachability(){
+            
+            signUPviewModel?.signUp( email: emailText, firstName: firstNameText, lastName: lastNameText, tags: passText) { createdNewCustomer in
+                if createdNewCustomer {
+                    self.settingsViewModel.saveCurrencySelection(.USD)
+                    
+                    self.showAlert(message: "Pleace check youe email and make verifcation, then login"){action in
+                        Navigation.ToALogin(from: self)
+                    }
+                    
+                } else {
+                    self.showAlert(message: "Sorry, Try reregiste with different email")
                 }
-
-            } else {
-                self.showAlert(message: "Sorry, Try reregiste with different email")
             }
+        }else {
+            showAlert(message: "Connect with network then login")
         }
+        
+        
     }
     
     @IBOutlet weak var signUpButton: UIButton!
