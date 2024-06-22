@@ -37,7 +37,7 @@ class ShoppingCartViewModel {
             return
         }
         
-        for index in 0..<lineItems.count  {
+        for index in 0..<lineItems.count {
             let lineItem = lineItems[index]
             let id = lineItem.variant_id ?? 0
             let productId = lineItem.product_id ?? 0
@@ -224,7 +224,8 @@ class ShoppingCartViewModel {
                     "value": String(lineItem.properties?.first(where: { $0.name == "quantityInString" })?.value ?? "0")
                 ])
                 
-                if lineItem.variant_id == 45293446398200 {
+                if lineItem.variant_id == 45293444825336
+                      {
                     lineItemsDict.append([
                         "variant_id": lineItem.variant_id ?? 0,
                         "quantity": lineItem.quantity ?? 0,
@@ -259,7 +260,5 @@ class ShoppingCartViewModel {
     var cartItemCount: Int {
         return cartItems.count
     }
-    
-    
-    
+
 }

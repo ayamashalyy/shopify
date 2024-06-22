@@ -22,18 +22,17 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         setupButtons()
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
-        fetchDraftOrders()
-        fetchExchangeRates()
-        
-        shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
-            self?.tableView.reloadData()
-            self?.updateSubtotal()
-        }
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchDraftOrders()
+        shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
+            self?.tableView.reloadData()
+            self?.updateSubtotal()
+        }
+        fetchExchangeRates()
         if Authorize.isRegistedCustomer() {
             getThemButton.isEnabled = true
             
@@ -84,7 +83,6 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     
-    
     func setupButtons() {
         getThemButton.backgroundColor = UIColor(hex: "#FF7D29")
         getThemButton.setTitleColor(UIColor.white, for: .normal)
@@ -130,8 +128,8 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.decrementButton.addTarget(self, action: #selector(decrementQuantity(_:)), for: .touchUpInside)
         customizeButton(button: cell.incrementButton)
         customizeButton(button: cell.decrementButton)
-       
-
+        
+        
         return cell
     }
     
@@ -154,7 +152,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             present(vc, animated: true, completion: nil)
         }
     }
-
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
         footerView.backgroundColor = UIColor.clear
