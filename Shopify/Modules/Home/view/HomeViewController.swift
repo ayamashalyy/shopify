@@ -33,18 +33,28 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     
     @IBAction func goToFav(_ sender: UIBarButtonItem) {
-        print("go to favss from home")
-        Navigation.ToAllFavourite(from: self)
-        print("go to favss from home after")
-        
+        if homeViewModel.isNetworkReachable() {
+            print("go to favss from home")
+            Navigation.ToAllFavourite(from: self)
+            print("go to favss from home after")
+        } else {
+            showNoInternetAlert()
+        }
     }
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
-        Navigation.ToSearch(from: self, comeFromHome: true, products: [])
+        if homeViewModel.isNetworkReachable() {
+            Navigation.ToSearch(from: self, comeFromHome: true, products: [])
+        } else {
+            showNoInternetAlert()
+        }
     }
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        Navigation.ToOrders(from: self)
-        
+        if homeViewModel.isNetworkReachable() {
+            Navigation.ToOrders(from: self)
+        } else {
+            showNoInternetAlert()
+        }
     }
     
     
@@ -56,12 +66,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         fetchBrands()
         fetchPriceRules()
         setupCartButton()
+        checkNetworkConnection()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchBrands()
         updateCartBadge()
         fetchCartItemsAndUpdateBadge()
+        checkNetworkConnection()
     }
     
     func updateCartBadge() {
@@ -227,6 +240,18 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    private func checkNetworkConnection() {
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+        }
+    }
+
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -283,7 +308,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return
         }
         
-        let message = "Here is a discount code with \(priceRuleValue)% off: \(code) , do you want to get it"
+        let message = "Enjoy an Extraordinary \(priceRuleValue)% Discount with \(code) 💐 \n Do you want to get it?"
         let alert = UIAlertController(title: "Discount Code", message: message, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

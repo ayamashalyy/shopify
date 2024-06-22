@@ -29,10 +29,16 @@ class CategoriesViewController: UIViewController {
     var additionalFABsVisible = false
     var blurEffectView: UIVisualEffectView?
     var settingsViewModel = SettingsViewModel()
+    let homeViewModel = HomeViewModel()
     
     @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
-        Navigation.ToAllFavourite(from: self)
-        
+        if homeViewModel.isNetworkReachable() {
+            print("go to favss from home")
+            Navigation.ToAllFavourite(from: self)
+            print("go to favss from home after")
+        } else {
+            showNoInternetAlert()
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +49,7 @@ class CategoriesViewController: UIViewController {
         fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
         fetchExchangeRates()
         setupCartButton()
+        checkNetworkConnection()
     }
     
 
@@ -74,6 +81,7 @@ class CategoriesViewController: UIViewController {
         updateCartBadge()
         fetchCartItemsAndUpdateBadge()
         fetchExchangeRates()
+        checkNetworkConnection()
     }
     
     func setupCartButton() {
@@ -103,12 +111,19 @@ class CategoriesViewController: UIViewController {
     }
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        Navigation.ToOrders(from: self)
-        
+        if homeViewModel.isNetworkReachable() {
+            Navigation.ToOrders(from: self)
+        } else {
+            showNoInternetAlert()
+        }
     }
     
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
-        Navigation.ToSearch(from: self, comeFromHome: false, products: categoriesViewModel.categoryProducts)
+        if homeViewModel.isNetworkReachable() {
+            Navigation.ToSearch(from: self, comeFromHome: false, products: categoriesViewModel.categoryProducts)
+        } else {
+            showNoInternetAlert()
+        }
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -349,6 +364,18 @@ class CategoriesViewController: UIViewController {
     func removeBlurEffect() {
         blurEffectView?.removeFromSuperview()
         blurEffectView = nil
+    }
+    
+    private func checkNetworkConnection() {
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+        }
+    }
+
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
 }

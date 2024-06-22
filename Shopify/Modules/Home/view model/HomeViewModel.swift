@@ -12,6 +12,16 @@ class HomeViewModel {
     var discountCodes: [DiscountCode] = []
     var priceRules: [PriceRule] = []
     
+    private let reachabilityChecker: CheckNetworkReachability.Type
+    
+    init(reachabilityChecker: CheckNetworkReachability.Type = CheckNetworkReachability.self) {
+        self.reachabilityChecker = reachabilityChecker
+    }
+    
+    func isNetworkReachable() -> Bool {
+        return reachabilityChecker.checkNetworkReachability()
+    }
+    
     func fetchBrands(completion: @escaping (Error?) -> Void) {
         
         NetworkManager.fetchDataFromApi(endpoint: .smartCollections, rootOfJson:.smartCollectionsRoot) { data, error in

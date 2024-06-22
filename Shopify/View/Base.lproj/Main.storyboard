@@ -440,10 +440,6 @@
                                     <action selector="seeMoreOrders:" destination="ok0-8O-MHZ" eventType="touchUpInside" id="E6y-5Y-zR7"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="shopu_logo" translatesAutoresizingMaskIntoConstraints="NO" id="sTX-BX-0kU">
-                                <rect key="frame" x="16" y="65" width="163" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="rco-u5-vyv"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -635,7 +631,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
