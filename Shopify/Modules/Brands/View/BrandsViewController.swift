@@ -187,60 +187,81 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
             guard let product = brandProductsViewModel.product(at: indexPath.row) else {
                 return
             }
-
+            
             if Authorize.isRegistedCustomer() {
                 cell.heartButton.isEnabled = false
-// deafult now if false
-                if product.variants[0].isSelected {
-                    // Remove from fav
-                    showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
-                                           okAction: { [weak self] _ in
-                        print("OK button remove tapped")
-                        self?.productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                if product.variants[0].id != fakeProductInDraftOrder {
+                    // deafult now if false
+                    if product.variants[0].isSelected {
+                        // Remove from fav
+                        showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
+                                               okAction: { [weak self] _ in
+                            print("OK button remove tapped")
+                            self?.productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                                DispatchQueue.main.async {
+                                    if isSuccess {
+                                        product.variants[0].isSelected = false
+                                        cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                        cell.heartButton.isEnabled = true
+                                        print("remove succeful")
+                                    } else {
+                                        self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                        cell.heartButton.isEnabled = true
+                                    } } }
+                        }, cancelAction: { _ in
+                            cell.heartButton.isEnabled = true
+                        } )
+                    } else {
+                        // Add to fav
+                        productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
                             DispatchQueue.main.async {
                                 if isSuccess {
-                                    product.variants[0].isSelected = false
-                                    cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                    cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                                     cell.heartButton.isEnabled = true
-                                    print("remove succeful")
+                                    print("added succesfully ")
+                                    product.variants[0].isSelected = true
+                                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                                    
                                 } else {
-                                    self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                    self?.showAlertWithTwoOption(message: "Failed to add to favorites")
                                     cell.heartButton.isEnabled = true
                                 }
                             }
                         }
-                    }, cancelAction: { _ in
-                        cell.heartButton.isEnabled = true
-                              }
-                    )
-                } else {
-                    // Add to fav
-                    productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
-                        DispatchQueue.main.async {
-                            if isSuccess {
-                                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                                cell.heartButton.isEnabled = true
-                                print("added succesfully ")
-                                product.variants[0].isSelected = true
-                                self?.showCheckMarkAnimation(mark: "heart.fill")
-
-                            } else {
-                                self?.showAlertWithTwoOption(message: "Failed to add to favorites")
-                                cell.heartButton.isEnabled = true
-                            }
-                        }
                     }
-                }
-            } else {
-                showAlertWithTwoOption(message: "Login to add to favorites?",
-                                       okAction: {  _ in
-                    Navigation.ToALogin(from: self)
-                    print("Login OK button tapped")
-                })
-            }
-        }
-    }
+                } else {
+                    showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
 
+                }} else {
+                    self.showAlertWithTwoOptionOkayAndCancel(message: "Login to add to faviourts?",
+                                                             okAction: { action in
+                        Navigation.ToALogin(from: self)
+                        print("OK button tapped")
+                    }
+                    )
+                }
+            }
+    }
+    
+    private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)

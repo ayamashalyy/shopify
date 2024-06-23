@@ -41,9 +41,7 @@ class AllFavViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if Authorize.isRegistedCustomer() {
             setUpUI()
-            
             myfavLineItem.removeAll()
             allFavTable.reloadData()
             
@@ -76,16 +74,8 @@ class AllFavViewController: UIViewController {
                 self.indicator.stopAnimating()
                 self.alartWithOneOption(message: "Sorry we can not bring your faviourts products, please connect network and try again")
             }
-        }else{
-            self.showAlertWithTwoOption(message: "Login to add to faviourts?",
-                                        okAction: { action in
-                Navigation.ToALogin(from: self)
-                print("OK button tapped")
-            }
-            )
-        }
     }
-    
+        
     func alartWithOneOption (message: String) {
         let alertController = UIAlertController(title: "Failed to load", message: message, preferredStyle: .alert)
         let okAlertAction = UIAlertAction(title: "OK", style: .default) { _ in
@@ -108,13 +98,12 @@ class AllFavViewController: UIViewController {
     }
     
     func checkIfNoData() {
-        if indicator.isHidden{
             if myfavLineItem.count <= 1 {
                 allFavTable.backgroundView = createNoDataBackgroundView()
             } else {
                 allFavTable.backgroundView = nil
             }
-        }
+        
     }
     
     func fetchExchangeRates() {
@@ -142,7 +131,7 @@ class AllFavViewController: UIViewController {
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         let label = UILabel()
-        label.text = "No Favorites yet. Add to it"
+        label.text = "No favorite products"
         label.textColor = .orange
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 16)
@@ -170,7 +159,6 @@ extension AllFavViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count = max(myfavLineItem.count - 1, 0)
-        checkIfNoData()
         return count
     }
     

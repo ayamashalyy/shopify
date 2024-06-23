@@ -96,89 +96,90 @@ class ProductViewController: UIViewController {
     
     
     @IBOutlet weak var pageContoller: UIPageControl!
-    
-    
-    
+        
     @IBAction func productFavBtn(_ sender: UIButton) {
         
-        if   (Authorize.isRegistedCustomer())
-        {
+        if Authorize.isRegistedCustomer() {
             productFavButton.isEnabled = false
-            
             guard let productIdString = productId, let firstImageURL = firstImageURL else {
                 showAlert(message: "The product not loaded yet")
                 return
             }
             // i need variant id not product id as draft order deal with it
-            if isFav{
-                // remove from fav
-                let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
-                    self.productFavButton.isEnabled = true
-
-                }))
-
-                alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-                    guard let self = self else { return }
-                    
+            if firstVariantId != fakeProductInDraftOrder {
+                if isFav{
+                    // remove from fav
+                    let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                        self.productFavButton.isEnabled = true
+                        
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        if  CheckNetworkReachability.checkNetworkReachability(){
+                            self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
+                                DispatchQueue.main.async {
+                                    if isSuccess {
+                                        self.isFav = false
+                                        self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                        self.productFavButton.isEnabled = true
+                                    }}}
+                        }else {
+                            productFavButton.isEnabled = true
+                            showAlert(message: "Failed to remove from faviourt as lost network connection")
+                        } }))
+                    present(alertController, animated: true, completion: nil)
+                }
+                else{ // add to fav
                     if  CheckNetworkReachability.checkNetworkReachability(){
-                    self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
-                        DispatchQueue.main.async {
-                            if isSuccess {
-                                self.isFav = false
-                                self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                                self.productFavButton.isEnabled = true
-                                
+                        productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
+                            DispatchQueue.main.async {
+                                if isSuccess {
+                                    self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                                    self?.isFav = true
+                                    self?.productFavButton.isEnabled = true
+                                    
+                                } else {
+                                    self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
+                                    self?.productFavButton.isEnabled = true
+                                }
                             }
                         }
-                    }
                     }else {
                         productFavButton.isEnabled = true
-                        showAlert(message: "Failed to remove from faviourt as lost network connection")
-                    }
-                }))
-                present(alertController, animated: true, completion: nil)
-            }
-            else{
-                // add to fav
-//                print("firstVariantId\(firstVariantId)!")
-                
-                if  CheckNetworkReachability.checkNetworkReachability(){
-
-                productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
-                    DispatchQueue.main.async {
-                        if isSuccess {
-                            self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                            self?.showCheckMarkAnimation(mark: "heart.fill")
-                            self?.isFav = true
-                            self?.productFavButton.isEnabled = true
-                            
-                        } else {
-                            self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
-                            self?.productFavButton.isEnabled = true
-                        }
+                        showAlert(message: "Failed to add from faviourt as lost network connection")
                     }
                 }
-                }else {
-                 productFavButton.isEnabled = true
-
-                    showAlert(message: "Failed to add from faviourt as lost network connection")
-                }
-            }}else {
-                
-                self.showAlertWithTwoOption(message: "Login to add to faviourts?",
-                                            okAction: { action in
+            } else {
+                showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
+            }}
+            else {
+                self.showAlertWithTwoOptionOkayAndCancel(message: "Login to add to faviourts?",
+                                                         okAction: { action in
                     Navigation.ToALogin(from: self)
                     print("OK button tapped")
                 }
                 )
             }
+            
     }
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
         let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
         
         alertController.addAction(okAlertAction)
@@ -204,9 +205,7 @@ class ProductViewController: UIViewController {
                     if let variantText = variantButton.titleLabel?.text {
                         selectedVariants.append(variantText)
                         
-                        
-                        print("the selectedVariants number = \(selectedVariants.count)")
-                        
+                //        print("the selectedVariants number = \(selectedVariants.count)")
                         
                         for variant in productViewModel?.product?.variants ?? [] {
                             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
@@ -228,15 +227,15 @@ class ProductViewController: UIViewController {
                 }
             }
             
-            print("selectedVariantsIDsAndImageUrl number\(selectedVariantsIDsAndImageUrl.count)")
+     //       print("selectedVariantsIDsAndImageUrl number\(selectedVariantsIDsAndImageUrl.count)")
             
             if selectedVariantsIDsAndImageUrl.count == 0 {
                 self.showAlert(message: "Please choose your size and color first, then add to card" ){
-                               action in
+                    action in
                     self.addToCard.isEnabled = true
                 }
             }else {
-                    if  CheckNetworkReachability.checkNetworkReachability(){
+                if  CheckNetworkReachability.checkNetworkReachability(){
                     productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
                         DispatchQueue.main.async {
                             if isSuccess {
@@ -253,17 +252,16 @@ class ProductViewController: UIViewController {
                 }else {
                     showAlert(message: "Failed to add product to cart as lost network connection")
                     addToCard.isEnabled = true
-
+                    
                 }
             }
         } else {
-                self.showAlertWithTwoOption(message: "Login to add to faviourts?",
-                                            okAction: { action in
-                    Navigation.ToALogin(from: self)
-                }
-                )
-                
+            self.showAlertWithTwoOptionOkayAndCancel(message: "Login to add to cart?",
+                                                     okAction: { action in
+                Navigation.ToALogin(from: self)
             }
+            )
+        }
     }
     
     func hideAllCheckmarkImages() {
@@ -323,7 +321,7 @@ class ProductViewController: UIViewController {
         stack.addArrangedSubview(descriptionTextView)
         stack.addArrangedSubview(availableSizeAndColorLabel)
         
-                
+        
         // get it to save product to fav by it
         firstVariantId = variants.first?.id
         
