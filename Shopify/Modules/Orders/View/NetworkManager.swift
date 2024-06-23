@@ -44,6 +44,7 @@ enum Root: String {
     case orders = "orders"
     case discountCodes = "discount_codes"
     case priceRules = "price_rules"
+    case sendingInvoice = "draft_order_invoice"
 }
 
 // remove it every time before push
