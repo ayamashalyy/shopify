@@ -29,11 +29,9 @@ class PaymentViewController: UIViewController {
         super.viewDidLoad()
         setUIButton()
         setupConfirmPayButton()
-        
-        //deleteLineItems()
         fetchExchangeRates()
-        
         totalPrice.text = "\(grandTotal)$"
+        orderViewModel.storeGradeTotal("\(grandTotal)")
         
         
     }
@@ -54,7 +52,6 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
-                        self.deleteLineItems()
                         self.viewModel.deleteLineItems { error in
                             if let error = error {
                                 print("Failed to delete line items: \(error.localizedDescription)")
@@ -62,7 +59,8 @@ class PaymentViewController: UIViewController {
                                 print("Line items deleted successfully")
                             }
                         }
-                        
+
+                        self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
                         
                     }
@@ -122,7 +120,10 @@ class PaymentViewController: UIViewController {
         if appleButton.isSelected {
             startApplePay()
             Navigation.ToHome(from: self)
+            print("grade total : \(orderViewModel.fetchGradeTotal())")
+            
         } else {
+
             confirmOrder()
             print("post Successfull of COD")
             Navigation.ToHome(from: self)

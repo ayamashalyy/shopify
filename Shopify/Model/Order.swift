@@ -15,9 +15,11 @@ struct ConfirmOrder: Codable {
     let currency: String?
     let phone: String?
     let customer: CustomerOrder?
-    let subtotal_price: String?
+//    let subtotal_price: String?
     let total_discounts: String?
-    let total_price: String?
+    //let total_price: String?
+    let current_total_price: String?
+    let total_tax: String?
     let created_at: String?
 }
 
@@ -66,5 +68,6 @@ struct DefaultAddress: Codable{
     let city: String?
     let country: String?
 }
+
 
 

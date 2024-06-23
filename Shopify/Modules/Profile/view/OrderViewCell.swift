@@ -11,8 +11,8 @@ class OrderViewCell: UITableViewCell {
 
     @IBOutlet weak var TotalPriceValue: UILabel!
     @IBOutlet weak var CreationDateValue: UILabel!
-    @IBOutlet weak var ShippedToValue: UILabel!
-    @IBOutlet weak var PhoneValue: UILabel!
+    //@IBOutlet weak var ShippedToValue: UILabel!
+    //@IBOutlet weak var PhoneValue: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

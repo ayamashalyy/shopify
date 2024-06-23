@@ -279,10 +279,15 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let product = brandProductsViewModel.product(at: indexPath.row)
-        {
-            Navigation.ToProduct(productId: "\(product.id)", from: self)
-            
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+            return
+        }else{
+            if let product = brandProductsViewModel.product(at: indexPath.row)
+            {
+                Navigation.ToProduct(productId: "\(product.id)", from: self)
+                
+            }
         }
     }
     

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
@@ -58,8 +59,8 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
                 
         totalPrice.text = convertedPriceString
         creationDate.text = order.created_at
-        shipedTo.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
-        phone.text = order.customer?.default_address?.phone
+//        shipedTo.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+//        phone.text = order.customer?.default_address?.phone
         tableView.reloadData()
     }
     
@@ -84,6 +85,12 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
         if let item = orderViewModel?.selectedOrder?.line_items?[indexPath.row] {
             cell.titleLabel.text = item.title
             
+            if let properties = item.properties, let firstProperty = properties.first, let imageURL = URL(string: firstProperty.value) {
+                cell.itemImageView.kf.setImage(with: imageURL)
+            } else {
+                cell.itemImageView.image = UIImage(named: "splash_img.jpeg") // or set a placeholder image
+            }
+            
             // Convert price using SettingsViewModel
             let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
             let convertedPriceString = settingsViewModel.convertPrice(item.price ?? "0", to: selectedCurrency) ?? "\(item.price)USD"
@@ -104,10 +111,8 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
 
 }
 
-import UIKit
-
 class OrderItemCell: UITableViewCell {
-
+    
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -117,6 +122,14 @@ class OrderItemCell: UITableViewCell {
         view.layer.masksToBounds = true
         view.backgroundColor = .white
         return view
+    }()
+    
+    let itemImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        return imageView
     }()
     
     let titleLabel: UILabel = {
@@ -154,6 +167,7 @@ class OrderItemCell: UITableViewCell {
     
     private func setupViews() {
         contentView.addSubview(containerView)
+        containerView.addSubview(itemImageView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(priceLabel)
         containerView.addSubview(quantityLabel)
@@ -166,7 +180,12 @@ class OrderItemCell: UITableViewCell {
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
             
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            itemImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            itemImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            itemImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            itemImageView.heightAnchor.constraint(equalToConstant: 130),
+            
+            titleLabel.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             

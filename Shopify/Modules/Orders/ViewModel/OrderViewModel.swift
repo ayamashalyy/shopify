@@ -17,8 +17,8 @@ class OrderViewModel {
     var addressViewModel: AddressViewModel?
     var settingViewModel: SettingsViewModel?
     
-    var subtotalPrice: String = ""
-    var totalDiscounts: String = ""
+//    var subtotalPrice: String = ""
+//    var totalDiscounts: String = ""
     var totalPrice: String = ""
     var email = "" {
         didSet {
@@ -33,9 +33,9 @@ class OrderViewModel {
         self.settingViewModel = settingViewModel
     }
     
-    func setOrderDetails(subtotalPrice: String, totalDiscounts: String, totalPrice: String) {
-        self.subtotalPrice = subtotalPrice
-        self.totalDiscounts = totalDiscounts
+    func setOrderDetails(totalPrice: String) {
+//        self.subtotalPrice = subtotalPrice
+//        self.totalDiscounts = totalDiscounts
         self.totalPrice = totalPrice
     }
     func setEmail(email: String){
@@ -60,6 +60,9 @@ class OrderViewModel {
         let currency = settingViewModel?.getSelectedCurrency()?.rawValue
         let phone = addressViewModel?.getDefaultAddress()?.phone
         let customer = CustomerOrder(id: customerId ?? 0)
+        let gradeTotal = self.fetchGradeTotal()
+        let discountTotal = self.fetchTotalDiscount()
+        let totalTax = self.fetchTotalTax()
 
         let confirmOrder = ConfirmOrder(//email: email,
                                         line_items: lineItems,
@@ -67,10 +70,10 @@ class OrderViewModel {
                                        // shipping_address: shippingAddress,
                                         currency: "USD",
                                         phone: phone,
-                                        customer: customer,
-                                        subtotal_price: subtotalPrice,
-                                        total_discounts: totalDiscounts,
-                                        total_price: totalPrice,
+                                        customer: customer, 
+                                        total_discounts: discountTotal,
+                                        current_total_price: gradeTotal,
+                                        total_tax: "5.00",
                                         created_at: nil
         )
 
@@ -137,6 +140,30 @@ class OrderViewModel {
     func selectOrder(at index: Int) {
         guard index >= 0 && index < orders.count else { return }
         selectedOrder = orders[index]
+    }
+    
+    func storeGradeTotal(_ gradeTotal: String) {
+        UserDefaults.standard.set(gradeTotal, forKey: "gradeTotal")
+    }
+    
+    func fetchGradeTotal() -> String? {
+        return UserDefaults.standard.string(forKey: "gradeTotal")
+    }
+    
+    func storeTotalDiscount(_ gradeTotal: String) {
+        UserDefaults.standard.set(gradeTotal, forKey: "discountTotal")
+    }
+    
+    func fetchTotalDiscount() -> String? {
+        return UserDefaults.standard.string(forKey: "discountTotal")
+    }
+    
+    func storeTotalTax(_ gradeTotal: String) {
+        UserDefaults.standard.set(gradeTotal, forKey: "taxTotal")
+    }
+    
+    func fetchTotalTax() -> String? {
+        return UserDefaults.standard.string(forKey: "taxTotal")
     }
 
 }

@@ -118,6 +118,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
            let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
             let discountAmount = totalPrice * discountPercentage / 100
             let discountedTotal = totalPrice - discountAmount
+            orderViewModel.storeTotalDiscount("\(discountAmount)")
             let convertedDiscountedTotalString = settingsViewModel.convertPrice("\(discountedTotal)" , to: selectedCurrency) ?? "\(discountedTotal)USD"
             
             cell.discountLable.text = "\(discountPercentage)%"
@@ -128,11 +129,14 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         } else {
             cell.discountLable.text = "0.0 %"
             let convertedGradeTotalString = settingsViewModel.convertPrice("\(totalPrice + 5)" , to: selectedCurrency) ?? "\(totalPrice + 5)USD"
+
+            orderViewModel.storeTotalDiscount("")
             cell.gradeTotalLable.text = convertedGradeTotalString
         }
         
         let convertedShippingFeesString = settingsViewModel.convertPrice("\(5)" , to: selectedCurrency) ?? "\(5)USD"
         cell.shippingFeesLable.text = convertedShippingFeesString
+        orderViewModel.storeTotalTax("\(5)")
         cell.cancelDiscountHandler = { [weak self] in
             self?.cancelDiscount(for: cell)
         }
@@ -170,9 +174,9 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
             subtotalPrice = "\(totalPrice)"
             totalDiscounts = "\(discountAmount)"
             grandTotal = "\(totalPrice - discountAmount + 5)"
+            orderViewModel.setOrderDetails(totalPrice: grandTotal)
+            print("grand total \(grandTotal)")
         }
-        
-        orderViewModel.setOrderDetails(subtotalPrice: subtotalPrice, totalDiscounts: totalDiscounts, totalPrice: grandTotal)
         
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
