@@ -72,9 +72,28 @@ class PaymentViewController: UIViewController {
                         }
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+                        self.orderViewModel.sendInvoiceToCustomer { result in
+                            switch result {
+                            case .success():
+                                print("Invoice sent successfully")
+                            case .failure(let error):
+                                print("Failed to send invoice: \(error.localizedDescription)")
+                            }
+                        }
                         
                     }
                 }
+            }
+        }
+    }
+    
+    func sendInvoice(){
+        self.orderViewModel.sendInvoiceToCustomer { result in
+            switch result {
+            case .success():
+                print("Invoice sent successfully")
+            case .failure(let error):
+                print("Failed to send invoice: \(error.localizedDescription)")
             }
         }
     }
