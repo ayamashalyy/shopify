@@ -29,12 +29,10 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         ordersTable.dataSource = self
         ordersTable.delegate = self
         ordersTable.register(UINib(nibName: "OrderViewCell", bundle: nil), forCellReuseIdentifier: "OrderViewCell")
-        
+        ordersTable.separatorStyle = .none
         view.addSubview(noOrdersImageView)
         setupNoOrdersImageViewConstraints()
-        
         checkNetworkConnection()
-        
         fetchOrders()
         fetchExchangeRates()
         
@@ -43,7 +41,6 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkNetworkConnection()
-        
         if let selectedIndexPath = ordersTable.indexPathForSelectedRow {
             ordersTable.deselectRow(at: selectedIndexPath, animated: true)
         }
@@ -73,7 +70,6 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
     func fetchOrders() {
         orderViewModel.fetchOrders { [weak self] result in
             guard let self = self else { return }
-            
             DispatchQueue.main.async {
                 switch result {
                 case .success:
@@ -95,31 +91,21 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
                 print("Failed to fetch exchange rates: \(error.localizedDescription)")
                 return
             }
-            // Fetch orders after exchange rates are fetched
             self.ordersTable.reloadData()
         }
     }
     
-    //    func confirmOrder(){
-    //        orderViewModel.createOrder { order, error in
-    //            if let order = order {
-    //                print("Order created successfully: \(order)")
-    //            } else if let error = error {
-    //                print("Failed to create order: \(error.localizedDescription)")
-    //            }
-    //        }
-    //    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 170
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 20
+        return 40
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -139,7 +125,6 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         }
         let order = orderViewModel.orders[indexPath.row]
         
-        // Convert price using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(order.total_price)USD"
         
@@ -147,11 +132,6 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         cell.CreationDateValue.text = order.created_at
         //cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
         //cell.PhoneValue.text = order.customer?.default_address?.phone
-        
-        //cell.contentView.layer.cornerRadius = 10
-        cell.contentView.layer.borderWidth = 1
-        cell.contentView.layer.borderColor = UIColor(hex: "#FF7D29").cgColor
-        cell.contentView.layer.masksToBounds = true
         
         return cell
     }

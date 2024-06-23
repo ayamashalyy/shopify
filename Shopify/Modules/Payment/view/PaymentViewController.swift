@@ -72,6 +72,7 @@ class PaymentViewController: UIViewController {
 
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+                        Navigation.ToHome(from: self)
                         
                     }
                 }
@@ -129,13 +130,11 @@ class PaymentViewController: UIViewController {
     @IBAction func Payment(_ sender: UIButton) {
         if appleButton.isSelected {
             startApplePay()
-            Navigation.ToHome(from: self)
             print("grade total : \(orderViewModel.fetchGradeTotal())")
             
         } else {
             confirmOrder()
             print("post Successfull of COD")
-            Navigation.ToHome(from: self)
         }
     }
     

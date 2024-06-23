@@ -12,22 +12,42 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     var productViewModel = ProductViewModel()
     let settingsViewModel = SettingsViewModel()
     
-    var cartItems = [(String, Int, Int,String?)]()
     
+    
+    let emptyCartImageView: UIImageView = {
+           let imageView = UIImageView()
+           imageView.image = UIImage(named: "no_items")
+           imageView.contentMode = .scaleAspectFit
+           imageView.translatesAutoresizingMaskIntoConstraints = false
+           imageView.isHidden = true
+           return imageView
+       }()
+       
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        fetchDraftOrders()
         setupButtons()
+        setupEmptyCartImageView()
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
         
     }
     
+    func setupEmptyCartImageView() {
+          view.addSubview(emptyCartImageView)
+          NSLayoutConstraint.activate([
+              emptyCartImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+              emptyCartImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+              emptyCartImageView.widthAnchor.constraint(equalToConstant: 200),
+              emptyCartImageView.heightAnchor.constraint(equalToConstant: 200)
+          ])
+      }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchDraftOrders()
         shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
             self?.tableView.reloadData()
             self?.updateSubtotal()
@@ -76,7 +96,6 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             if let error = error {
                 print("Error fetching exchange rates: \(error)")
             } else {
-                // Reload data once exchange rates are fetched
                 self?.tableView.reloadData()
             }
         }
@@ -107,8 +126,6 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
         let item = shoppingCartViewModel.cartItems[indexPath.row]
         cell.productNameLabel.text = "\(item.0)"
-        
-        // Convert price using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let convertedPriceString = settingsViewModel.convertPrice(String(item.1), to: selectedCurrency) ?? "\(item.1)USD"
         cell.productPriceLabel.text = convertedPriceString
@@ -248,6 +265,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let convertedSubtotalString = settingsViewModel.convertPrice(String(subtotal), to: selectedCurrency) ?? "\(subtotal)$"
         subtotalLabel.text = convertedSubtotalString
+        emptyCartImageView.isHidden = !filteredItems.isEmpty
     }
 
     
