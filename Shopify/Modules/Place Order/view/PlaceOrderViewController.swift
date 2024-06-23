@@ -155,8 +155,6 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func cancelDiscount(for cell: PlaceOrderCell) {
-        cell.couponLable.text = ""
-        self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
         cell.couponLable.isEnabled = false
         let totalPrice = viewModel.cartItems.reduce(0) { $0 + ($1.4 != 45293432635640 ? $1.1 * $1.2 : 0) }
         cell.discountLable.text = "0.0 %"
