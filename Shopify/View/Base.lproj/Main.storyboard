@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yRd-gQ-vfL">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yRd-gQ-vfL">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -510,18 +511,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shiped To " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zCu-E7-ERC">
-                                <rect key="frame" x="10" y="197" width="85" height="21"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pdM-qX-7oP">
-                                <rect key="frame" x="10" y="238" width="52" height="21"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200 USD" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S75-VW-meM">
                                 <rect key="frame" x="143" y="115" width="240" height="20.333333333333343"/>
                                 <constraints>
@@ -542,27 +531,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Alex" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bou-uq-7bp">
-                                <rect key="frame" x="143" y="195.66666666666666" width="240" height="20.333333333333343"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="X5y-8J-Pds"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2+0 1186530" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nat-Pp-xSF">
-                                <rect key="frame" x="143" y="236" width="240" height="20.333333333333314"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="IOr-uS-iB9"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="240" id="SUh-cc-m2w"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Items" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3h-P3-R3k">
-                                <rect key="frame" x="10" y="279" width="51" height="21"/>
+                                <rect key="frame" x="10" y="197" width="51" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -572,39 +542,27 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ocy-Op-DKU" firstAttribute="top" secondItem="s8N-hJ-tkd" secondAttribute="top" constant="51" id="0XW-3n-dJ1"/>
-                            <constraint firstItem="zCu-E7-ERC" firstAttribute="top" secondItem="bAF-vL-Bkz" secondAttribute="bottom" constant="20" id="5ns-cZ-uI7"/>
+                            <constraint firstItem="A3h-P3-R3k" firstAttribute="top" secondItem="bAF-vL-Bkz" secondAttribute="bottom" constant="20" id="81V-17-2bc"/>
                             <constraint firstItem="kxX-dp-Jwp" firstAttribute="leading" secondItem="KqU-ox-iW6" secondAttribute="leading" constant="10" id="8SD-rM-5C6"/>
-                            <constraint firstItem="KqU-ox-iW6" firstAttribute="trailing" secondItem="Bou-uq-7bp" secondAttribute="trailing" constant="10" id="9Yw-Nb-7QE"/>
                             <constraint firstItem="ocy-Op-DKU" firstAttribute="leading" secondItem="KqU-ox-iW6" secondAttribute="leading" id="FYC-Md-MGH"/>
-                            <constraint firstItem="pdM-qX-7oP" firstAttribute="leading" secondItem="KqU-ox-iW6" secondAttribute="leading" constant="10" id="GWx-e1-KYZ"/>
                             <constraint firstItem="S75-VW-meM" firstAttribute="top" secondItem="ocy-Op-DKU" secondAttribute="bottom" constant="20" id="GvM-kM-fKw"/>
                             <constraint firstItem="sof-62-ZJH" firstAttribute="top" secondItem="S75-VW-meM" secondAttribute="bottom" constant="20" id="Kca-b4-SPz"/>
                             <constraint firstItem="sof-62-ZJH" firstAttribute="leading" secondItem="bAF-vL-Bkz" secondAttribute="trailing" constant="21" id="NEJ-L4-KA6"/>
-                            <constraint firstItem="zCu-E7-ERC" firstAttribute="leading" secondItem="KqU-ox-iW6" secondAttribute="leading" constant="10" id="PDd-bd-rsO"/>
                             <constraint firstItem="KqU-ox-iW6" firstAttribute="trailing" secondItem="S75-VW-meM" secondAttribute="trailing" constant="10" id="S9F-Ze-nd3"/>
-                            <constraint firstItem="pdM-qX-7oP" firstAttribute="top" secondItem="zCu-E7-ERC" secondAttribute="bottom" constant="20" id="Tcv-oO-cPl"/>
                             <constraint firstItem="KqU-ox-iW6" firstAttribute="bottom" secondItem="ocy-Op-DKU" secondAttribute="bottom" constant="723" id="WgN-9i-iQL"/>
-                            <constraint firstItem="Bou-uq-7bp" firstAttribute="leading" secondItem="zCu-E7-ERC" secondAttribute="trailing" constant="48" id="YCf-Yr-sGw"/>
-                            <constraint firstItem="Bou-uq-7bp" firstAttribute="top" secondItem="sof-62-ZJH" secondAttribute="bottom" constant="20" id="aLV-qA-c2U"/>
-                            <constraint firstItem="nat-Pp-xSF" firstAttribute="leading" secondItem="pdM-qX-7oP" secondAttribute="trailing" constant="81" id="bMe-vv-Bje"/>
                             <constraint firstItem="A3h-P3-R3k" firstAttribute="leading" secondItem="KqU-ox-iW6" secondAttribute="leading" constant="10" id="bMy-vg-B3i"/>
                             <constraint firstItem="KqU-ox-iW6" firstAttribute="trailing" secondItem="sof-62-ZJH" secondAttribute="trailing" constant="10" id="caz-oO-pfR"/>
                             <constraint firstItem="ocy-Op-DKU" firstAttribute="trailing" secondItem="KqU-ox-iW6" secondAttribute="trailing" id="dMP-F8-8xV"/>
                             <constraint firstItem="KqU-ox-iW6" firstAttribute="trailing" secondItem="A3h-P3-R3k" secondAttribute="trailing" constant="332" id="fqp-ib-y3w"/>
                             <constraint firstItem="S75-VW-meM" firstAttribute="leading" secondItem="kxX-dp-Jwp" secondAttribute="trailing" constant="47" id="gbu-gw-ffS"/>
                             <constraint firstItem="bAF-vL-Bkz" firstAttribute="leading" secondItem="KqU-ox-iW6" secondAttribute="leading" constant="10" id="lac-wc-6Q3"/>
-                            <constraint firstItem="A3h-P3-R3k" firstAttribute="top" secondItem="pdM-qX-7oP" secondAttribute="bottom" constant="20" id="oEK-T5-wsk"/>
-                            <constraint firstItem="KqU-ox-iW6" firstAttribute="trailing" secondItem="nat-Pp-xSF" secondAttribute="trailing" constant="10" id="pqa-Nn-duy"/>
                             <constraint firstItem="bAF-vL-Bkz" firstAttribute="top" secondItem="kxX-dp-Jwp" secondAttribute="bottom" constant="20" id="qKV-cH-2pO"/>
                             <constraint firstItem="kxX-dp-Jwp" firstAttribute="top" secondItem="ocy-Op-DKU" secondAttribute="bottom" constant="20" id="uHU-ne-pcf"/>
-                            <constraint firstItem="nat-Pp-xSF" firstAttribute="top" secondItem="Bou-uq-7bp" secondAttribute="bottom" constant="20" id="vy5-Gx-P1J"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="creationDate" destination="sof-62-ZJH" id="eKh-xK-BDV"/>
                         <outlet property="itemsLabel" destination="A3h-P3-R3k" id="tY2-e1-0qP"/>
-                        <outlet property="phone" destination="nat-Pp-xSF" id="c1z-he-QrO"/>
-                        <outlet property="shipedTo" destination="Bou-uq-7bp" id="NAa-67-NJt"/>
                         <outlet property="totalPrice" destination="S75-VW-meM" id="GtP-RF-E7y"/>
                     </connections>
                 </viewController>
@@ -630,7 +588,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

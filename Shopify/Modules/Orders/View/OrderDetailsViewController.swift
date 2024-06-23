@@ -12,8 +12,8 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBOutlet weak var totalPrice: UILabel!
     @IBOutlet weak var creationDate: UILabel!
-    @IBOutlet weak var shipedTo: UILabel!
-    @IBOutlet weak var phone: UILabel!
+//    @IBOutlet weak var shipedTo: UILabel!
+//    @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var itemsLabel: UILabel!
     
     let tableView = UITableView()

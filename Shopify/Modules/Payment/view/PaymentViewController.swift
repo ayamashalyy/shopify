@@ -30,18 +30,21 @@ class PaymentViewController: UIViewController {
         setUIButton()
         setupConfirmPayButton()
 
-
-        deleteLineItems()
-//        confirmOrder()
-
-        //deleteLineItems()
-
         fetchExchangeRates()
+        updateTotalPrice()
 
-        totalPrice.text = "\(grandTotal)$"
+    }
+    
+    func updateTotalPrice(){
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)" , to: selectedCurrency) ?? "\(grandTotal) USD"
+        totalPrice.text = convertedGrandTotalPrice
         orderViewModel.storeGradeTotal("\(grandTotal)")
-        
-
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchExchangeRates()
     }
 
     func confirmOrder(){
@@ -60,14 +63,13 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
-                        //self.deleteLineItems()
-//                        self.viewModel.deleteLineItems { error in
-//                                       if let error = error {
-//                                           print("Failed to delete line items: \(error.localizedDescription)")
-//                                       } else {
-//                                           print("Line items deleted successfully")
-//                                       }
-//                                   }
+                        self.viewModel.deleteLineItems { error in
+                            if let error = error {
+                                print("Failed to delete line items: \(error.localizedDescription)")
+                            } else {
+                                print("Line items deleted successfully")
+                            }
+                        }
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
                         
@@ -93,7 +95,7 @@ class PaymentViewController: UIViewController {
                 print("Failed to fetch exchange rates: \(error.localizedDescription)")
                 return
             }
-            // Update total price after exchange rates are fetched
+            self.updateTotalPrice()
             
         }
     }
@@ -127,12 +129,9 @@ class PaymentViewController: UIViewController {
     @IBAction func Payment(_ sender: UIButton) {
         if appleButton.isSelected {
             startApplePay()
-            //confirmOrder()
             print("grade total : \(orderViewModel.fetchGradeTotal())")
         } else {
-
             // Handle COD payment
-            deleteLineItems()
 
             confirmOrder()
             print("post Successfull of COD")
