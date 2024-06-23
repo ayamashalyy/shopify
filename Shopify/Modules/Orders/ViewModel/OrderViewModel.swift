@@ -9,7 +9,6 @@ class OrderViewModel {
     var cartViewModel: ShoppingCartViewModel?
     var addressViewModel: AddressViewModel?
     var settingViewModel: SettingsViewModel?
-    
     var totalPrice: String = ""
     var email = "" {
         didSet {
@@ -54,10 +53,13 @@ class OrderViewModel {
         let gradeTotal = self.fetchGradeTotal()
         let discountTotal = self.fetchTotalDiscount()
         let totalTax = self.fetchTotalTax()
-        
-        let confirmOrder = ConfirmOrder(
+    
+
+        let confirmOrder = ConfirmOrder(//email: email,
             line_items: lineItems,
             financial_status: "paid",
+            // shipping_address: shippingAddress,
+
             currency: "USD",
             phone: phone,
             customer: customer,
@@ -154,4 +156,45 @@ class OrderViewModel {
     func fetchTotalTax() -> String? {
         return UserDefaults.standard.string(forKey: "taxTotal")
     }
+
+    
+    func sendInvoiceToCustomer(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let draftOrderId = Authorize.cardDraftOrderId()
+                //,
+              //let customerEmail = Authorize.getCustomeremail()
+        else {
+            print("Draft Order ID or Customer Email is missing.")
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Missing draft order ID or customer email"])))
+            return
+        }
+
+        
+        let invoiceDetails: [String: Any] = [
+            "draft_order_invoice": [
+                "to": "rewanmohamed869@gmail.com",
+                "from": "abdosayed20162054@gmail.com",
+                "subject": "ShopU Invoice",
+                "custom_message": "Thank you for ordering!",
+                "bcc": ["abdosayed20162054@gmail.com"]
+            ]
+        ]
+        
+        do {
+            let body = try JSONSerialization.data(withJSONObject: invoiceDetails, options: [])
+            
+            let endpoint = "\(draftOrderId)/send_invoice.json"
+            
+            NetworkManager.postDataToApi(endpoint: .specficDraftOeder, rootOfJson: .sendingInvoice, body: body, addition: endpoint) { data, error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
+
 }
