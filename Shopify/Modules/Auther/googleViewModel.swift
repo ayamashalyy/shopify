@@ -37,7 +37,7 @@ class GoogleViewModel {
                 print(" aleardy user deal with it as normal login")
                 
                 // aleardy user deal with it as normal login
-                loginViewModel.isACustomer(email: googleEmail, password: ""){ isAcusotmer in
+                loginViewModel.isACustomerComeFromGoogle(email: googleEmail, password: ""){ isAcusotmer in
                     
                     if isAcusotmer{
                         print("he is a cusotmer ")

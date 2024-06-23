@@ -270,12 +270,19 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
 
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Second", bundle: nil)
-        if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
-            selectAddressVC.modalPresentationStyle = .fullScreen
-            present(selectAddressVC, animated: true, completion: nil)
+        let filteredItems = shoppingCartViewModel.cartItems.filter { $0.4 != 45293432635640 }
+        if filteredItems.isEmpty {
+            showAlert(message: "Your cart is empty. Please add items to your cart before proceeding.")
+        } else {
+            let storyboard = UIStoryboard(name: "Second", bundle: nil)
+            if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+                selectAddressVC.modalPresentationStyle = .fullScreen
+                present(selectAddressVC, animated: true, completion: nil)
+            }
         }
     }
+
+
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
