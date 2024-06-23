@@ -30,10 +30,20 @@ class PaymentViewController: UIViewController {
         setUIButton()
         setupConfirmPayButton()
         fetchExchangeRates()
-        totalPrice.text = "\(grandTotal)$"
+        updateTotalPrice()
+
+    }
+    
+    func updateTotalPrice(){
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)" , to: selectedCurrency) ?? "\(grandTotal) USD"
+        totalPrice.text = convertedGrandTotalPrice
         orderViewModel.storeGradeTotal("\(grandTotal)")
-        
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchExchangeRates()
     }
     
     func confirmOrder(){
@@ -85,7 +95,7 @@ class PaymentViewController: UIViewController {
                 print("Failed to fetch exchange rates: \(error.localizedDescription)")
                 return
             }
-            // Update total price after exchange rates are fetched
+            self.updateTotalPrice()
             
         }
     }
@@ -123,7 +133,6 @@ class PaymentViewController: UIViewController {
             print("grade total : \(orderViewModel.fetchGradeTotal())")
             
         } else {
-
             confirmOrder()
             print("post Successfull of COD")
             Navigation.ToHome(from: self)
