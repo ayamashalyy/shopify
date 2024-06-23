@@ -22,6 +22,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         setUpUI()
+        nameLabel.text = Authorize.getCustomerFullName()
     }
     
     func setUpUI(){

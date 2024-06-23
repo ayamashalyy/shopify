@@ -100,11 +100,13 @@ class ProductViewController: UIViewController {
     @IBAction func productFavBtn(_ sender: UIButton) {
         
         if Authorize.isRegistedCustomer() {
+            
             productFavButton.isEnabled = false
             guard let productIdString = productId, let firstImageURL = firstImageURL else {
                 showAlert(message: "The product not loaded yet")
                 return
             }
+            
             // i need variant id not product id as draft order deal with it
             if firstVariantId != fakeProductInDraftOrder {
                 if isFav{
@@ -149,6 +151,7 @@ class ProductViewController: UIViewController {
                     }else {
                         productFavButton.isEnabled = true
                         showAlert(message: "Failed to add from faviourt as lost network connection")
+
                     }
                 }
             } else {

@@ -224,7 +224,7 @@ class ShoppingCartViewModel {
                     "value": String(lineItem.properties?.first(where: { $0.name == "quantityInString" })?.value ?? "0")
                 ])
                 
-                if lineItem.variant_id == 45293444825336
+                if lineItem.variant_id == 45293432635640
                       {
                     lineItemsDict.append([
                         "variant_id": lineItem.variant_id ?? 0,
@@ -257,8 +257,9 @@ class ShoppingCartViewModel {
     }
     
     
-    var cartItemCount: Int {
-        return cartItems.count
+    func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
+    {
+        NetworkManager.getShoppingCartItemsCount(completion: completion)
     }
 
 }

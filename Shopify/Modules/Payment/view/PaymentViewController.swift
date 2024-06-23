@@ -15,30 +15,37 @@ class PaymentViewController: UIViewController {
     @IBOutlet weak var confirmPay: UIButton!
     @IBOutlet weak var totalPrice: UILabel!
     
-
+    
     let shoppingCartViewModel = ShoppingCartViewModel()
     let orderViewModel = OrderViewModel.shared
     let homeViewModel = HomeViewModel()
     let settingsViewModel = SettingsViewModel()
     let viewModel = ShoppingCartViewModel()
-
+    
     var grandTotal: Int = 0
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUIButton()
         setupConfirmPayButton()
-
-        //deleteLineItems()
-        confirmOrder()
         fetchExchangeRates()
-
-        totalPrice.text = "\(grandTotal)$"
-        
+        updateTotalPrice()
 
     }
+    
+    func updateTotalPrice(){
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
 
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)" , to: selectedCurrency) ?? "\(grandTotal) USD"
+        totalPrice.text = convertedGrandTotalPrice
+        orderViewModel.storeGradeTotal("\(grandTotal)")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchExchangeRates()
+    }
+    
     func confirmOrder(){
         shoppingCartViewModel.fetchDraftOrders { error in
             if let error = error {
@@ -55,19 +62,40 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
-                        self.deleteLineItems()
                         self.viewModel.deleteLineItems { error in
-                                       if let error = error {
-                                           print("Failed to delete line items: \(error.localizedDescription)")
-                                       } else {
-                                           print("Line items deleted successfully")
-                                       }
-                                   }
-                                
+                            if let error = error {
+                                print("Failed to delete line items: \(error.localizedDescription)")
+                            } else {
+                                print("Line items deleted successfully")
+                            }
+                        }
+
+                        self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+                        Navigation.ToHome(from: self)
+
+                        self.orderViewModel.sendInvoiceToCustomer { result in
+                            switch result {
+                            case .success():
+                                print("Invoice sent successfully")
+                            case .failure(let error):
+                                print("Failed to send invoice: \(error.localizedDescription)")
+                            }
+                        }
                         
                     }
                 }
+            }
+        }
+    }
+    
+    func sendInvoice(){
+        self.orderViewModel.sendInvoiceToCustomer { result in
+            switch result {
+            case .success():
+                print("Invoice sent successfully")
+            case .failure(let error):
+                print("Failed to send invoice: \(error.localizedDescription)")
             }
         }
     }
@@ -88,7 +116,7 @@ class PaymentViewController: UIViewController {
                 print("Failed to fetch exchange rates: \(error.localizedDescription)")
                 return
             }
-            // Update total price after exchange rates are fetched
+            self.updateTotalPrice()
             
         }
     }
@@ -122,8 +150,11 @@ class PaymentViewController: UIViewController {
     @IBAction func Payment(_ sender: UIButton) {
         if appleButton.isSelected {
             startApplePay()
+            print("grade total : \(orderViewModel.fetchGradeTotal())")
+            
         } else {
-            // Handle COD payment
+            confirmOrder()
+            print("post Successfull of COD")
         }
     }
     
@@ -150,7 +181,7 @@ class PaymentViewController: UIViewController {
         
         return request
     }
-
+    
     func startApplePay() {
         
         if let paymentVC = PKPaymentAuthorizationViewController(paymentRequest: paymentRequest) {
@@ -170,6 +201,7 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
         if success {
             completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
             showAlert(title: "Success", message: "Payment was successful!")
+            performCustomActionForApplePaySuccess()
         } else {
             completion(PKPaymentAuthorizationResult(status: .failure, errors: nil))
             showAlert(title: "Failure", message: "Payment failed. Please try again.")
@@ -185,6 +217,13 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func performCustomActionForApplePaySuccess() {
+        confirmOrder()
+        print("post Successfull")
+        Navigation.ToHome(from: self)
     }
 }
 

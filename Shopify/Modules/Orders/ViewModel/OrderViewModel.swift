@@ -1,10 +1,3 @@
-//
-//  OrderViewModel.swift
-//  Shopify
-//
-//  Created by Rawan Elsayed on 12/06/2024.
-//
-
 import Foundation
 
 class OrderViewModel {
@@ -16,13 +9,10 @@ class OrderViewModel {
     var cartViewModel: ShoppingCartViewModel?
     var addressViewModel: AddressViewModel?
     var settingViewModel: SettingsViewModel?
-    
-    var subtotalPrice: String = ""
-    var totalDiscounts: String = ""
     var totalPrice: String = ""
     var email = "" {
         didSet {
-            print("OrderViewModel email set to: \(email)") 
+            print("OrderViewModel email set to: \(email)")
         }
     }
     var customerId = Authorize.getCustomerIDFromUserDefaults()
@@ -33,25 +23,25 @@ class OrderViewModel {
         self.settingViewModel = settingViewModel
     }
     
-    func setOrderDetails(subtotalPrice: String, totalDiscounts: String, totalPrice: String) {
-        self.subtotalPrice = subtotalPrice
-        self.totalDiscounts = totalDiscounts
+    func setOrderDetails(totalPrice: String) {
         self.totalPrice = totalPrice
     }
+    
     func setEmail(email: String){
         self.email = email
     }
     
     func createOrder(completion: @escaping (ConfirmOrder?, Error?) -> Void) {
-        guard let lineItems = cartViewModel?.cartItems.map({ cartItem -> LineItem in
+        guard let lineItems = cartViewModel?.cartItems.compactMap({ cartItem -> LineItem? in
             let (title, price, quantity, imageUrl, id, quantityInString, variantTitle, productId) = cartItem
+            guard id != 45293432635640 else { return nil }
             let properties: [Property] = [
                 Property(name: "image_url", value: imageUrl ?? ""),
                 Property(name: "quantity_in_string", value: String(quantityInString))
             ]
             return LineItem(id: nil, variant_id: id, product_id: productId, title: title, variant_title: variantTitle, sku: nil, vendor: nil, quantity: quantity, requires_shipping: nil, taxable: nil, gift_card: nil, fulfillment_service: nil, grams: nil, tax_lines: nil, applied_discount: nil, name: nil, custom: nil, price: price.description, admin_graphql_api_id: nil, properties: properties)
         }) else {
-            print("Cart items are empty or not initialized") 
+            print("Cart items are empty or not initialized")
             completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Cart items are empty"]))
             return
         }
@@ -60,22 +50,27 @@ class OrderViewModel {
         let currency = settingViewModel?.getSelectedCurrency()?.rawValue
         let phone = addressViewModel?.getDefaultAddress()?.phone
         let customer = CustomerOrder(id: customerId ?? 0)
+        let gradeTotal = self.fetchGradeTotal()
+        let discountTotal = self.fetchTotalDiscount()
+        let totalTax = self.fetchTotalTax()
+    
 
         let confirmOrder = ConfirmOrder(//email: email,
-                                        line_items: lineItems,
-                                        financial_status: "paid",
-                                       // shipping_address: shippingAddress,
-                                        currency: "USD",
-                                        phone: phone,
-                                        customer: customer,
-                                        subtotal_price: subtotalPrice,
-                                        total_discounts: totalDiscounts,
-                                        total_price: totalPrice,
-                                        created_at: nil
+            line_items: lineItems,
+            financial_status: "paid",
+            // shipping_address: shippingAddress,
+
+            currency: "USD",
+            phone: phone,
+            customer: customer,
+            total_discounts: discountTotal,
+            current_total_price: gradeTotal,
+            total_tax: "5.00",
+            created_at: nil
         )
-
+        
         let orderPayload = ["order": confirmOrder]
-
+        
         do {
             let data = try JSONEncoder().encode(orderPayload)
             if let jsonString = String(data: data, encoding: .utf8) {
@@ -120,7 +115,6 @@ class OrderViewModel {
             
             Decoding.decodeData(data: data, objectType: [GetOrder].self) { decodedOrders, decodeError in
                 if let decodedOrders = decodedOrders {
-                    //self.orders = decodedOrders
                     // Filter orders by customer ID
                     self.orders = decodedOrders.filter { $0.customer?.id == self.customerId }
                     print("order \(self.orders.count)")
@@ -138,6 +132,69 @@ class OrderViewModel {
         guard index >= 0 && index < orders.count else { return }
         selectedOrder = orders[index]
     }
+    
+    func storeGradeTotal(_ gradeTotal: String) {
+        UserDefaults.standard.set(gradeTotal, forKey: "gradeTotal")
+    }
+    
+    func fetchGradeTotal() -> String? {
+        return UserDefaults.standard.string(forKey: "gradeTotal")
+    }
+    
+    func storeTotalDiscount(_ gradeTotal: String) {
+        UserDefaults.standard.set(gradeTotal, forKey: "discountTotal")
+    }
+    
+    func fetchTotalDiscount() -> String? {
+        return UserDefaults.standard.string(forKey: "discountTotal")
+    }
+    
+    func storeTotalTax(_ gradeTotal: String) {
+        UserDefaults.standard.set(gradeTotal, forKey: "taxTotal")
+    }
+    
+    func fetchTotalTax() -> String? {
+        return UserDefaults.standard.string(forKey: "taxTotal")
+    }
+
+    
+    func sendInvoiceToCustomer(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let draftOrderId = Authorize.cardDraftOrderId()
+                //,
+              //let customerEmail = Authorize.getCustomeremail()
+        else {
+            print("Draft Order ID or Customer Email is missing.")
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Missing draft order ID or customer email"])))
+            return
+        }
+
+        
+        let invoiceDetails: [String: Any] = [
+            "draft_order_invoice": [
+                "to": "rewanmohamed869@gmail.com",
+                "from": "abdosayed20162054@gmail.com",
+                "subject": "ShopU Invoice",
+                "custom_message": "Thank you for ordering!",
+                "bcc": ["abdosayed20162054@gmail.com"]
+            ]
+        ]
+        
+        do {
+            let body = try JSONSerialization.data(withJSONObject: invoiceDetails, options: [])
+            
+            let endpoint = "\(draftOrderId)/send_invoice.json"
+            
+            NetworkManager.postDataToApi(endpoint: .specficDraftOeder, rootOfJson: .sendingInvoice, body: body, addition: endpoint) { data, error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
+
 
 }
-

@@ -32,7 +32,7 @@ struct DraftOrder: Codable {
     let completed_at: String?
     let name: String?
     let status: String?
-    let line_items: [LineItem]?
+    var line_items: [LineItem]?
     let shipping_address: AddressDraftOrder?
     let billing_address: AddressDraftOrder?
     let invoice_url: String?

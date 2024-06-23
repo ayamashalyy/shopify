@@ -44,12 +44,44 @@ enum Root: String {
     case orders = "orders"
     case discountCodes = "discount_codes"
     case priceRules = "price_rules"
+    case sendingInvoice = "draft_order_invoice"
 }
 
 // remove it every time before push
 
 
 class NetworkManager {
+    
+    
+    
+    
+    static func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
+        {
+        let additionDraftOrder = "\(Authorize.cardDraftOrderId()!).json"
+        NetworkManager.fetchDataFromApi(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, addition: additionDraftOrder) { (data, error) in
+            
+            if let error = error {
+                completion(nil,error)
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data returned"]))
+                return
+            }
+            
+            do {
+                print("Received data: \(String(data: data, encoding: .utf8) ?? "No data")")
+                let draftOrders = try JSONDecoder().decode(DraftOrder.self, from: data)
+                let cartItemsCount = (draftOrders.line_items?.count ?? 0) 
+                completion(cartItemsCount,nil)
+            } catch let decodingError {
+                completion(nil,decodingError)
+            }
+        }
+        
+    }
+    
     
     static func fetchDataFromApi(endpoint: Endpoint, rootOfJson: Root, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
         let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"

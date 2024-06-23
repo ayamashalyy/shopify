@@ -55,6 +55,12 @@ class CategoriesViewModel{
     }
     
     
+    func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
+    {
+        NetworkManager.getShoppingCartItemsCount(completion: completion)
+    }
+    
+    
     
     func checkIsFav(productFromApi: [Product], completion: @escaping ([Product]) -> Void) {
         var favViewModel = FavViewModel()

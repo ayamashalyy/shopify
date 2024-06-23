@@ -10,6 +10,7 @@ import UIKit
 class BrandsViewController: UIViewController {
     
     var productViewModel = ProductViewModel()
+    let homeViewModel = HomeViewModel()
     
     @IBOutlet weak var sliderFilter: UISlider!
     
@@ -29,11 +30,17 @@ class BrandsViewController: UIViewController {
         setupUI()
         fetchProducts()
         fetchExchangeRates()
+        checkNetworkConnection()
         
         valueLabel.text = "50.0"
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkNetworkConnection()
     }
     
     
@@ -134,6 +141,18 @@ class BrandsViewController: UIViewController {
                 self?.categoriesCollectionView.reloadData()
             }
         }
+    }
+    
+    private func checkNetworkConnection() {
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+        }
+    }
+
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
 }
@@ -281,10 +300,15 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let product = brandProductsViewModel.product(at: indexPath.row)
-        {
-            Navigation.ToProduct(productId: "\(product.id)", from: self)
-            
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+            return
+        }else{
+            if let product = brandProductsViewModel.product(at: indexPath.row)
+            {
+                Navigation.ToProduct(productId: "\(product.id)", from: self)
+                
+            }
         }
     }
     

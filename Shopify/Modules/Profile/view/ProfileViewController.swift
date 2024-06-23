@@ -12,16 +12,17 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var setting: UIBarButtonItem!
     var favViewModel: FavViewModel?
     var myfavLineItem: [FavLineItem] = []
+    @IBOutlet weak var userName: UILabel!
     let indicator = UIActivityIndicatorView(style: .large)
     let settingsViewModel = SettingsViewModel()
-
+    
     var orderViewModel = OrderViewModel.shared
     @IBOutlet weak var tableview: UITableView!
     
-
+    
     @IBOutlet weak var cartButton: UIBarButtonItem!
     let shoppingCartViewModel = ShoppingCartViewModel()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,42 +32,35 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.register(UINib(nibName: "WishListViewCell", bundle: nil), forCellReuseIdentifier: "WishListViewCell")
         tableview.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         favViewModel = FavViewModel()
-
-        
-        // Fetch exchange rates
         fetchExchangeRates()
-
         setupCartButton()
+        userName.text = Authorize.getCustomerFullName()
         
         
-
     }
     
     
-    func updateCartBadge() {
-        let itemCount = shoppingCartViewModel.cartItemCount
+    
+    func updateCartBadge(itemCount:Int) {
         print("Item count: \(itemCount)")
         if itemCount > 0 {
             cartButton.addBadge(text: "\(itemCount)", color: .orange)
         } else {
             cartButton.removeBadge()
         }
-    }  
+    }
     
     
     private func fetchCartItemsAndUpdateBadge() {
-        shoppingCartViewModel.fetchDraftOrders { [weak self] error in
-            guard let self = self else { return }
-            if let error = error {
-                print("Failed to fetch cart items: \(error.localizedDescription)")
-            } else {
-                DispatchQueue.main.async {
-                    self.updateCartBadge()
-                }
-            }
-        }
-    }
         
+        shoppingCartViewModel.getShoppingCartItemsCount { count, error in
+            guard let count = count else {return}
+            self.updateCartBadge(itemCount: count - 1)
+        }
+        
+    }
+    
+    
     func setupCartButton() {
         let button = UIButton(type: .custom)
         
@@ -101,8 +95,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             indicator.startAnimating()
             getWishList()
             getOrders()
+            fetchExchangeRates()
             fetchCartItemsAndUpdateBadge()
-            updateCartBadge()
         } else {
             setting.isEnabled = false
             self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
@@ -121,7 +115,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 print("Failed to fetch exchange rates: \(error.localizedDescription)")
                 return
             }
-            // Fetch orders after exchange rates are fetched
             self.getOrders()
         }
     }
@@ -131,7 +124,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         tableview.reloadData()
         
         var numberOfFav = 0
-        print("get   WishListViewCell")
+        
         favViewModel?.bindResultToViewController = { [weak self] in
             DispatchQueue.main.async {
                 guard let self = self, let lineItems = self.favViewModel?.LineItems else { return }
@@ -182,10 +175,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        
         let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
-        
         alertController.addAction(okAlertAction)
         alertController.addAction(cancelAlertAction)
         
@@ -198,7 +189,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 190
+            return 170
         } else {
             return 100
         }
@@ -235,14 +226,13 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             if orderViewModel.orders.count > 0 {
                 let order = orderViewModel.orders[0]
                 
-                // Convert price using SettingsViewModel
                 let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
                 let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(order.total_price)USD"
                 
                 cell.TotalPriceValue.text = convertedPriceString
                 cell.CreationDateValue.text = order.created_at
-                cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
-                cell.PhoneValue.text = order.customer?.default_address?.phone
+                //cell.ShippedToValue.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+                //cell.PhoneValue.text = order.customer?.default_address?.phone
                 //print(order.email)
             }
             return cell
@@ -260,6 +250,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 let convertedPriceString = settingsViewModel.convertPrice(favItem.price, to: selectedCurrency) ?? "\(favItem.price)USD"
                 cell.productPrice.text = convertedPriceString
                 cell.favImage.kf.setImage(with: URL(string: favItem.image))
+                cell.isHidden = favItem.firstVariantid == 45293432635640 ? true : false
             }
             cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.size.width, bottom: 0, right: 0)
             cell.layoutMargins = UIEdgeInsets.zero
