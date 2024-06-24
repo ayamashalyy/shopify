@@ -287,6 +287,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return
         }
         
+        
+        
         if collectionView == brandsCollectionView {
             guard let brand = homeViewModel.brand(at: indexPath.item) else { return }
             
@@ -299,7 +301,16 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             self.present(brandsVC, animated: true, completion: nil)
             
         } else if collectionView == couponsCollectionView {
-            fetchDiscountCodesAndShowAlert(for: indexPath)
+            if !Authorize.isRegistedCustomer(){
+                self.showAlertWithTwoOption(message: "Log in to get Offers and do Shopping",
+                                            okAction: { action in
+                    Navigation.ToALogin(from: self)
+                    print("OK button tapped")
+                }
+                )
+            }else{
+                fetchDiscountCodesAndShowAlert(for: indexPath)
+            }
         }
     }
     
@@ -334,6 +345,18 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         }))
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
 }

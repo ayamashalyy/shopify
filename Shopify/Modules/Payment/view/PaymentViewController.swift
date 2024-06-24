@@ -72,7 +72,8 @@ class PaymentViewController: UIViewController {
 
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
-                        Navigation.ToHome(from: self)
+                        //Navigation.ToHome(from: self)
+                        self.showOrderSuccessAlert()
 
                         self.orderViewModel.sendInvoiceToCustomer { result in
                             switch result {
@@ -170,13 +171,19 @@ class PaymentViewController: UIViewController {
         request.merchantCapabilities = .capability3DS
         request.countryCode = "EG"
         
-        if UserDefaults.standard.string(forKey: "Currency") == "EGP" {
-            request.currencyCode = "EGP"
+        if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
+            request.currencyCode = selectedCurrency.rawValue
         } else {
             request.currencyCode = "USD"
         }
         
-        let paymentItem = PKPaymentSummaryItem(label: "Shopify", amount: NSDecimalNumber(value: grandTotal))
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        request.currencyCode = selectedCurrency.rawValue
+        
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal)"
+        let amount = NSDecimalNumber(string: convertedGrandTotalPrice.split(separator: " ").first.map(String.init))
+        
+        let paymentItem = PKPaymentSummaryItem(label: "Shopify", amount: amount)
         request.paymentSummaryItems = [paymentItem]
         
         return request
@@ -192,6 +199,14 @@ class PaymentViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
+    }
+    func showOrderSuccessAlert() {
+        let alert = UIAlertController(title: "Order Created", message: "Order created successfully", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            Navigation.ToHome(from: self)
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
 }
 
