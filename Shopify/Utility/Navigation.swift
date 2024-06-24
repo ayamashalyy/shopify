@@ -10,12 +10,6 @@ import UIKit
 
 class Navigation {
     
-//Navigation.ToProduct(productId: "someProductId", from: self)
-//    Navigation.ToSearch(from: self)
-//    Navigation.ToAllFavourite(from: self)
-//    Navigation.ToOrders(from: self)
-    
-    
     static func ToAllFavourite(from viewController: UIViewController) {
          let storyboard = UIStoryboard(name: "third", bundle: nil)
          if let vc = storyboard.instantiateViewController(withIdentifier: "AllFavViewController") as? AllFavViewController {
@@ -52,18 +46,6 @@ class Navigation {
                print("to product")
            }
        }
-
-
-    static func ToSearch(from viewController: UIViewController,comeFromHome:Bool , products: [Product]) {
-           let storyboard = UIStoryboard(name: "third", bundle: nil)
-           if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
-               vc.comeFromHome = comeFromHome
-               vc.products =  products
-               vc.modalPresentationStyle = .fullScreen
-               viewController.present(vc, animated: true, completion: nil)
-           }
-       }
-     
 
         static func ToOrders(from viewController: UIViewController) {
             let storyboard = UIStoryboard(name: "Second", bundle: nil)

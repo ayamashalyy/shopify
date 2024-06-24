@@ -19,7 +19,9 @@ class AllFavViewController: UIViewController {
  
     var favViewModel: FavViewModel?
     let indicator = UIActivityIndicatorView(style: .large)
+    
     var myfavLineItem: [FavLineItem] = []
+    
     let settingsViewModel = SettingsViewModel()
     var productViewModel = ProductViewModel()
     

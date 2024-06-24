@@ -43,7 +43,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
         if homeViewModel.isNetworkReachable() {
-            Navigation.ToSearch(from: self, comeFromHome: true, products: [])
+            
+            let storyboard = UIStoryboard(name: "third", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+                vc.comeFromHome = true
+                let searchViewModel = SearchViewModel()
+                searchViewModel.recevingProductFromANotherScreen = []
+
+                vc.searchViewModel = searchViewModel
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: true, completion: nil)
+            }
         } else {
             showNoInternetAlert()
         }
