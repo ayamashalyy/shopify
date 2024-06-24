@@ -31,13 +31,12 @@ class PaymentViewController: UIViewController {
         setupConfirmPayButton()
         fetchExchangeRates()
         updateTotalPrice()
-
+        
     }
     
-    func updateTotalPrice(){
+    func updateTotalPrice() {
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-
-        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)" , to: selectedCurrency) ?? "\(grandTotal) USD"
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal) USD"
         totalPrice.text = convertedGrandTotalPrice
         orderViewModel.storeGradeTotal("\(grandTotal)")
     }
@@ -71,10 +70,25 @@ class PaymentViewController: UIViewController {
                                 print("updated successfully and sent email inside")
                             }
                         }
-
+                        
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
 
+                        Navigation.ToHome(from: self)
+                        
+                        //Navigation.ToHome(from: self)
+                        self.showOrderSuccessAlert()
+                        
+                        
+                        self.orderViewModel.sendInvoiceToCustomer { result in
+                            switch result {
+                            case .success():
+                                print("Invoice sent successfully")
+                            case .failure(let error):
+                                print("Failed to send invoice: \(error.localizedDescription)")
+                            }
+                        }
+                        
 
                     }
                 }
@@ -155,6 +169,7 @@ class PaymentViewController: UIViewController {
     @IBAction func backToPlaceOrders(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
+    
     private var paymentRequest: PKPaymentRequest {
         let request = PKPaymentRequest()
         request.merchantIdentifier = "merchant.com.pushpendra.pay"
@@ -172,14 +187,14 @@ class PaymentViewController: UIViewController {
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         request.currencyCode = selectedCurrency.rawValue
         
-        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal)"
-        let amount = NSDecimalNumber(string: convertedGrandTotalPrice.split(separator: " ").first.map(String.init))
+        let amount = NSDecimalNumber(value: grandTotal)
         
         let paymentItem = PKPaymentSummaryItem(label: "Shopify", amount: amount)
         request.paymentSummaryItems = [paymentItem]
         
         return request
     }
+    
     
     func startApplePay() {
         

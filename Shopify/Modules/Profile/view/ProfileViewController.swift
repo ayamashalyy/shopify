@@ -34,7 +34,15 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         favViewModel = FavViewModel()
         fetchExchangeRates()
         setupCartButton()
-        userName.text = Authorize.getCustomerFullName()
+        if let fullName = Authorize.getCustomerFullName() {
+               userName.text = fullName
+               print("Customer full name: \(fullName)")
+           } else {
+               print("Failed to get customer full name")
+           }
+           if userName.isHidden {
+               print("userName label is hidden")
+           }
         setupNoItemsImageView()
         
     }

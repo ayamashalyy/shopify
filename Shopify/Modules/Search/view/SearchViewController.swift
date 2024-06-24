@@ -32,6 +32,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         
         searchBar.delegate = self
         setUpUi()
+        fetchExchangeRates()
         
         if comeFromHome ?? false {
             searchViewModel.bindResultToViewController = { [weak self] in
@@ -46,6 +47,21 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         priceFilter.isHidden = true
         priceFilter.text = "10.0"
         slider.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchExchangeRates()
+    }
+    
+    func fetchExchangeRates() {
+        settingsViewModel.fetchExchangeRates { error in
+            if let error = error {
+                print("Failed to fetch exchange rates: \(error.localizedDescription)")
+                return
+            }
+            self.searchCollectionView.reloadData()
+        }
     }
     
     @IBAction func filter(_ sender: Any) {

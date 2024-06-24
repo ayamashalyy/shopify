@@ -9,8 +9,6 @@ import UIKit
 
 class SettingsViewController: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logoutButton: UIButton!
     
@@ -22,12 +20,10 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         setUpUI()
-        nameLabel.text = Authorize.getCustomerFullName()
+       
     }
     
     func setUpUI(){
-        profileImageView.image = UIImage(named: "profile")
-        nameLabel.text = "Aya"
         logoutButton.setTitle("Log out", for: .normal)
         logoutButton.backgroundColor = UIColor(hex: "#FF7D29")
         logoutButton.layer.cornerRadius = 8
@@ -35,8 +31,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-        profileImageView.clipsToBounds = true
+    
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
