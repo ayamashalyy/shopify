@@ -21,6 +21,7 @@ struct ConfirmOrder: Codable {
     let current_total_price: String?
     let total_tax: String?
     let created_at: String?
+    let shipping_address: DefaultAddress?
 }
 
 struct OrdersResponse: Codable {
@@ -51,6 +52,7 @@ struct GetOrder: Codable {
     let total_discounts: String?
     let total_price: String?
     let created_at: String?
+    let shipping_address: DefaultAddress?
 }
 
 struct CustomerOrders: Codable {
@@ -62,11 +64,7 @@ struct CustomerOrders: Codable {
 }
 
 struct DefaultAddress: Codable{
-    let phone: String?
     let address1: String?
-    let address2: String?
-    let city: String?
-    let country: String?
 }
 
 

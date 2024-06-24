@@ -46,28 +46,26 @@ class OrderViewModel {
             return
         }
         
-        let shippingAddress = addressViewModel?.getDefaultAddress()
         let currency = settingViewModel?.getSelectedCurrency()?.rawValue
         let phone = addressViewModel?.getDefaultAddress()?.phone
         let customer = CustomerOrder(id: Authorize.getCustomerIDFromUserDefaults() ?? 0)
         let gradeTotal = self.fetchGradeTotal()
         let discountTotal = self.fetchTotalDiscount()
-        let totalTax = self.fetchTotalTax()
-    
+        let shippingAddress = DefaultAddress(address1: self.fetchShippingAddress())
 
-        let confirmOrder = ConfirmOrder(//email: email,
+        let confirmOrder = ConfirmOrder(
             line_items: lineItems,
             financial_status: "paid",
-            // shipping_address: shippingAddress,
-
             currency: "USD",
             phone: phone,
             customer: customer,
             total_discounts: discountTotal,
             current_total_price: gradeTotal,
             total_tax: "5.00",
-            created_at: nil
+            created_at: nil, 
+            shipping_address: shippingAddress
         )
+        print("shippingAddress : \(shippingAddress)")
         
         let orderPayload = ["order": confirmOrder]
         
@@ -157,6 +155,14 @@ class OrderViewModel {
     
     func fetchTotalTax() -> String? {
         return UserDefaults.standard.string(forKey: "taxTotal")
+    }
+    
+    func storeShippingAddress(_ address: String) {
+        UserDefaults.standard.set(address, forKey: "shippingAddress")
+    }
+    
+    func fetchShippingAddress() -> String? {
+        return UserDefaults.standard.string(forKey: "shippingAddress")
     }
 
     
