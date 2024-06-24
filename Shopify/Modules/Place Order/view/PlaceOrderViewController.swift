@@ -197,7 +197,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     
     
     @IBAction func placeOrder(_ sender: UIButton) {
-
+        grandTotal = calculateGrandTotal()
         print("grandTotal\(grandTotal)")
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
