@@ -117,7 +117,7 @@ class HomeViewModel {
     
     func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
     {
-        NetworkManager.getShoppingCartItemsCount(completion: completion)
+        GetShoppingCartItemsCount.getShoppingCartItemsCount(completion: completion)
     }
     
     

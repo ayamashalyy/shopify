@@ -85,6 +85,9 @@
 		7D9231862C23A9B2005E611D /* GoogleService-Info-3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D9231852C23A9B0005E611D /* GoogleService-Info-3.plist */; };
 		7DB203652C17630800CFFC65 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB203642C17630800CFFC65 /* ViewModel.swift */; };
 		7DB875B12C295E120075048B /* MethodsOfNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B02C295E120075048B /* MethodsOfNetwork.swift */; };
+		7DB875B42C2988450075048B /* MockNetworkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B32C2988450075048B /* MockNetworkManger.swift */; };
+		7DB875B62C2988FB0075048B /* MockMethodsOfNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */; };
+		7DB875B82C298E430075048B /* getShoppingCartItemsCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */; };
 		7DBCA50A2C1BBFED005DFD33 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBCA5092C1BBFED005DFD33 /* ReviewTableViewCell.swift */; };
 		7DBE8ACC2C1FE18000D466F0 /* Auth Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE8ACB2C1FE18000D466F0 /* Auth Manager.swift */; };
 		7DC183CA2C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC183C92C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift */; };
@@ -205,6 +208,9 @@
 		7D9231852C23A9B0005E611D /* GoogleService-Info-3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-3.plist"; sourceTree = "<group>"; };
 		7DB203642C17630800CFFC65 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		7DB875B02C295E120075048B /* MethodsOfNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodsOfNetwork.swift; sourceTree = "<group>"; };
+		7DB875B32C2988450075048B /* MockNetworkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManger.swift; sourceTree = "<group>"; };
+		7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMethodsOfNetworkTests.swift; sourceTree = "<group>"; };
+		7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getShoppingCartItemsCount.swift; sourceTree = "<group>"; };
 		7DBCA5092C1BBFED005DFD33 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
 		7DBE8ACB2C1FE18000D466F0 /* Auth Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Auth Manager.swift"; path = "Network service/Auth Manager.swift"; sourceTree = SOURCE_ROOT; };
 		7DC183C92C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsimagesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -791,6 +797,7 @@
 			isa = PBXGroup;
 			children = (
 				7D89BF9A2C26001E00F1C761 /* CheckNetworkReachiability.swift */,
+				7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -798,6 +805,8 @@
 		7DB875B22C296E7F0075048B /* mock */ = {
 			isa = PBXGroup;
 			children = (
+				7DB875B32C2988450075048B /* MockNetworkManger.swift */,
+				7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */,
 			);
 			path = mock;
 			sourceTree = "<group>";
@@ -1294,6 +1303,7 @@
 				51871C4B2C0F6C5D0045676F /* BrandsViewController.swift in Sources */,
 				03E7541A2C14838F0027C8F8 /* APIError.swift in Sources */,
 				51A7DF872C1C7C4C003D31E2 /* OrderDetailsViewController.swift in Sources */,
+				7DB875B82C298E430075048B /* getShoppingCartItemsCount.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1303,6 +1313,8 @@
 			files = (
 				7DB875B12C295E120075048B /* MethodsOfNetwork.swift in Sources */,
 				03D35C9F2C0CEC3400523AF7 /* ShopifyTests.swift in Sources */,
+				7DB875B62C2988FB0075048B /* MockMethodsOfNetworkTests.swift in Sources */,
+				7DB875B42C2988450075048B /* MockNetworkManger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
