@@ -45,7 +45,18 @@ class BrandsViewController: UIViewController {
     
     
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
-        Navigation.ToSearch(from: self, comeFromHome: false, products: brandProductsViewModel.filteredProducts)
+      
+        let storyboard = UIStoryboard(name: "third", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+            vc.comeFromHome = false
+            let searchViewModel = SearchViewModel()
+            searchViewModel.recevingProductFromANotherScreen = brandProductsViewModel.filteredProducts
+            vc.searchViewModel = searchViewModel
+            
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: false, completion: nil)
+            
+        }
     }
     
     func setupUI(){
