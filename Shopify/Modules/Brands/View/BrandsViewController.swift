@@ -28,10 +28,7 @@ class BrandsViewController: UIViewController {
         
         self.indicator.startAnimating()
         setupUI()
-        fetchProducts()
-        fetchExchangeRates()
-        checkNetworkConnection()
-        
+    
         valueLabel.text = "50.0"
         
         sliderFilter.isHidden = true
@@ -40,7 +37,11 @@ class BrandsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchProducts()
+        fetchExchangeRates()
         checkNetworkConnection()
+        
+        
     }
     
     

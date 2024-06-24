@@ -11,10 +11,10 @@ import XCTest
 
 final class MockMethodsOfNetworkTests: XCTestCase {
     
-    var mockNetworkManager: MockNetworkManager!
+    var mockNetworkManager: MockNetworkManagerMethods!
 
     override func setUpWithError() throws {
-        mockNetworkManager = MockNetworkManager(networkConnection: false)
+        mockNetworkManager = MockNetworkManagerMethods(networkConnection: false)
     }
 
     override func tearDownWithError() throws {

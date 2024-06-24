@@ -46,9 +46,16 @@ class CategoriesViewController: UIViewController {
         self.indicator.startAnimating()
         
         setupUI()
-        fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
-        fetchExchangeRates()
         setupCartButton()
+       
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
+
+        fetchCartItemsAndUpdateBadge()
+        fetchExchangeRates()
         checkNetworkConnection()
     }
     
@@ -72,13 +79,7 @@ class CategoriesViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        fetchCartItemsAndUpdateBadge()
-        fetchExchangeRates()
-        checkNetworkConnection()
-    }
-    
+
     func setupCartButton() {
         let button = UIButton(type: .custom)
         

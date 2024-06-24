@@ -8,7 +8,7 @@
 import Foundation
 @testable import Shopify
 
-class MockNetworkManager {
+class MockNetworkManagerMethods {
     
     var networkConnection: Bool
     init(networkConnection: Bool) {
@@ -44,7 +44,7 @@ class MockNetworkManager {
     ]
 }
 
-extension MockNetworkManager {
+extension MockNetworkManagerMethods {
     
     enum ErrorResponse: Error {
         case errorResponse
