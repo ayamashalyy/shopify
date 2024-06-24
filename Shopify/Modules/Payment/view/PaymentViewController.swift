@@ -31,13 +31,13 @@ class PaymentViewController: UIViewController {
         setupConfirmPayButton()
         fetchExchangeRates()
         updateTotalPrice()
-
+        
     }
     
     func updateTotalPrice(){
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-
-        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)" , to: selectedCurrency) ?? "\(grandTotal) USD"
+        
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal) USD"
         totalPrice.text = convertedGrandTotalPrice
         orderViewModel.storeGradeTotal("\(grandTotal)")
     }
@@ -71,10 +71,9 @@ class PaymentViewController: UIViewController {
                                 print("updated successfully and sent email inside")
                             }
                         }
-
+                        
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
-
 
                     }
                 }

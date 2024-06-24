@@ -127,8 +127,8 @@ class ProductViewController: UIViewController {
                                         self.productFavButton.isEnabled = true
                                     }}}
                         }else {
-                            productFavButton.isEnabled = true
-                            showAlert(message: "Failed to remove from faviourt as lost network connection")
+                            self.productFavButton.isEnabled = true
+                            self.showAlert(message: "Failed to remove from faviourt as lost network connection")
                         } }))
                     present(alertController, animated: true, completion: nil)
                 }
