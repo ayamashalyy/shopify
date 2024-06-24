@@ -1,6 +1,9 @@
 import Foundation
 
 class ShoppingCartViewModel {
+    var orderViewModel = OrderViewModel.shared
+
+    
     var cartItems = [(String, Int, Int, String?, Int, Int, String, Int)]()
     var updateCartItemsHandler: (() -> Void)?
     var productViewModel = ProductViewModel()
@@ -255,6 +258,113 @@ class ShoppingCartViewModel {
             }
         }
     }
+    
+    func updateDraftOrderAfterOrder(completion: @escaping (Error?) -> Void) {
+        fetchDraftOrders { [weak self] error in
+            guard let self = self else { return }
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            guard let draftOrders = self.draftOrders else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No draft order found"]))
+                return
+            }
+            
+            let (lineItemsDictHaveDefaultOnly, lineItemsDictAcutllalyOrderOnly) = self.separateLineItems(draftOrders: draftOrders)
+            
+            self.updateDraftOrder(lineItems: lineItemsDictAcutllalyOrderOnly) { error in
+                if let error = error {
+                    completion(error)
+                    return
+                }
+                print(" make with actually done fffff")
+                self.sendInvoiceAndReupdate(lineItemsDictHaveDefaultOnly: lineItemsDictHaveDefaultOnly, completion: completion)
+            }
+        }
+    }
+
+    private func separateLineItems(draftOrders: DraftOrder) -> ([[String: Any]], [[String: Any]]) {
+        var lineItemsDictHaveDefaultOnly: [[String: Any]] = []
+        var lineItemsDictAcutllalyOrderOnly: [[String: Any]] = []
+        
+        for lineItem in draftOrders.line_items ?? [] {
+            var properties: [[String: Any]] = []
+            
+            if let imageUrl = lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value {
+                properties.append([
+                    "name": "imageUrl",
+                    "value": imageUrl
+                ])
+            }
+            properties.append([
+                "name": "quantityInString",
+                "value": String(lineItem.properties?.first(where: { $0.name == "quantityInString" })?.value ?? "0")
+            ])
+            
+            if lineItem.variant_id == 45293432635640 {
+                lineItemsDictHaveDefaultOnly.append([
+                    "variant_id": lineItem.variant_id ?? 0,
+                    "quantity": lineItem.quantity ?? 0,
+                    "properties": properties
+                ])
+            } else {
+                lineItemsDictAcutllalyOrderOnly.append([
+                    "variant_id": lineItem.variant_id ?? 0,
+                    "quantity": lineItem.quantity ?? 0,
+                    "properties": properties
+                ])
+            }
+        }
+        
+        return (lineItemsDictHaveDefaultOnly, lineItemsDictAcutllalyOrderOnly)
+    }
+
+    private func updateDraftOrder(lineItems: [[String: Any]], completion: @escaping (Error?) -> Void) {
+        let updateEndpoint = Endpoint.specficDraftOeder
+        let rootOfJson = Root.specificDraftOrder
+        let draftOrderId = "\(Authorize.cardDraftOrderId()!).json"
+        
+        let body: [String: Any] = [
+            "draft_order": [
+                "id": Authorize.cardDraftOrderId()!,
+                "line_items": lineItems
+            ]
+        ]
+        
+        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+            completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to serialize JSON"]))
+            return
+        }
+        NetworkManager.updateResource(endpoint: updateEndpoint, rootOfJson: rootOfJson, body: bodyData, addition: draftOrderId) { (data, error) in
+            completion(error)
+        }
+    }
+
+    
+    private func sendInvoiceAndReupdate(lineItemsDictHaveDefaultOnly: [[String: Any]], completion: @escaping (Error?) -> Void) {
+        self.orderViewModel.sendInvoiceToCustomer { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success():
+                print(" Invoice sent successfully fffff")
+
+                self.updateDraftOrder(lineItems: lineItemsDictHaveDefaultOnly) { error in
+                    if let error = error {
+                        completion(error)
+                        return
+                    }
+                    print("Re-update with default one fffff")
+                    completion(nil)
+                }
+            case .failure(let error):
+                print("Failed to send invoice: \(error.localizedDescription)")
+                completion(error)
+            }
+        }
+    }    
     
     
     func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)

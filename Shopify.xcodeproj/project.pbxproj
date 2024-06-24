@@ -84,6 +84,7 @@
 		7D9231842C239427005E611D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D9231832C239427005E611D /* GoogleService-Info.plist */; };
 		7D9231862C23A9B2005E611D /* GoogleService-Info-3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D9231852C23A9B0005E611D /* GoogleService-Info-3.plist */; };
 		7DB203652C17630800CFFC65 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB203642C17630800CFFC65 /* ViewModel.swift */; };
+		7DB79FE72C2A05F0006B45C9 /* UrlParts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB79FE62C2A05F0006B45C9 /* UrlParts.swift */; };
 		7DB875B12C295E120075048B /* MethodsOfNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B02C295E120075048B /* MethodsOfNetwork.swift */; };
 		7DB875B42C2988450075048B /* MockNetworkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B32C2988450075048B /* MockNetworkManger.swift */; };
 		7DB875B62C2988FB0075048B /* MockMethodsOfNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */; };
@@ -207,6 +208,7 @@
 		7D9231832C239427005E611D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7D9231852C23A9B0005E611D /* GoogleService-Info-3.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-3.plist"; sourceTree = "<group>"; };
 		7DB203642C17630800CFFC65 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		7DB79FE62C2A05F0006B45C9 /* UrlParts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UrlParts.swift; path = "Network service/UrlParts.swift"; sourceTree = SOURCE_ROOT; };
 		7DB875B02C295E120075048B /* MethodsOfNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MethodsOfNetwork.swift; sourceTree = "<group>"; };
 		7DB875B32C2988450075048B /* MockNetworkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManger.swift; sourceTree = "<group>"; };
 		7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMethodsOfNetworkTests.swift; sourceTree = "<group>"; };
@@ -472,6 +474,7 @@
 			children = (
 				517E82692C1277D0004FBD00 /* NetworkManager.swift */,
 				7DBE8ACB2C1FE18000D466F0 /* Auth Manager.swift */,
+				7DB79FE62C2A05F0006B45C9 /* UrlParts.swift */,
 			);
 			path = "Network service";
 			sourceTree = "<group>";
@@ -637,6 +640,7 @@
 				7DC25B5C2C13A9F800D046D7 /* Decoding.swift */,
 				03CF26EF2C15166C005A89D1 /* Common Methods.swift */,
 				7D7CA1EB2C16A0C2003D8013 /* Auth.swift */,
+				7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -797,7 +801,6 @@
 			isa = PBXGroup;
 			children = (
 				7D89BF9A2C26001E00F1C761 /* CheckNetworkReachiability.swift */,
-				7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1229,6 +1232,7 @@
 			files = (
 				7D30296A2C1290FA00B235B4 /* SearchViewController.swift in Sources */,
 				03EAA80A2C14337600A60BDA /* Address.swift in Sources */,
+				7DB79FE72C2A05F0006B45C9 /* UrlParts.swift in Sources */,
 				7DC25B4D2C1379A000D046D7 /* SearchViewModel.swift in Sources */,
 				037955DC2C0E825D003A3AF9 /* PlaceOrderCell.swift in Sources */,
 				03E40D9A2C10C31500489854 /* OrderViewCell.swift in Sources */,
