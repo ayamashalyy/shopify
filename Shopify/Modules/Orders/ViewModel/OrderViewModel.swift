@@ -46,28 +46,26 @@ class OrderViewModel {
             return
         }
         
-        let shippingAddress = addressViewModel?.getDefaultAddress()
         let currency = settingViewModel?.getSelectedCurrency()?.rawValue
         let phone = addressViewModel?.getDefaultAddress()?.phone
-        let customer = CustomerOrder(id: customerId ?? 0)
+        let customer = CustomerOrder(id: Authorize.getCustomerIDFromUserDefaults() ?? 0)
         let gradeTotal = self.fetchGradeTotal()
         let discountTotal = self.fetchTotalDiscount()
-        let totalTax = self.fetchTotalTax()
-    
+        let shippingAddress = DefaultAddress(address1: self.fetchShippingAddress())
 
-        let confirmOrder = ConfirmOrder(//email: email,
+        let confirmOrder = ConfirmOrder(
             line_items: lineItems,
             financial_status: "paid",
-            // shipping_address: shippingAddress,
-
             currency: "USD",
             phone: phone,
             customer: customer,
             total_discounts: discountTotal,
             current_total_price: gradeTotal,
             total_tax: "5.00",
-            created_at: nil
+            created_at: nil, 
+            shipping_address: shippingAddress
         )
+        print("shippingAddress : \(shippingAddress)")
         
         let orderPayload = ["order": confirmOrder]
         
@@ -79,6 +77,8 @@ class OrderViewModel {
             NetworkManager.postDataToApi(endpoint: .order, rootOfJson: .order, body: data) { responseData, networkError in
                 guard let data = responseData, networkError == nil else {
                     completion(nil, networkError)
+                    print("customer.id:  \(customer.id)")
+                    print("getCustomerIDFromUserDefaults: \(Authorize.getCustomerIDFromUserDefaults())")
                     return
                 }
                 print("Response Data: \(String(data: data, encoding: .utf8) ?? "No response data")") // Print raw response data for debugging
@@ -116,7 +116,7 @@ class OrderViewModel {
             Decoding.decodeData(data: data, objectType: [GetOrder].self) { decodedOrders, decodeError in
                 if let decodedOrders = decodedOrders {
                     // Filter orders by customer ID
-                    self.orders = decodedOrders.filter { $0.customer?.id == self.customerId }
+                    self.orders = decodedOrders.filter { $0.customer?.id == Authorize.getCustomerIDFromUserDefaults() }
                     print("order \(self.orders.count)")
                     completion(.success(()))
                 } else if let decodeError = decodeError {
@@ -156,6 +156,14 @@ class OrderViewModel {
     func fetchTotalTax() -> String? {
         return UserDefaults.standard.string(forKey: "taxTotal")
     }
+    
+    func storeShippingAddress(_ address: String) {
+        UserDefaults.standard.set(address, forKey: "shippingAddress")
+    }
+    
+    func fetchShippingAddress() -> String? {
+        return UserDefaults.standard.string(forKey: "shippingAddress")
+    }
 
     
     func sendInvoiceToCustomer(completion: @escaping (Result<Void, Error>) -> Void) {
@@ -171,13 +179,14 @@ class OrderViewModel {
         
         let invoiceDetails: [String: Any] = [
             "draft_order_invoice": [
-                "to": "ayamashaly363@gmail.com",
+                "to": Authorize.getCustomeremail(),
                 "from": "abdosayed20162054@gmail.com",
                 "subject": "ShopU Invoice",
                 "custom_message": "Thank you for ordering!",
                 "bcc": ["abdosayed20162054@gmail.com"]
             ]
         ]
+        print("getCustomeremail \(Authorize.getCustomeremail())")
         
         do {
             let body = try JSONSerialization.data(withJSONObject: invoiceDetails, options: [])

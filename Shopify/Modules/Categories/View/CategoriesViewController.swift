@@ -52,7 +52,7 @@ class CategoriesViewController: UIViewController {
         checkNetworkConnection()
     }
     
-
+    
     
     func updateCartBadge(itemCount:Int) {
         print("Item count: \(itemCount)")
@@ -65,7 +65,7 @@ class CategoriesViewController: UIViewController {
     
     
     private func fetchCartItemsAndUpdateBadge() {
-
+        
         categoriesViewModel.getShoppingCartItemsCount { count, error in
             guard let count = count else {return}
             self.updateCartBadge(itemCount: count - 1)
@@ -115,7 +115,18 @@ class CategoriesViewController: UIViewController {
     
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
         if homeViewModel.isNetworkReachable() {
-            Navigation.ToSearch(from: self, comeFromHome: false, products: categoriesViewModel.categoryProducts)
+            
+            let storyboard = UIStoryboard(name: "third", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+                vc.comeFromHome = false
+                let searchViewModel = SearchViewModel()
+                searchViewModel.recevingProductFromANotherScreen = categoriesViewModel.categoryProducts
+                vc.searchViewModel = searchViewModel
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: false, completion: nil)
+                
+            }
+            
         } else {
             showNoInternetAlert()
         }
@@ -366,7 +377,7 @@ class CategoriesViewController: UIViewController {
             showNoInternetAlert()
         }
     }
-
+    
     private func showNoInternetAlert() {
         let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -432,64 +443,64 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                 if product.variants[0].id != fakeProductInDraftOrder {
                     // deafult now if false
                     if product.variants[0].isSelected {
-                    // Remove from fav
-                    showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
-                                           okAction: { [weak self] _ in
-                        print("OK button remove tapped")
-                        productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                        // Remove from fav
+                        showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
+                                               okAction: { [weak self] _ in
+                            print("OK button remove tapped")
+                            productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                                DispatchQueue.main.async {
+                                    if isSuccess {
+                                        product.variants[0].isSelected = false
+                                        cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                        cell.heartButton.isEnabled = true
+                                        print("remove succeful")
+                                    } else {
+                                        self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                        cell.heartButton.isEnabled = true
+                                    }
+                                }
+                            }
+                            
+                        }, cancelAction: { _ in
+                            cell.heartButton.isEnabled = true
+                        }
+                        )
+                    } else {
+                        // Add to fav
+                        productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
                             DispatchQueue.main.async {
                                 if isSuccess {
-                                    product.variants[0].isSelected = false
-                                    cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                    cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                                     cell.heartButton.isEnabled = true
-                                    print("remove succeful")
+                                    print("added succesfully ")
+                                    product.variants[0].isSelected = true
+                                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                                    
                                 } else {
-                                    self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                    self?.showAlertWithTwoOption(message: "Failed to add to favorites")
                                     cell.heartButton.isEnabled = true
                                 }
                             }
                         }
+                    }}else {
+                        showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
                         
-                    }, cancelAction: { _ in
-                        cell.heartButton.isEnabled = true
-                              }
-                                       )
-                } else {
-                    // Add to fav
-                    productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
-                        DispatchQueue.main.async {
-                            if isSuccess {
-                                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                                cell.heartButton.isEnabled = true
-                                print("added succesfully ")
-                                product.variants[0].isSelected = true
-                                self?.showCheckMarkAnimation(mark: "heart.fill")
-                                
-                            } else {
-                                self?.showAlertWithTwoOption(message: "Failed to add to favorites")
-                                cell.heartButton.isEnabled = true
-                        }
                     }
-                }
-            }}else {
-                showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
-
+            } else {
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                    okAction: {  _ in
+                    Navigation.ToALogin(from: self)
+                    print("Login OK button tapped")
+                })
             }
-    } else {
-        showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
-                               okAction: {  _ in
-            Navigation.ToALogin(from: self)
-            print("Login OK button tapped")
-        })
+        }
     }
-}
-}
-private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
-let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
-alertController.addAction(okAction)
-present(alertController, animated: true, completion: nil)
-}
+    private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)

@@ -153,6 +153,8 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
             cell.couponLable.text = "No discount code found"
         }
         cell.addressLabel.text = (selectedAddress ?? "") + "," + (selectedCountry ?? "")
+        
+        orderViewModel.storeShippingAddress((selectedAddress ?? "") + "," + (selectedCountry ?? ""))
         cell.phoneLabel.text = selectedPhone
         
         return cell

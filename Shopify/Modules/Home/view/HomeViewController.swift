@@ -43,7 +43,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
         if homeViewModel.isNetworkReachable() {
-            Navigation.ToSearch(from: self, comeFromHome: true, products: [])
+            
+            let storyboard = UIStoryboard(name: "third", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+                vc.comeFromHome = true
+                let searchViewModel = SearchViewModel()
+                searchViewModel.recevingProductFromANotherScreen = []
+
+                vc.searchViewModel = searchViewModel
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: true, completion: nil)
+            }
         } else {
             showNoInternetAlert()
         }
@@ -287,6 +297,8 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return
         }
         
+        
+        
         if collectionView == brandsCollectionView {
             guard let brand = homeViewModel.brand(at: indexPath.item) else { return }
             
@@ -299,7 +311,16 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             self.present(brandsVC, animated: true, completion: nil)
             
         } else if collectionView == couponsCollectionView {
-            fetchDiscountCodesAndShowAlert(for: indexPath)
+            if !Authorize.isRegistedCustomer(){
+                self.showAlertWithTwoOption(message: "Log in to get Offers and do Shopping",
+                                            okAction: { action in
+                    Navigation.ToALogin(from: self)
+                    print("OK button tapped")
+                }
+                )
+            }else{
+                fetchDiscountCodesAndShowAlert(for: indexPath)
+            }
         }
     }
     
@@ -334,6 +355,18 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         }))
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
 }
