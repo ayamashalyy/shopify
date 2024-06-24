@@ -31,13 +31,13 @@ class PaymentViewController: UIViewController {
         setupConfirmPayButton()
         fetchExchangeRates()
         updateTotalPrice()
-
+        
     }
     
     func updateTotalPrice(){
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-
-        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)" , to: selectedCurrency) ?? "\(grandTotal) USD"
+        
+        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal) USD"
         totalPrice.text = convertedGrandTotalPrice
         orderViewModel.storeGradeTotal("\(grandTotal)")
     }
@@ -69,11 +69,11 @@ class PaymentViewController: UIViewController {
                                 print("Line items deleted successfully")
                             }
                         }
-
+                        
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
                         Navigation.ToHome(from: self)
-
+                        
                         self.orderViewModel.sendInvoiceToCustomer { result in
                             switch result {
                             case .success():

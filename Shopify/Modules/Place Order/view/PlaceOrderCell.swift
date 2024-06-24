@@ -18,15 +18,27 @@ class PlaceOrderCell: UITableViewCell {
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
     var cancelDiscountHandler: (() -> Void)?
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    var isDiscountApplied: Bool = false
+        
+        override func awakeFromNib() {
+            super.awakeFromNib()
+        }
+        
+        override func setSelected(_ selected: Bool, animated: Bool) {
+            super.setSelected(selected, animated: animated)
+        }
+        
+        func updateDiscountPercentage(_ percentage: Int) {
+            if percentage > 0 {
+                cancelButton.setImage(UIImage(named: "multiply"), for: .normal)
+                isDiscountApplied = true
+            } else {
+                cancelButton.setImage(UIImage(named: "accept"), for: .normal)
+                isDiscountApplied = false
+            }
+        }
+        
+        @IBAction func cancelDiscount(_ sender: UIButton) {
+            cancelDiscountHandler?()
+        }
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    @IBAction func cancelDiscount(_ sender: UIButton) {
-        cancelDiscountHandler?()
-    }
-}

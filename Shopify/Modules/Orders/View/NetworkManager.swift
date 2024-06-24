@@ -53,8 +53,6 @@ enum Root: String {
 class NetworkManager {
     
     
-    
-    
     static func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
         {
         let additionDraftOrder = "\(Authorize.cardDraftOrderId()!).json"
