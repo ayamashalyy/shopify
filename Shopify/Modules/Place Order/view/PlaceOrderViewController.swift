@@ -127,14 +127,14 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
             let convertedGradeTotalString = settingsViewModel.convertPrice("\(discountedTotal + 5)" , to: selectedCurrency) ?? "\(discountedTotal + 5)USD"
             
             cell.gradeTotalLable.text = convertedGradeTotalString
-            grandTotal = Int(convertedGradeTotalString)!
+            grandTotal = Int(discountedTotal + 5)
         } else {
             cell.discountLable.text = "0.0 %"
             let convertedGradeTotalString = settingsViewModel.convertPrice("\(totalPrice + 5)" , to: selectedCurrency) ?? "\(totalPrice + 5)USD"
             
             orderViewModel.storeTotalDiscount("")
             cell.gradeTotalLable.text = convertedGradeTotalString
-            grandTotal = Int(convertedGradeTotalString)!
+            grandTotal = Int(totalPrice + 5)
             
         }
         
@@ -197,14 +197,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     
     
     @IBAction func placeOrder(_ sender: UIButton) {
-//        let totalPrice = viewModel.cartItems.reduce(0) { $0 + ($1.4 != 45293432635640 ? $1.1 * $1.2 : 0) }
-//        var grandTotal = totalPrice + 5
-//
-//        if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
-//           let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
-//            let discountAmount = totalPrice * discountPercentage / 100
-//            grandTotal = totalPrice - discountAmount + 5
-//        }
+
         print("grandTotal\(grandTotal)")
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {

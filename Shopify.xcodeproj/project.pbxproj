@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		030744892C29D64E00A182A8 /* MeGuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030744882C29D64E00A182A8 /* MeGuestViewController.swift */; };
 		0337F1F82C0E0BAF00D97CBD /* ShoppingCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337F1F72C0E0BAF00D97CBD /* ShoppingCartViewController.swift */; };
 		0337F1FB2C0E0C3B00D97CBD /* ShoppingCartableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0337F1F92C0E0C3B00D97CBD /* ShoppingCartableViewCell.swift */; };
 		0337F1FC2C0E0C3B00D97CBD /* ShoppingCartableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0337F1FA2C0E0C3B00D97CBD /* ShoppingCartableViewCell.xib */; };
@@ -121,6 +122,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		030744882C29D64E00A182A8 /* MeGuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeGuestViewController.swift; sourceTree = "<group>"; };
 		030E50A52C18985D00BA16B8 /* Shopify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shopify.entitlements; sourceTree = "<group>"; };
 		0337F1F72C0E0BAF00D97CBD /* ShoppingCartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCartViewController.swift; sourceTree = "<group>"; };
 		0337F1F92C0E0C3B00D97CBD /* ShoppingCartableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingCartableViewCell.swift; sourceTree = "<group>"; };
@@ -581,6 +583,7 @@
 				03E40D992C10C31500489854 /* OrderViewCell.xib */,
 				03E40D9C2C10D5AE00489854 /* WishListViewCell.swift */,
 				03E40D9D2C10D5AE00489854 /* WishListViewCell.xib */,
+				030744882C29D64E00A182A8 /* MeGuestViewController.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1283,6 +1286,7 @@
 				03ED90ED2C0DCCC700EE0A50 /* HomeViewController.swift in Sources */,
 				03E3E5B52C19071200F0164C /* ContactUsViewController.swift in Sources */,
 				0351671B2C0D3E6C00B208A8 /* SettingsViewController.swift in Sources */,
+				030744892C29D64E00A182A8 /* MeGuestViewController.swift in Sources */,
 				03EAA80C2C1434F500A60BDA /* AddressViewModel.swift in Sources */,
 				5188A1402C1DCD3E00865F57 /* DiscountCode.swift in Sources */,
 				5187651C2C1A20D50040EF33 /* Order.swift in Sources */,
