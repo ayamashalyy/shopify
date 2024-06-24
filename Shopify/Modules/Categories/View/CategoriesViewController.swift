@@ -428,8 +428,10 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
             
             if Authorize.isRegistedCustomer() {
                 cell.heartButton.isEnabled = false
-                // deafult now if false
-                if product.variants[0].isSelected {
+                
+                if product.variants[0].id != fakeProductInDraftOrder {
+                    // deafult now if false
+                    if product.variants[0].isSelected {
                     // Remove from fav
                     showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
                                            okAction: { [weak self] _ in
@@ -466,19 +468,28 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                             } else {
                                 self?.showAlertWithTwoOption(message: "Failed to add to favorites")
                                 cell.heartButton.isEnabled = true
-                            }
                         }
                     }
                 }
-            } else {
-                showAlertWithTwoOption(message: "Login to add to favorites?",
-                                       okAction: {  _ in
-                    Navigation.ToALogin(from: self)
-                    print("Login OK button tapped")
-                })
+            }}else {
+                showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
+
             }
-        }
+    } else {
+        showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                               okAction: {  _ in
+            Navigation.ToALogin(from: self)
+            print("Login OK button tapped")
+        })
     }
+}
+}
+private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
+let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+alertController.addAction(okAction)
+present(alertController, animated: true, completion: nil)
+}
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
@@ -492,7 +503,18 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
         
         present(alertController, animated: true, completion: nil)
     }
-
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width / 2 - 20 , height: 260)
     }

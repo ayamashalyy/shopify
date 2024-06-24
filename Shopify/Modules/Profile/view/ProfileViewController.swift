@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var userName: UILabel!
     let indicator = UIActivityIndicatorView(style: .large)
     let settingsViewModel = SettingsViewModel()
-    
+    let noItemsImageView = UIImageView(image: UIImage(named: "no_items"))
     var orderViewModel = OrderViewModel.shared
     @IBOutlet weak var tableview: UITableView!
     
@@ -35,9 +35,23 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         fetchExchangeRates()
         setupCartButton()
         userName.text = Authorize.getCustomerFullName()
-        
+        setupNoItemsImageView()
         
     }
+    
+    
+      func setupNoItemsImageView() {
+          noItemsImageView.contentMode = .scaleAspectFit
+          noItemsImageView.translatesAutoresizingMaskIntoConstraints = false
+          view.addSubview(noItemsImageView)
+          NSLayoutConstraint.activate([
+              noItemsImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+              noItemsImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+              noItemsImageView.widthAnchor.constraint(equalToConstant: 200),
+              noItemsImageView.heightAnchor.constraint(equalToConstant: 200)
+          ])
+          noItemsImageView.isHidden = true
+      }
     
     
     
@@ -134,28 +148,21 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                        let imageUrl = lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value,
                        let price = lineItem.price {
                         let favLineItem = FavLineItem(name: lineItem.title ?? "", productId: lineItem.product_id!, image: imageUrl, price: price, firstVariantid: lineItem.variant_id!)
-                        if numberOfFav < 2
-                        {
-                            print("WishListViewCell\(numberOfFav)")
+                        if numberOfFav < 2 {
                             self.myfavLineItem.append(favLineItem)
                             numberOfFav += 1
-                            
                         }
-                        else
-                        {
-                            print("does not WishListViewCell")
-                        }
-                        
                         print("Fav: \(favLineItem)")
-                    } else {
-                        print("Error: Missing data in lineItem \(lineItem)")
                     }
                 }
+                print("Total Wishlist Items: \(self.myfavLineItem.count)")
                 self.indicator.stopAnimating()
                 self.tableview.reloadData()
+                self.checkEmptyState()
             }
         }
         favViewModel?.getFavs()
+
     }
     
     
@@ -166,12 +173,35 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
                 switch result {
                 case .success:
                     self.tableview.reloadData()
+                    self.checkEmptyState()
                 case .failure(let error):
                     print("Failed to fetch orders: \(error.localizedDescription)")
                 }
             }
         }
     }
+    
+    
+    private func checkEmptyState() {
+         let visibleFavItems = myfavLineItem.filter { $0.firstVariantid != 45293432635640 }
+         if orderViewModel.orders.isEmpty && visibleFavItems.isEmpty {
+             noItemsImageView.isHidden = false
+             tableview.isHidden = true
+             showAlertWithSingleOption(message: "There are no items in your orders and wish list.")
+         } else {
+             noItemsImageView.isHidden = true
+             tableview.isHidden = false
+         }
+     }
+    
+    
+    private func showAlertWithSingleOption(message: String) {
+          let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+          let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+          alertController.addAction(okAction)
+          present(alertController, animated: true, completion: nil)
+      }
+
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)

@@ -22,26 +22,19 @@ class ProductViewModel{
                     DispatchQueue.main.async {
                         
                         guard let self = self else {
-                            print("in  guard 1")
-
                             completion(false)
                             return
                         }
                         
                         guard let lineItems = self.favViewModel.LineItems else {
-                            print("in  guard let 2 ")
-
                             completion(false)
                             return
                         }
-                        print("after  guard let")
 
                         let isFav = lineItems.contains { lineItem in
                             imageUrl == lineItem.properties?.first(where: { $0.name == "imageUrl" })?.value
                         }
-                        
                         print(" i get the result ot isfav in check is fav \(isFav)")
-
                         completion(isFav)
                     }
                 }
