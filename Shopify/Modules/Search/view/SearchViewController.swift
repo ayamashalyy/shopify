@@ -9,28 +9,28 @@ import UIKit
 
 class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, CustomCategoriesCellDelegate {
     
-    var settingsViewModel = SettingsViewModel()
+    var settingsViewModel: = SettingsViewModel()
+    
     var comeFromHome: Bool? = true
     var products: [Product] = []
     var filteredProducts: [Product] = []
     var isSearching = false
-    var isFiltering = false // Added to track filtering state
-    var originalProducts: [Product] = [] // Added to store original products
+    var isFiltering = false
     
     var searchViewModel = SearchViewModel()
     var searchCollectionView: UICollectionView!
 
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var priceFilter: UILabel!
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-        @IBAction func back(_ sender: Any) {
+    @IBAction func back(_ sender: Any) {
             dismiss(animated: true)
         }
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         searchBar.delegate = self
         setUpUi()
         loadProducts()
@@ -46,14 +46,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         priceFilter.isHidden.toggle()
         
         if slider.isHidden {
-            // Filter turned off
+            // the oriiiignal
             filteredProducts = products
             isFiltering = false
         } else {
-            // Filter turned on
             filterProductsByCurrentSliderValue()
             isFiltering = true
         }
+        
         searchCollectionView.reloadData()
     }
     
@@ -65,10 +65,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     func filterProductsByCurrentSliderValue() {
         if let currentValue = Float(priceFilter.text ?? "10.0") {
-            print("Filtering products by price: \(currentValue)")
             filteredProducts = searchViewModel.filterProducts(filteredProducts: products, byPrice: currentValue)
             searchCollectionView.reloadData()
-            print("Reloaded collection view with filtered products.")
         }
     }
     
@@ -94,7 +92,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
             searchViewModel.bindResultToViewController = { [weak self] in
                 DispatchQueue.main.async {
                     self?.products = self?.searchViewModel.products ?? []
-                    self?.originalProducts = self?.products ?? [] // Save original products
                     self?.filteredProducts = self?.products ?? []
                     self?.searchCollectionView.reloadData()
                 }
@@ -149,10 +146,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         }
         
         if product.variants[0].isSelected {
-            print("is fav ")
             cell.heartButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
         } else {
-            print("is not fav")
             cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         }
         cell.heartButton.tag = indexPath.row
@@ -174,21 +169,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
                         // Remove from fav
                         showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
                                                okAction: { [weak self] _ in
-                            print("OK button remove tapped")
                             productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
                                 DispatchQueue.main.async {
                                     if isSuccess {
                                         product.variants[0].isSelected = false
                                         cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
                                         cell.heartButton.isEnabled = true
-                                        print("remove successful")
                                     } else {
                                         self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
                                         cell.heartButton.isEnabled = true
                                     }
                                 }
                             }
-                            
                         }, cancelAction: { _ in
                             cell.heartButton.isEnabled = true
                         })
@@ -199,7 +191,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
                                 if isSuccess {
                                     cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                                     cell.heartButton.isEnabled = true
-                                    print("added successfully ")
                                     product.variants[0].isSelected = true
                                     self?.showCheckMarkAnimation(mark: "heart.fill")
                                 } else {
@@ -238,19 +229,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
             let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
             alertController.addAction(cancelAlertAction)
         }
-        
         present(alertController, animated: true, completion: nil)
     }
     
     private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        
         let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
-        
         alertController.addAction(okAlertAction)
         alertController.addAction(cancelAlertAction)
-        
         present(alertController, animated: true, completion: nil)
     }
     
