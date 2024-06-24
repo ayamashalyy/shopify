@@ -61,16 +61,19 @@ class PaymentViewController: UIViewController {
                         print("Error creating order: \(error)")
                     } else if let order = order {
                         print("Order created successfully: \(order)")
-                        self.viewModel.deleteLineItems { error in
+                        
+                        self.viewModel.updateDraftOrderAfterOrder { error in
                             if let error = error {
-                                print("Failed to delete line items: \(error.localizedDescription)")
+                                print("Failed to update line items: \(error.localizedDescription)")
                             } else {
-                                print("Line items deleted successfully")
+                                self.showOrderSuccessAlert()
+                                print("updated successfully and sent email inside")
                             }
                         }
                         
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
+
                         Navigation.ToHome(from: self)
                         
                         //Navigation.ToHome(from: self)
@@ -86,6 +89,7 @@ class PaymentViewController: UIViewController {
                             }
                         }
                         
+
                     }
                 }
             }

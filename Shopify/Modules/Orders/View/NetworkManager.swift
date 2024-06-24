@@ -9,77 +9,9 @@ import Foundation
 import Alamofire 
 
 
-enum Endpoint: String {
-    case smartCollections = "smart_collections.json"
-    case specificProduct = "products/"
-    case listOfBrandProducts = "products.json?collection_id="
-    case customers = "customers.json"
-    case addressCastomer = "customers/"
-    case order = "orders.json"
-    case discount_code = "price_rules"
-    
-    //case productsByCategory = "collections/"
-    case allProduct = "products.json"
-    
-    case draftOrder = "draft_orders.json"
-    case specficDraftOeder = "draft_orders/"
-    
-    
-    
-    //    8575848153336.json
-}
-
-enum Root: String {
-    case smartCollectionsRoot = "smart_collections"
-    case product = "product"
-    case products = "products"
-    case customers = "customers"
-    case customer = "customer"
-    case address = "addresses"
-    
-    case allDraftOrderRoot = "draft_orders"
-    
-    case specificDraftOrder = "draft_order"
-    case order = "order"
-    case orders = "orders"
-    case discountCodes = "discount_codes"
-    case priceRules = "price_rules"
-    case sendingInvoice = "draft_order_invoice"
-}
-
 // remove it every time before push
 
-
 class NetworkManager {
-    
-    
-    static func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)
-        {
-        let additionDraftOrder = "\(Authorize.cardDraftOrderId()!).json"
-        NetworkManager.fetchDataFromApi(endpoint: .specficDraftOeder, rootOfJson: .specificDraftOrder, addition: additionDraftOrder) { (data, error) in
-            
-            if let error = error {
-                completion(nil,error)
-                return
-            }
-            
-            guard let data = data else {
-                completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data returned"]))
-                return
-            }
-            
-            do {
-                print("Received data: \(String(data: data, encoding: .utf8) ?? "No data")")
-                let draftOrders = try JSONDecoder().decode(DraftOrder.self, from: data)
-                let cartItemsCount = (draftOrders.line_items?.count ?? 0) 
-                completion(cartItemsCount,nil)
-            } catch let decodingError {
-                completion(nil,decodingError)
-            }
-        }
-        
-    }
-    
     
     static func fetchDataFromApi(endpoint: Endpoint, rootOfJson: Root, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
         let urlString = "https://\(API_KEY):\(TOKEN)\(baseUrl)\(endpoint.rawValue)\(addition ?? "")"
@@ -92,27 +24,18 @@ class NetworkManager {
         Alamofire.request(url).responseJSON { response in
             switch response.result {
             case .success(let value):
-                //    print("response is successed ")
                 guard let json = value as? [String: Any] else {
                     completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON format"]))
                     return
                 }
-                //   print("JSON Response:", json)
-                
-                //       print("Raw JSON: \(json)")
-                
-                
                 var jsonData: Data?
-                
                 if let jsonObject = json[rootOfJson.rawValue] as? [String: Any] {
                     // Handle single object
                     jsonData = try? JSONSerialization.data(withJSONObject: jsonObject)
                     //        print("is single ")
                 } else if let jsonArray = json[rootOfJson.rawValue] as? [[String: Any]] {
                     // Handle array of objects
-                    
                     //        print("is arrary ")
-                    
                     jsonData = try? JSONSerialization.data(withJSONObject: jsonArray)
                     //             print("jsonData  \(jsonData)")
                 } else {
@@ -144,14 +67,6 @@ class NetworkManager {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(TOKEN, forHTTPHeaderField: "X-Shopify-Access-Token")
         request.httpBody = body
-        
-        //        // Print request details for debugging
-        //        if let jsonString = String(data: body, encoding: .utf8) {
-        //            print("Request Body JSON: \(jsonString)")
-        //        }
-        //        print("Request URL: \(urlString)")
-        //        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
-        //
         Alamofire.request(request)
             .validate()
             .responseData { response in
@@ -172,7 +87,6 @@ class NetworkManager {
     
     
     static func fetchExchangeRates(urlString: String ,completion: @escaping (Data?, Error?) -> Void) {
-        //        let urlString = "https://v6.exchangerate-api.com/v6/3f59a2c7ff27012aaa916946/latest/USD"
         Alamofire.request(urlString).responseData { response in
             switch response.result {
             case .success(let data):
