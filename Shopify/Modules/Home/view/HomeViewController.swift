@@ -33,14 +33,37 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     
     @IBAction func goToFav(_ sender: UIBarButtonItem) {
-        if homeViewModel.isNetworkReachable() {
-            print("go to favss from home")
-            Navigation.ToAllFavourite(from: self)
-            print("go to favss from home after")
-        } else {
-            showNoInternetAlert()
+        if Authorize.isRegistedCustomer() {
+            if homeViewModel.isNetworkReachable() {
+                print("go to favss from home")
+                Navigation.ToAllFavourite(from: self)
+                print("go to favss from home after")
+            } else {
+                showNoInternetAlert()
+            }
+        }else
+        {
+            //guest
+            showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                okAction: {  _ in
+                Navigation.ToALogin(from: self)
+                print("Login OK button tapped")
+            })
         }
+        
     }
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
         if homeViewModel.isNetworkReachable() {
             
@@ -60,11 +83,20 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        if homeViewModel.isNetworkReachable() {
-            Navigation.ToOrders(from: self)
-        } else {
-            showNoInternetAlert()
-        }
+        if Authorize.isRegistedCustomer(){
+            if homeViewModel.isNetworkReachable() {
+                Navigation.ToOrders(from: self)
+            } else {
+                showNoInternetAlert()
+            }}else{
+                //guest
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                    okAction: {  _ in
+                    Navigation.ToALogin(from: self)
+                    print("Login OK button tapped")
+                })
+                
+            }
     }
     
     

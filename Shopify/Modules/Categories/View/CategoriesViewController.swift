@@ -32,14 +32,26 @@ class CategoriesViewController: UIViewController {
     let homeViewModel = HomeViewModel()
     
     @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
-        if homeViewModel.isNetworkReachable() {
-            print("go to favss from home")
-            Navigation.ToAllFavourite(from: self)
-            print("go to favss from home after")
-        } else {
-            showNoInternetAlert()
-        }
+        
+        if Authorize.isRegistedCustomer() {
+            if homeViewModel.isNetworkReachable() {
+                print("go to favss from home")
+                Navigation.ToAllFavourite(from: self)
+                print("go to favss from home after")
+            } else {
+                showNoInternetAlert()
+            }}else {
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                    okAction: {  _ in
+                    Navigation.ToALogin(from: self)
+                    print("Login OK button tapped")
+                })
+            }
+        
+        
     }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -107,10 +119,17 @@ class CategoriesViewController: UIViewController {
     }
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        if homeViewModel.isNetworkReachable() {
-            Navigation.ToOrders(from: self)
-        } else {
-            showNoInternetAlert()
+        if Authorize.isRegistedCustomer() {
+            if homeViewModel.isNetworkReachable() {
+                Navigation.ToOrders(from: self)
+            } else {
+                showNoInternetAlert()
+            }
+        }else {      showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                         okAction: {  _ in
+            Navigation.ToALogin(from: self)
+            print("Login OK button tapped")
+        })
         }
     }
     
