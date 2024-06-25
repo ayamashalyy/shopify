@@ -16,7 +16,7 @@ class SplashViewController: UIViewController {
          // for codding only the next line:
 
 
-     //  Authorize.logout()
+    //  Authorize.logout()
       self.checkCustomerID()
         }       
     }
