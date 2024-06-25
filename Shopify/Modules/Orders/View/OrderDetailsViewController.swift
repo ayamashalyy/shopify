@@ -179,22 +179,24 @@ class OrderItemCell: UITableViewCell {
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            containerView.heightAnchor.constraint(equalToConstant: 150),
             
             itemImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             itemImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            itemImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+            itemImageView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 1/3, constant: -10),
             itemImageView.heightAnchor.constraint(equalToConstant: 130),
+            itemImageView.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -10),
             
-            titleLabel.topAnchor.constraint(equalTo: itemImageView.bottomAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-            priceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            priceLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 10),
             priceLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             
             quantityLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 5),
-            quantityLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            quantityLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 10),
             quantityLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             quantityLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
         ])
