@@ -1,5 +1,13 @@
+//
+//  ShoppingCartViewController.swift
+//  Shopify
+//
+//  Created by aya on 03/06/2024.
+//
+
 import UIKit
 import Kingfisher
+import Reachability
 
 class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -48,6 +56,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+                    showNoInternetAlert()
+                    return
+                }
+        
         shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
             self?.tableView.reloadData()
             self?.updateSubtotal()
@@ -67,6 +81,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
+    private func showNoInternetAlert() {
+          let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+          alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+          present(alert, animated: true, completion: nil)
+      }
+    
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
@@ -80,6 +100,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func fetchDraftOrders() {
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+                   showNoInternetAlert()
+                   return
+               }
+        
         shoppingCartViewModel.fetchDraftOrders { [weak self] error in
             if let error = error {
                 print("Error fetching draft orders: \(error.localizedDescription)")
@@ -92,6 +118,13 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     
     func fetchExchangeRates(){
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+                   showNoInternetAlert()
+                   return
+               }
+               
+        
         settingsViewModel.fetchExchangeRates { [weak self] error in
             if let error = error {
                 print("Error fetching exchange rates: \(error)")
@@ -270,6 +303,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
 
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+                   showNoInternetAlert()
+                   return
+               }
+               
         let filteredItems = shoppingCartViewModel.cartItems.filter { $0.4 != 45293432635640 }
         if filteredItems.isEmpty {
             showAlert(message: "Your cart is empty. Please add items to your cart before proceeding.")

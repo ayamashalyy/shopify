@@ -1,3 +1,10 @@
+//
+//  ShoppingCartViewModel.swift
+//  Shopify
+//
+//  Created by aya on 03/06/2024.
+//
+
 import Foundation
 
 class ShoppingCartViewModel {

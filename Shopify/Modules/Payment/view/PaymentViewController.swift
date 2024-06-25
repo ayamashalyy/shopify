@@ -7,7 +7,7 @@
 
 import UIKit
 import PassKit
-
+import Reachability
 class PaymentViewController: UIViewController {
     
     @IBOutlet weak var codButton: UIButton!
@@ -22,8 +22,8 @@ class PaymentViewController: UIViewController {
     let settingsViewModel = SettingsViewModel()
     let viewModel = ShoppingCartViewModel()
     
-    var grandTotal: Int = 0
-    
+    var grandTotal: Double = 0.0
+    var isUSD :Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,14 +31,19 @@ class PaymentViewController: UIViewController {
         setupConfirmPayButton()
         fetchExchangeRates()
         updateTotalPrice()
-        
+        print("grandTotal in view did load in payment \(grandTotal)")
+
     }
     
     func updateTotalPrice() {
-        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal) USD"
-        totalPrice.text = convertedGrandTotalPrice
-        orderViewModel.storeGradeTotal("\(grandTotal)")
+        if isUSD {
+            totalPrice.text = "\(grandTotal) USD"
+
+        }else{
+            totalPrice.text = "\(grandTotal) EGP"
+
+        }
+           orderViewModel.storeGradeTotal("\(grandTotal)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,6 +156,12 @@ class PaymentViewController: UIViewController {
     }
     
     @IBAction func Payment(_ sender: UIButton) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+            
         if appleButton.isSelected {
             startApplePay()
             print("grade total : \(orderViewModel.fetchGradeTotal())")
@@ -236,6 +247,13 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+    
+    func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
     
     
     func performCustomActionForApplePaySuccess() {

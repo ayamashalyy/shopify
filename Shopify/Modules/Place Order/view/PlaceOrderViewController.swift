@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Reachability
 
 class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -20,7 +21,11 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     var selectedAddress: String?
     var selectedPhone: String?
     var selectedCountry: String?
-    var grandTotal = 0
+    
+    
+    var grandTotal = 0.00
+    var isUSD = true
+    var settingVM = SettingsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +48,23 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        var  currency = settingVM.getSelectedCurrency()?.rawValue
+        print(" currency\(currency)")
+        if currency != "USD" {
+            isUSD = false
+            print("isUSD false\(isUSD) ")
+
+        }
+        else {
+            print("isUSD true\(isUSD) ")
+
+        }
+        print("isUSD\(isUSD) ")
+        
     }
     
     func fetchExchangeRates() {
@@ -111,7 +133,7 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
         
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let totalPrice = viewModel.cartItems.reduce(0) { $0 + ($1.4 != 45293432635640 ? $1.1 * $1.2 : 0) }
-        let convertedTotalPriceString = settingsViewModel.convertPrice("\(totalPrice)" , to: selectedCurrency) ?? "\(totalPrice)USD"
+        let convertedTotalPriceString = settingsViewModel.convertPrice("\(totalPrice)" , to: selectedCurrency) ?? "\(totalPrice) USD"
         
         cell.subTotalLable.text = convertedTotalPriceString
         
@@ -120,22 +142,32 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
             let discountAmount = totalPrice * discountPercentage / 100
             let discountedTotal = totalPrice - discountAmount
             orderViewModel.storeTotalDiscount("\(discountAmount)")
-            let convertedDiscountedTotalString = settingsViewModel.convertPrice("\(discountedTotal)" , to: selectedCurrency) ?? "\(discountedTotal)USD"
+            let convertedDiscountedTotalString = settingsViewModel.convertPrice("\(discountedTotal)" , to: selectedCurrency) ?? "\(discountedTotal) USD"
             
             cell.discountLable.text = "\(discountPercentage)%"
             
-            let convertedGradeTotalString = settingsViewModel.convertPrice("\(discountedTotal + 5)" , to: selectedCurrency) ?? "\(discountedTotal + 5)USD"
+            let convertedGradeTotalString = settingsViewModel.convertPrice("\(discountedTotal + 5)" , to: selectedCurrency) ?? "\(discountedTotal + 5) USD"
             
             cell.gradeTotalLable.text = convertedGradeTotalString
-            grandTotal = Int(discountedTotal + 5)
+//            print(" convertedGradeTotalString grandTotal in table view 1 with discount  convertedGradeTotalString \(convertedGradeTotalString)")
+//            print("String(convertedGradeTotalString.dropLast(3))\(String(convertedGradeTotalString.dropLast(4)))")
+//            print("Int(String(convertedGradeTotalString.dropLast(4)))\(Double(String(convertedGradeTotalString.dropLast(4))))")
+            
+            grandTotal = Double(String(convertedGradeTotalString.dropLast(4))) ?? 0.00
+            
+            print("grandTotal in table view 1 with discount  \(grandTotal)")
+
         } else {
             cell.discountLable.text = "0.0 %"
             let convertedGradeTotalString = settingsViewModel.convertPrice("\(totalPrice + 5)" , to: selectedCurrency) ?? "\(totalPrice + 5)USD"
             
             orderViewModel.storeTotalDiscount("")
             cell.gradeTotalLable.text = convertedGradeTotalString
-            grandTotal = Int(totalPrice + 5)
+         
+            grandTotal = Double(String(convertedGradeTotalString.dropLast(4))) ?? 0.0
             
+            print("grandTotal in table view 2 withooooout discount  \(grandTotal)")
+
         }
         
         let convertedShippingFeesString = settingsViewModel.convertPrice("\(5)" , to: selectedCurrency) ?? "\(5)USD"
@@ -172,20 +204,29 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
                 let discountAmount = totalPrice * discountPercentage / 100
                 let discountedTotal = totalPrice - discountAmount
                 orderViewModel.storeTotalDiscount("\(discountAmount)")
-                let convertedDiscountedTotalString = settingsViewModel.convertPrice("\(discountedTotal)" , to: selectedCurrency) ?? "\(discountedTotal)USD"
+                let convertedDiscountedTotalString = settingsViewModel.convertPrice("\(discountedTotal)" , to: selectedCurrency) ?? "\(discountedTotal) USD"
                 
                 cell.discountLable.text = "\(discountPercentage)%"
-                let convertedGradeTotalString = settingsViewModel.convertPrice("\(discountedTotal + 5)" , to: selectedCurrency) ?? "\(discountedTotal + 5)USD"
+                let convertedGradeTotalString = settingsViewModel.convertPrice("\(discountedTotal + 5)" , to: selectedCurrency) ?? "\(discountedTotal + 5) USD"
                 
                 cell.gradeTotalLable.text = convertedGradeTotalString
+                
+                grandTotal = Double(String(convertedGradeTotalString.dropLast(4))) ?? 0.0
+                   print("grandTotal in table view cell.isDiscountApplied \(grandTotal)")
+                
+                
                 cell.updateDiscountPercentage(discountPercentage)
             }
         } else {
             cell.discountLable.text = "0.0 %"
-            let convertedGradeTotalString = settingsViewModel.convertPrice("\(totalPrice + 5)" , to: selectedCurrency) ?? "\(totalPrice + 5)USD"
+            let convertedGradeTotalString = settingsViewModel.convertPrice("\(totalPrice + 5)" , to: selectedCurrency) ?? "\(totalPrice + 5) USD"
             
             orderViewModel.storeTotalDiscount("")
             cell.gradeTotalLable.text = convertedGradeTotalString
+            
+            grandTotal = Double(String(convertedGradeTotalString.dropLast(4))) ?? 0.0
+            print("grandTotal in table view cell.isDiscountApplied elsssse \(grandTotal)")
+         
             cell.updateDiscountPercentage(0)
         }
         
@@ -197,32 +238,31 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     
     
     @IBAction func placeOrder(_ sender: UIButton) {
-        grandTotal = calculateGrandTotal()
-        print("grandTotal\(grandTotal)")
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+                   showNoInternetAlert()
+                   return
+               }
+        
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
             paymentViewController.modalPresentationStyle = .fullScreen
             paymentViewController.grandTotal = grandTotal
+            paymentViewController.isUSD = isUSD
             present(paymentViewController, animated: true, completion: nil)
         }
     }
     
-    
-    private func calculateGrandTotal() -> Int {
-        let totalPrice = viewModel.cartItems.reduce(0) { $0 + ($1.4 != 45293432635640 ? $1.1 * $1.2 : 0) }
-        if let storedDiscountDict = homeViewModel.fetchStoredDiscountCode(),
-           let discountPercentage = storedDiscountDict["priceRuleValue"] as? Int {
-            let discountAmount = totalPrice * discountPercentage / 100
-            let discountedTotal = totalPrice - discountAmount
-            return discountedTotal + 5
-        } else {
-            return totalPrice + 5
-        }
-    }
-    
+
     @IBAction func backToSelectAddress(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
 }
 
 extension PlaceOrderViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

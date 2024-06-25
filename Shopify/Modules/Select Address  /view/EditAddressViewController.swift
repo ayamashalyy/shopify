@@ -44,6 +44,12 @@ class EditAddressViewController: UIViewController {
     }
     
     @IBAction func editAddress(_ sender: UIButton) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         guard let address = viewModel.getDefaultAddress() else { return }
         guard validateFields() else { return }
         let updatedAddress = Address(id: address.id,
@@ -116,6 +122,12 @@ class EditAddressViewController: UIViewController {
     
     @IBAction func backToSelectAddress(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
+    }
+    
+    func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
 }
