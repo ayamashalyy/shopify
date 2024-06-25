@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Reachability
 
 
 
@@ -30,6 +31,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     @IBAction func addAddress(_ sender: UIBarButtonItem) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let addAddressVC = storyboard.instantiateViewController(withIdentifier: "AddAddressViewController") as? AddAddressViewController {
             addAddressVC.modalPresentationStyle = .overFullScreen
@@ -71,6 +78,13 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
+        
         super.viewWillAppear(animated)
         viewModel.getAllAddresses { [weak self] result in
             switch result {
@@ -144,6 +158,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         if editingStyle == UITableViewCell.EditingStyle.delete {
             let address = viewModel.addresses[indexPath.row]
             self.showConfirmDeleteAlert(address: address, indexPath: indexPath)
@@ -188,6 +208,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         
         for i in 0..<viewModel.addresses.count {
@@ -219,6 +245,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     func editAddress(at indexPath: IndexPath) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         guard let editAddressVC = storyboard?.instantiateViewController(withIdentifier: "EditAddressViewController") as? EditAddressViewController else {
             return
         }
@@ -254,6 +286,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     @IBAction func navToPlaceOrder(_ sender: UIButton) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         if viewModel.addresses.isEmpty {
             showAlert(title: "No Address", message: "Please add an address before placing an order.")
         } else {
@@ -269,6 +307,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
                 present(placeOrderViewController, animated: true, completion: nil)
             }
         }
+    }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     

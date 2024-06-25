@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Reachability
 
 class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -199,6 +200,12 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     @IBAction func placeOrder(_ sender: UIButton) {
         grandTotal = calculateGrandTotal()
         print("grandTotal\(grandTotal)")
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+                   showNoInternetAlert()
+                   return
+               }
+        
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let paymentViewController = storyboard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController {
             paymentViewController.modalPresentationStyle = .fullScreen
@@ -223,6 +230,13 @@ class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITable
     @IBAction func backToSelectAddress(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
 }
 
 extension PlaceOrderViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

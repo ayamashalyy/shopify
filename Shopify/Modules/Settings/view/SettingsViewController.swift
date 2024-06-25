@@ -48,6 +48,13 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         return cell
     }
     
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -107,6 +114,12 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     }
     
     func presentCurrencySelectionAlert() {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+               showNoInternetAlert()
+               return
+           }
+        
         let alert = UIAlertController(title: "Select Currency", message: nil, preferredStyle: .alert)
         
         let usdAction = UIAlertAction(title: "USD", style: .default) { _ in
