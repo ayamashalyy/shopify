@@ -7,7 +7,7 @@
 
 import UIKit
 import PassKit
-
+import Reachability
 class PaymentViewController: UIViewController {
     
     @IBOutlet weak var codButton: UIButton!
@@ -37,7 +37,9 @@ class PaymentViewController: UIViewController {
     func updateTotalPrice() {
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal) USD"
+        print("convertedGrandTotalPrice\(convertedGrandTotalPrice)")
         totalPrice.text = convertedGrandTotalPrice
+        print("totalPrice\(totalPrice)")
         orderViewModel.storeGradeTotal("\(grandTotal)")
     }
     
@@ -155,6 +157,12 @@ class PaymentViewController: UIViewController {
     }
     
     @IBAction func Payment(_ sender: UIButton) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+            
         if appleButton.isSelected {
             startApplePay()
             print("grade total : \(orderViewModel.fetchGradeTotal())")
@@ -240,6 +248,13 @@ extension PaymentViewController: PKPaymentAuthorizationViewControllerDelegate {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+    
+    func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
     
     
     func performCustomActionForApplePaySuccess() {

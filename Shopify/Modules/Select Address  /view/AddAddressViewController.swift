@@ -33,6 +33,12 @@ class AddAddressViewController: UIViewController {
     }
     
     @IBAction func addAddress(_ sender: UIButton) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         guard let address = addressTF.text, !address.isEmpty,
               let phone = phoneTF.text, !phone.isEmpty,
               let city = cityTF.text, !city.isEmpty,
@@ -70,6 +76,12 @@ class AddAddressViewController: UIViewController {
     
     @IBAction func backToSelectAddress(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
+    }
+    
+    func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
 }

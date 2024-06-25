@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Reachability
 
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -35,31 +36,31 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         fetchExchangeRates()
         setupCartButton()
         if let fullName = Authorize.getCustomerFullName() {
-               userName.text = fullName
-               print("Customer full name: \(fullName)")
-           } else {
-               print("Failed to get customer full name")
-           }
-           if userName.isHidden {
-               print("userName label is hidden")
-           }
+            userName.text = fullName
+            print("Customer full name: \(fullName)")
+        } else {
+            print("Failed to get customer full name")
+        }
+        if userName.isHidden {
+            print("userName label is hidden")
+        }
         setupNoItemsImageView()
         
     }
     
     
-      func setupNoItemsImageView() {
-          noItemsImageView.contentMode = .scaleAspectFit
-          noItemsImageView.translatesAutoresizingMaskIntoConstraints = false
-          view.addSubview(noItemsImageView)
-          NSLayoutConstraint.activate([
-              noItemsImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-              noItemsImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-              noItemsImageView.widthAnchor.constraint(equalToConstant: 200),
-              noItemsImageView.heightAnchor.constraint(equalToConstant: 200)
-          ])
-          noItemsImageView.isHidden = true
-      }
+    func setupNoItemsImageView() {
+        noItemsImageView.contentMode = .scaleAspectFit
+        noItemsImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(noItemsImageView)
+        NSLayoutConstraint.activate([
+            noItemsImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noItemsImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noItemsImageView.widthAnchor.constraint(equalToConstant: 200),
+            noItemsImageView.heightAnchor.constraint(equalToConstant: 200)
+        ])
+        noItemsImageView.isHidden = true
+    }
     
     
     
@@ -112,24 +113,36 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         if Authorize.isRegistedCustomer() {
             setting.isEnabled = true
             indicator.startAnimating()
-            getWishList()
-            getOrders()
-            fetchExchangeRates()
-            fetchCartItemsAndUpdateBadge()
+            if CheckNetworkReachability.checkNetworkReachability() {
+                getWishList()
+                getOrders()
+                fetchExchangeRates()
+                fetchCartItemsAndUpdateBadge()
+            } else {
+                showNoInternetAlert()
+            }
         } else {
             setting.isEnabled = false
-            self.showAlertWithTwoOption(message: "You are a guest,not have profile.Go to Login in?",
-                                        okAction: { action in
+            showAlertWithTwoOption(message: "You are a guest, not have profile. Go to Login in?",
+                                   okAction: { action in
                 Navigation.ToALogin(from: self)
                 print("OK button tapped")
             }
             )
         }
-        
     }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
     
     func fetchExchangeRates() {
         settingsViewModel.fetchExchangeRates { error in
@@ -170,7 +183,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         favViewModel?.getFavs()
-
+        
     }
     
     
@@ -191,25 +204,25 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     private func checkEmptyState() {
-         let visibleFavItems = myfavLineItem.filter { $0.firstVariantid != 45293432635640 }
-         if orderViewModel.orders.isEmpty && visibleFavItems.isEmpty {
-             noItemsImageView.isHidden = false
-             tableview.isHidden = true
-             showAlertWithSingleOption(message: "There are no items in your orders and wish list.")
-         } else {
-             noItemsImageView.isHidden = true
-             tableview.isHidden = false
-         }
-     }
+        let visibleFavItems = myfavLineItem.filter { $0.firstVariantid != 45293432635640 }
+        if orderViewModel.orders.isEmpty && visibleFavItems.isEmpty {
+            noItemsImageView.isHidden = false
+            tableview.isHidden = true
+            showAlertWithSingleOption(message: "There are no items in your orders and wish list.")
+        } else {
+            noItemsImageView.isHidden = true
+            tableview.isHidden = false
+        }
+    }
     
     
     private func showAlertWithSingleOption(message: String) {
-          let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-          let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-          alertController.addAction(okAction)
-          present(alertController, animated: true, completion: nil)
-      }
-
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
@@ -337,10 +350,22 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func showMoreWishListItems() {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         Navigation.ToAllFavourite(from: self)
     }
     
     @IBAction func seeMoreOrders(_ sender: UIButton) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         let storyboard = UIStoryboard(name: "Second", bundle: nil)
         if let OrdersViewController = storyboard.instantiateViewController(withIdentifier: "OrdersViewController") as? OrdersViewController {
             OrdersViewController.modalPresentationStyle = .fullScreen
@@ -369,6 +394,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     @IBAction func navToShoppingCart(_ sender: UIBarButtonItem) {
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
         Navigation.ToOrders(from: self)
     }
 }
