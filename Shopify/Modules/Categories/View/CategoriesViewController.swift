@@ -125,7 +125,7 @@ class CategoriesViewController: UIViewController {
             } else {
                 showNoInternetAlert()
             }
-        }else {      showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+        }else {      showAlertWithTwoOptionOkayAndCancel(message: "Login to add to cart?",
                                                          okAction: {  _ in
             Navigation.ToALogin(from: self)
             print("Login OK button tapped")

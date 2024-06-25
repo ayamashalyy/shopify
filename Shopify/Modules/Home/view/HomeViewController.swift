@@ -90,7 +90,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 showNoInternetAlert()
             }}else{
                 //guest
-                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to cart?",
                                                     okAction: {  _ in
                     Navigation.ToALogin(from: self)
                     print("Login OK button tapped")
