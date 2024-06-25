@@ -109,7 +109,22 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         fetchPriceRules()
         setupCartButton()
         checkNetworkConnection()
-    }
+        
+        if Authorize.isRegistedCustomer() {
+            if let profileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
+                self.tabBarController?.viewControllers?[2] = profileViewController
+            }
+        } else {
+            if let meGuestViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MeGuestViewController") as? MeGuestViewController {
+                meGuestViewController.tabBarItem = UITabBarItem(title: "Me", image: UIImage(systemName: "person.circle"), selectedImage: nil)
+                self.tabBarController?.viewControllers?[2] = meGuestViewController
+            }
+
+            }
+        }
+    
+
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

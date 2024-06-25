@@ -23,14 +23,14 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     
     let emptyCartImageView: UIImageView = {
-           let imageView = UIImageView()
-           imageView.image = UIImage(named: "no_items")
-           imageView.contentMode = .scaleAspectFit
-           imageView.translatesAutoresizingMaskIntoConstraints = false
-           imageView.isHidden = true
-           return imageView
-       }()
-       
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "no_items")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,22 +45,22 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func setupEmptyCartImageView() {
-          view.addSubview(emptyCartImageView)
-          NSLayoutConstraint.activate([
-              emptyCartImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-              emptyCartImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-              emptyCartImageView.widthAnchor.constraint(equalToConstant: 200),
-              emptyCartImageView.heightAnchor.constraint(equalToConstant: 200)
-          ])
-      }
+        view.addSubview(emptyCartImageView)
+        NSLayoutConstraint.activate([
+            emptyCartImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyCartImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCartImageView.widthAnchor.constraint(equalToConstant: 200),
+            emptyCartImageView.heightAnchor.constraint(equalToConstant: 200)
+        ])
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         if !CheckNetworkReachability.checkNetworkReachability() {
-                    showNoInternetAlert()
-                    return
-                }
+            showNoInternetAlert()
+            return
+        }
         
         shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
             self?.tableView.reloadData()
@@ -82,10 +82,10 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     private func showNoInternetAlert() {
-          let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
-          alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-          present(alert, animated: true, completion: nil)
-      }
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
@@ -102,9 +102,9 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     func fetchDraftOrders() {
         
         if !CheckNetworkReachability.checkNetworkReachability() {
-                   showNoInternetAlert()
-                   return
-               }
+            showNoInternetAlert()
+            return
+        }
         
         shoppingCartViewModel.fetchDraftOrders { [weak self] error in
             if let error = error {
@@ -120,10 +120,10 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     func fetchExchangeRates(){
         
         if !CheckNetworkReachability.checkNetworkReachability() {
-                   showNoInternetAlert()
-                   return
-               }
-               
+            showNoInternetAlert()
+            return
+        }
+        
         
         settingsViewModel.fetchExchangeRates { [weak self] error in
             if let error = error {
@@ -300,28 +300,29 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         subtotalLabel.text = convertedSubtotalString
         emptyCartImageView.isHidden = !filteredItems.isEmpty
     }
-
+    
     
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
         
         if !CheckNetworkReachability.checkNetworkReachability() {
-                   showNoInternetAlert()
-                   return
-               }
-               
+            showNoInternetAlert()
+            return
+        }
+        
         let filteredItems = shoppingCartViewModel.cartItems.filter { $0.4 != 45293432635640 }
         if filteredItems.isEmpty {
             showAlert(message: "Your cart is empty. Please add items to your cart before proceeding.")
         } else {
             let storyboard = UIStoryboard(name: "Second", bundle: nil)
             if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+                selectAddressVC.isFromShoppingCart = true
                 selectAddressVC.modalPresentationStyle = .fullScreen
                 present(selectAddressVC, animated: true, completion: nil)
             }
         }
     }
-
-
+    
+    
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)

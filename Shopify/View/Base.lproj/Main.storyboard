@@ -246,6 +246,7 @@
             <objects>
                 <tabBarController storyboardIdentifier="UITabBarController" automaticallyAdjustsScrollViewInsets="NO" id="Tx8-Le-g1L" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="yXT-DF-KLw"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KpV-H8-au5">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -344,13 +345,13 @@
         <!--Me Guest View Controller-->
         <scene sceneID="FVu-L2-IMa">
             <objects>
-                <viewController id="js8-Ac-VbX" customClass="MeGuestViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MeGuestViewController" id="js8-Ac-VbX" customClass="MeGuestViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="B03-NO-01k">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="vck-R3-N8e">
-                                <rect key="frame" x="0.0" y="68" width="393" height="44"/>
+                                <rect key="frame" x="0.0" y="68" width="393" height="12"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <textAttributes key="titleTextAttributes">
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -360,7 +361,7 @@
                                 </items>
                             </navigationBar>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6aw-Oc-cSN">
-                                <rect key="frame" x="16" y="162" width="200" height="50"/>
+                                <rect key="frame" x="16" y="130" width="200" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="gaU-BP-UQU"/>
                                     <constraint firstAttribute="width" constant="200" id="rTq-vi-J7Z"/>
@@ -370,16 +371,16 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Please sign in or register to                    access your shopping cart,   wishlist, and more personalized features." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aFV-9z-JHt">
-                                <rect key="frame" x="27" y="312" width="346" height="100.33333333333331"/>
+                                <rect key="frame" x="27" y="240" width="346" height="140"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="120" id="nHt-CH-vDu"/>
+                                    <constraint firstAttribute="height" constant="140" id="nHt-CH-vDu"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UFX-dk-Qku">
-                                <rect key="frame" x="102" y="472.33333333333331" width="189" height="42.999999999999943"/>
+                                <rect key="frame" x="102" y="440" width="189" height="43"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="43" id="MBW-nz-cmp"/>
                                 </constraints>
@@ -392,7 +393,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X02-Gu-RG4">
-                                <rect key="frame" x="102" y="545.33333333333337" width="189" height="43"/>
+                                <rect key="frame" x="102" y="513" width="189" height="43"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="43" id="M02-cB-V4M"/>
                                 </constraints>
@@ -416,7 +417,7 @@
                             <constraint firstItem="X02-Gu-RG4" firstAttribute="top" secondItem="UFX-dk-Qku" secondAttribute="bottom" constant="30" id="D8g-HN-hMu"/>
                             <constraint firstItem="vck-R3-N8e" firstAttribute="top" secondItem="tpF-Rj-2hQ" secondAttribute="top" constant="9" id="Fxi-vv-vvt"/>
                             <constraint firstItem="X02-Gu-RG4" firstAttribute="leading" secondItem="tpF-Rj-2hQ" secondAttribute="leading" constant="102" id="Gfl-Gs-Gd3"/>
-                            <constraint firstItem="aFV-9z-JHt" firstAttribute="top" secondItem="6aw-Oc-cSN" secondAttribute="bottom" constant="100" id="RqC-VW-OTZ"/>
+                            <constraint firstItem="aFV-9z-JHt" firstAttribute="top" secondItem="6aw-Oc-cSN" secondAttribute="bottom" constant="60" id="RqC-VW-OTZ"/>
                             <constraint firstItem="UFX-dk-Qku" firstAttribute="leading" secondItem="tpF-Rj-2hQ" secondAttribute="leading" constant="102" id="SBt-sX-KbX"/>
                             <constraint firstItem="6aw-Oc-cSN" firstAttribute="leading" secondItem="tpF-Rj-2hQ" secondAttribute="leading" constant="16" id="YPV-ua-dWv"/>
                             <constraint firstItem="aFV-9z-JHt" firstAttribute="leading" secondItem="tpF-Rj-2hQ" secondAttribute="leading" constant="27" id="cRC-t2-SJO"/>
@@ -437,12 +438,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Ef-O4-kWG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3470.9923664122134" y="750.70422535211276"/>
+            <point key="canvasLocation" x="3332" y="751"/>
         </scene>
         <!--Me-->
         <scene sceneID="2DY-lX-s99">
             <objects>
-                <viewController id="ok0-8O-MHZ" customClass="ProfileViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileViewController" id="ok0-8O-MHZ" customClass="ProfileViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Wh-NS-HYv">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -33,9 +33,11 @@ class MeGuestViewController: UIViewController {
     }
 
     @IBAction func login(_ sender: UIButton) {
+        Navigation.ToALogin(from: self)
     }
     
     @IBAction func signUp(_ sender: UIButton) {
+        Navigation.toSignUpViewController(from: self)
     }
     
 }

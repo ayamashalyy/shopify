@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         setUpUI()
-       
+        
     }
     
     func setUpUI(){
@@ -31,7 +31,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-    
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,7 +53,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -96,18 +96,18 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         }
     }
     
-
-        @IBAction func logoutButtonTapped(_ sender: UIButton) {
-            let alertController = UIAlertController(title: "Confirm Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
-                Authorize.logout()
-                Navigation.ToALogin(from: self)
-            }))
-            
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
-
+    
+    @IBAction func logoutButtonTapped(_ sender: UIButton) {
+        let alertController = UIAlertController(title: "Confirm Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
+            Authorize.logout()
+            Navigation.ToALogin(from: self)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
@@ -116,9 +116,9 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     func presentCurrencySelectionAlert() {
         
         guard CheckNetworkReachability.checkNetworkReachability() else {
-               showNoInternetAlert()
-               return
-           }
+            showNoInternetAlert()
+            return
+        }
         
         let alert = UIAlertController(title: "Select Currency", message: nil, preferredStyle: .alert)
         

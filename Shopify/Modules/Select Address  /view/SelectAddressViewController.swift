@@ -14,7 +14,7 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     private let viewModel: AddressViewModel
-    
+    var isFromShoppingCart: Bool = false
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navToPlaceOrder: UIButton!
     var address: String = ""
@@ -68,6 +68,14 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if isFromShoppingCart {
+            navToPlaceOrder.isHidden = false
+            navToPlaceOrder.addTarget(self, action: #selector(getter: navToPlaceOrder), for: .touchUpInside)
+        } else {
+            navToPlaceOrder.isHidden = true
+        }
+        
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         tableView.dataSource = self
         tableView.delegate = self
