@@ -79,11 +79,7 @@ class PaymentViewController: UIViewController {
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
 
-                        Navigation.ToHome(from: self)
-                        
-                        //Navigation.ToHome(from: self)
                         self.showOrderSuccessAlert()
-                        
                         
                         self.orderViewModel.sendInvoiceToCustomer { result in
                             switch result {
