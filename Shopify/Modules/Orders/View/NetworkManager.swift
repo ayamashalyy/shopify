@@ -11,7 +11,6 @@ import Alamofire
 
 // remove it every time before push
 
-
 class NetworkManager {
     
     static func fetchDataFromApi(endpoint: Endpoint, rootOfJson: Root, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {

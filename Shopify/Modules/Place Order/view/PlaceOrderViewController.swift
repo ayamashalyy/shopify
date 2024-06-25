@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Reachability
 
 class PlaceOrderViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     

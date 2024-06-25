@@ -7,7 +7,7 @@
 
 import UIKit
 import PassKit
-import Reachability
+
 class PaymentViewController: UIViewController {
     
     @IBOutlet weak var codButton: UIButton!
