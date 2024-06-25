@@ -25,7 +25,8 @@ class signUpViewController: UIViewController {
     @IBOutlet weak var confirmPass: UITextField!
     
     @IBOutlet weak var showHidePassButton: UIButton!
-        @IBOutlet weak var showHideConfirmPassButton: UIButton!
+    
+    @IBOutlet weak var showHideConfirmPassButton: UIButton!
         
         var isPasswordVisible = false
         var isConfirmPasswordVisible = false

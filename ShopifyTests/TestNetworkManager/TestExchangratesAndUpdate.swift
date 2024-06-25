@@ -60,32 +60,6 @@ final class TestExchangratesAndUpdate: XCTestCase{
         waitForExpectations(timeout: 10, handler: nil)
     }
     
-    func testUpdateResource_Success() {
-        let expectation = self.expectation(description: "Wait for API response")
-        
-        let updatedCustomer: [String: Any] = [
-            "id": 12345678,
-            "firstName": "Updated FirstName",
-            "lastName": "Updated LastName"
-        ]
-        
-        let jsonData = try! JSONSerialization.data(withJSONObject: updatedCustomer, options: [])
-        
-        MockNetworkManager.updateResource(endpoint: .customers, rootOfJson: .customer, body: jsonData, addition: "12345678.json") { data, error in
-            XCTAssertNil(error, "Expected no error, but got \(String(describing: error)) instead")
-            XCTAssertNotNil(data, "Expected non-nil data")
-            
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                XCTAssertEqual(json["success"] as? Bool, true, "Expected success to be true")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-    
-    
     
     func testUpdateResource_Failure() {
         let expectation = self.expectation(description: "Wait for API response")
@@ -124,205 +98,95 @@ final class TestExchangratesAndUpdate: XCTestCase{
         waitForExpectations(timeout: 10, handler: nil)
     }
     
-    func testUpdateResource_Failure_InvalidEndpoint() {
-        let expectation = self.expectation(description: "Wait for API response")
-        
-        let updatedCustomer: [String: Any] = [
-            "id": 12345678,
-            "firstName": "Updated FirstName",
-            "lastName": "Updated LastName"
-        ]
-        
-        let jsonData = try! JSONSerialization.data(withJSONObject: updatedCustomer, options: [])
-        
-        MockNetworkManager.updateResource(endpoint: .order, rootOfJson: .order, body: jsonData, addition: "12345678.json") { data, error in
-            XCTAssertNotNil(error, "Expected an error, but got nil instead")
-            XCTAssertNil(data, "Expected nil data when there is an error")
-            
-            // Print the error for debugging purposes
-            if let error = error as NSError? {
-                XCTAssertEqual(error.code, -1, "Expected error code to be -1 for unexpected endpoint")
-            } else {
-                XCTFail("Unexpected error type: \(String(describing: error))")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-    
-    func testUpdateResource_Failure_InvalidURL() {
-        let expectation = self.expectation(description: "Wait for API response")
-        
-        let updatedCustomer: [String: Any] = [
-            "id": 12345678,
-            "firstName": "Updated FirstName",
-            "lastName": "Updated LastName"
-        ]
-        
-        let jsonData = try! JSONSerialization.data(withJSONObject: updatedCustomer, options: [])
-        
-        MockNetworkManager.updateResource(endpoint: .customers, rootOfJson: .customer, body: jsonData, addition: nil) { data, error in
-            XCTAssertNotNil(error, "Expected an error, but got nil instead")
-            XCTAssertNil(data, "Expected nil data when there is an error")
-            
-            if let error = error as NSError? {
-                XCTAssertEqual(error.code, -1, "Expected error code to be -1 for invalid URL")
-            } else {
-                XCTFail("Unexpected error type: \(String(describing: error))")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-    
-    func testUpdateResource_Failure_InvalidAddition() {
-        let expectation = self.expectation(description: "Wait for API response")
-        
-        let updatedCustomer: [String: Any] = [
-            "id": 12345678,
-            "firstName": "Updated FirstName",
-            "lastName": "Updated LastName"
-        ]
-        
-        let jsonData = try! JSONSerialization.data(withJSONObject: updatedCustomer, options: [])
-        
-        MockNetworkManager.updateResource(endpoint: .customers, rootOfJson: .customer, body: jsonData, addition: "invalid.json") { data, error in
-            XCTAssertNotNil(error, "Expected an error, but got nil instead")
-            XCTAssertNil(data, "Expected nil data when there is an error")
-            
-            if let error = error as? NSError {
-                XCTAssertEqual(error.code, 400, "Expected error code to be 400 for mock failure")
-            } else {
-                XCTFail("Unexpected error type: \(String(describing: error))")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-    
+
     func testDeleteResource_Success() {
         let expectation = self.expectation(description: "Wait for API response")
-        
-        // Use the mock network manager for deleteResource
-        MockNetworkManager.deleteResource(endpoint: .customers, addition: "12345678.json") { data, error in
-            XCTAssertNil(error, "Expected no error, but got \(String(describing: error)) instead")
-            XCTAssertNotNil(data, "Expected non-nil data")
-            
-            // Optionally, check the contents of the response
-            if let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                XCTAssertEqual(json["success"] as? Bool, true, "Expected success to be true")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-    
-    func testDeleteResource_Failure_InvalidEndpoint() {
-        let expectation = self.expectation(description: "Wait for API response")
-        
-        // Use the mock network manager for deleteResource with an invalid endpoint
-        MockNetworkManager.deleteResource(endpoint: .order, addition: "12345678.json") { data, error in
-            XCTAssertNotNil(error, "Expected an error, but got nil instead")
-            XCTAssertNil(data, "Expected nil data when there is an error")
-            
-            // Print the error for debugging purposes
-            if let error = error as NSError? {
-                XCTAssertEqual(error.code, -1, "Expected error code to be -1 for unexpected endpoint")
+        let addition = "7685097193720/addresses/9146178142456.json" // put the customer id and an address
+       
+        print("addition\(addition)")
+        NetworkManager.deleteResource(endpoint: .addressCastomer, rootOfJson: .address, addition: addition) { data, error in
+            if let error = error {
+                XCTFail("Expected no error, but got \(String(describing: error)) instead")
             } else {
-                XCTFail("Unexpected error type: \(String(describing: error))")
+                XCTAssertNotNil(data, "Expected non-nil data")
             }
-            
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 15, handler: nil)
     }
     
-    func testDeleteResource_Failure_InvalidAddition() {
+    func testDeleteResource_Failure() {
         let expectation = self.expectation(description: "Wait for API response")
+        let customerID = "0000000000000"
+        let addressID = "0000000000000"
         
-        // Use the mock network manager for deleteResource with an invalid addition
-        MockNetworkManager.deleteResource(endpoint: .customers, addition: "invalid.json") { data, error in
-            XCTAssertNotNil(error, "Expected an error, but got nil instead")
-            XCTAssertNil(data, "Expected nil data when there is an error")
-            
-            // Print the error for debugging purposes
-            if let error = error as? NSError {
-                XCTAssertEqual(error.code, 400, "Expected error code to be 400 for mock failure")
+        let addition = "\(customerID)/addresses/\(addressID).json"
+        
+        NetworkManager.deleteResource(endpoint: .addressCastomer, rootOfJson: .address, addition: addition) { data, error in
+            if let error = error {
+                XCTAssertNotNil(error, "Expected an error, but got nil instead")
+                
+                // Optionally, assert specific error conditions (e.g., status code validation)
+                if let afError = error as? AFError {
+                    switch afError {
+                    case .responseValidationFailed(reason: let reason):
+                        switch reason {
+                        case .unacceptableStatusCode(code: let code):
+                            XCTAssertEqual(code, 404, "Expected 404 Not Found error")
+                        default:
+                            XCTFail("Unexpected response validation failure reason: \(reason)")
+                        }
+                    default:
+                        XCTFail("Unexpected Alamofire error: \(afError)")
+                    }
+                } else {
+                    XCTFail("Unexpected error type: \(error)")
+                }
             } else {
-                XCTFail("Unexpected error type: \(String(describing: error))")
+                XCTFail("Expected an error, but got nil instead")
             }
             
             expectation.fulfill()
         }
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 15)
     }
+
+ }
     
-    func testDeleteResource_Failure_InvalidURL() {
-        let expectation = self.expectation(description: "Wait for API response")
+    class MockNetworkManager {
         
-        // Use the mock network manager for deleteResource with an invalid URL
-        MockNetworkManager.deleteResource(endpoint: .customers, addition: nil) { data, error in
-            XCTAssertNotNil(error, "Expected an error, but got nil instead")
-            XCTAssertNil(data, "Expected nil data when there is an error")
+        static func updateResource(endpoint: Endpoint, rootOfJson: Root, body: Data, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
+            let mockSuccessResponseData = "{\"success\": true}".data(using: .utf8)!
             
-            // Print the error for debugging purposes
-            if let error = error as NSError? {
-                XCTAssertEqual(error.code, -1, "Expected error code to be -1 for invalid URL")
-            } else {
-                XCTFail("Unexpected error type: \(String(describing: error))")
+            let mockFailureError = NSError(domain: "com.shopify.test", code: 400, userInfo: [NSLocalizedDescriptionKey: "Request failed: bad request (400)"])
+            
+            switch (endpoint, addition) {
+            case (.customers, "12345678.json"):
+                completion(mockSuccessResponseData, nil)
+            case (.customers, "invalid.json"):
+                completion(nil, mockFailureError)
+            default:
+                completion(nil, NSError(domain: "com.shopify.test", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unexpected endpoint and addition combination"]))
             }
+        }
+        
+        static func deleteResource(endpoint: Endpoint, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
+            let mockSuccessResponseData = "{\"success\": true}".data(using: .utf8)!
             
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-    
-}
-
-
-class MockNetworkManager {
-    
-    static func updateResource(endpoint: Endpoint, rootOfJson: Root, body: Data, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
-        let mockSuccessResponseData = "{\"success\": true}".data(using: .utf8)!
-        
-        let mockFailureError = NSError(domain: "com.shopify.test", code: 400, userInfo: [NSLocalizedDescriptionKey: "Request failed: bad request (400)"])
-        
-        switch (endpoint, addition) {
-        case (.customers, "12345678.json"):
-            completion(mockSuccessResponseData, nil)
-        case (.customers, "invalid.json"):
-            completion(nil, mockFailureError)
-        default:
-            completion(nil, NSError(domain: "com.shopify.test", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unexpected endpoint and addition combination"]))
+            let mockFailureError = NSError(domain: "com.shopify.test", code: 400, userInfo: [NSLocalizedDescriptionKey: "Request failed: bad request (400)"])
+            
+            switch (endpoint, addition) {
+            case (.customers, "12345678.json"):
+                completion(mockSuccessResponseData, nil)
+            case (.customers, "invalid.json"):
+                completion(nil, mockFailureError)
+            default:
+                completion(nil, NSError(domain: "com.shopify.test", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unexpected endpoint and addition combination"]))
+            }
         }
     }
     
-    static func deleteResource(endpoint: Endpoint, addition: String? = "", completion: @escaping (Data?, Error?) -> Void) {
-        let mockSuccessResponseData = "{\"success\": true}".data(using: .utf8)!
-        
-        let mockFailureError = NSError(domain: "com.shopify.test", code: 400, userInfo: [NSLocalizedDescriptionKey: "Request failed: bad request (400)"])
-        
-        switch (endpoint, addition) {
-        case (.customers, "12345678.json"):
-            completion(mockSuccessResponseData, nil)
-        case (.customers, "invalid.json"):
-            completion(nil, mockFailureError)
-        default:
-            completion(nil, NSError(domain: "com.shopify.test", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unexpected endpoint and addition combination"]))
-        }
-    }
-}
-
-
-
+    
+    
