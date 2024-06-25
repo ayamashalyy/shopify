@@ -61,13 +61,12 @@ final class MethodsOfNetwork: XCTestCase {
         
         waitForExpectations(timeout: 10, handler: nil)
     }
-    
+
     func testPostDataSuccess() {
-        var number = 6
         let expectation = self.expectation(description: "Wait for API response")
         
         let newCustomer = Customer(
-            email: "test\(number)@example.com",
+            email: "test13@example.com",     // change number with every run
             firstName: "testFirstName",
             lastName: "testlastName",
             verifiedEmail: true,
@@ -87,7 +86,6 @@ final class MethodsOfNetwork: XCTestCase {
                 } else { // the return of response
                     XCTAssertNotNil(data, "Data should not be nil")
                     do {
-                        number += 1
                         // Assuming the data is being decoded to a CustomerResponse object
                         let customerResponse = try JSONDecoder().decode(CustomerResponse.self, from: data!)
                         XCTAssertEqual(customerResponse.customer.email, newCustomer.email)
@@ -104,37 +102,35 @@ final class MethodsOfNetwork: XCTestCase {
         waitForExpectations(timeout: 10)
     }
     
-//    func testPostDataFailure() {
-//        let expectation = self.expectation(description: "Wait for API response")
-//        
-//        let newCustomer = Customer(
-//            email: "testDataFailure@example.com",
-//            firstName: "testFirstName",
-//            lastName: "testlastName",
-//            verifiedEmail: true,
-//            tags: "123456",
-//            password: "123456",
-//            passwordConfirmation: "123456"
-//        )
-//        
-//        let customerRequest = CustomerRequest(customer: newCustomer)
-//        
-//        do {
-//            let jsonData = try JSONEncoder().encode(customerRequest)
-//            
-//            // Use an invalid endpoint or modify the request to simulate a failure
-//            NetworkManager.postDataToApi(endpoint: .invalidEndpoint, rootOfJson: .customer, body: jsonData) { data, error in
-//                if let error = error {
-//                    XCTAssertNil(data, "Data should be nil when there is an error")
-//                    XCTAssertNotNil(error, "Error should not be nil")
-//                    expectation.fulfill()
-//                } else {
-//                    XCTFail("Expected to fail, but succeeded with data: \(String(describing: data))")
-//                }
-//            }
-//        } catch {
-//            XCTFail("Encoding failed with error: \(error)")
-//        }
-//        waitForExpectations(timeout: 10)
-//    }
+    func testPostDataFailure_Failure_InvalidAddition() {
+        let expectation = self.expectation(description: "Wait for API response")
+        
+        let newCustomer = Customer(
+            email: "testDataFailure@example.com",
+            firstName: "testFirstName",
+            lastName: "testlastName",
+            verifiedEmail: true,
+            tags: "123456",
+            password: "123456",
+            passwordConfirmation: "123456"
+        )
+        
+        let customerRequest = CustomerRequest(customer: newCustomer)
+        
+        do {
+            let jsonData = try JSONEncoder().encode(customerRequest)
+            
+            NetworkManager.postDataToApi(endpoint: .customers, rootOfJson: .customer, body: jsonData, addition: "invalid.json") { data, error in
+                XCTAssertNotNil(error, "Expected an error, but got nil instead")
+                XCTAssertNil(data, "Expected nil data when there is an error")
+                            
+                expectation.fulfill()
+            }
+        } catch {
+            XCTFail("Encoding failed with error: \(error)")
+        }
+        
+        waitForExpectations(timeout: 10)
+    }
+
 }
