@@ -63,11 +63,11 @@ final class MethodsOfNetwork: XCTestCase {
     }
     
     func testPostDataSuccess() {
-        
+        var number = 6
         let expectation = self.expectation(description: "Wait for API response")
         
         let newCustomer = Customer(
-            email: "test3@example.com",
+            email: "test\(number)@example.com",
             firstName: "testFirstName",
             lastName: "testlastName",
             verifiedEmail: true,
@@ -87,6 +87,7 @@ final class MethodsOfNetwork: XCTestCase {
                 } else { // the return of response
                     XCTAssertNotNil(data, "Data should not be nil")
                     do {
+                        number += 1
                         // Assuming the data is being decoded to a CustomerResponse object
                         let customerResponse = try JSONDecoder().decode(CustomerResponse.self, from: data!)
                         XCTAssertEqual(customerResponse.customer.email, newCustomer.email)

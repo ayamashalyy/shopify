@@ -22,8 +22,8 @@ class PaymentViewController: UIViewController {
     let settingsViewModel = SettingsViewModel()
     let viewModel = ShoppingCartViewModel()
     
-    var grandTotal: Int = 0
-    
+    var grandTotal: Double = 0.0
+    var isUSD :Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,16 +31,19 @@ class PaymentViewController: UIViewController {
         setupConfirmPayButton()
         fetchExchangeRates()
         updateTotalPrice()
-        
+        print("grandTotal in view did load in payment \(grandTotal)")
+
     }
     
     func updateTotalPrice() {
-        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-        let convertedGrandTotalPrice = settingsViewModel.convertPrice("\(grandTotal)", to: selectedCurrency) ?? "\(grandTotal) USD"
-        print("convertedGrandTotalPrice\(convertedGrandTotalPrice)")
-        totalPrice.text = convertedGrandTotalPrice
-        print("totalPrice\(totalPrice)")
-        orderViewModel.storeGradeTotal("\(grandTotal)")
+        if isUSD {
+            totalPrice.text = "\(grandTotal) USD"
+
+        }else{
+            totalPrice.text = "\(grandTotal) EGP"
+
+        }
+           orderViewModel.storeGradeTotal("\(grandTotal)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
