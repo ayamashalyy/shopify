@@ -286,7 +286,6 @@ class ProductViewController: UIViewController {
         view.addSubview(indicator)
     }
     
-    
     func setupStackView(name: String, price: String, description: String, variants: [Variant]) {
         let nameText = UITextView()
         nameText.text = name
@@ -318,26 +317,27 @@ class ProductViewController: UIViewController {
         availableSizeAndColorLabel.text = "Available Size and Color:"
         availableSizeAndColorLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         
-        
         stack.addArrangedSubview(nameText)
         stack.addArrangedSubview(ratingView)
         stack.addArrangedSubview(descriptionTextView)
         stack.addArrangedSubview(availableSizeAndColorLabel)
         
-        
         // get it to save product to fav by it
         firstVariantId = variants.first?.id
         
-        
         for variant in variants {
+            // Check the inventory quantity before adding the variant to the stack
+            guard let quantity = variant.inventory_quantity, quantity > 0 else {
+                continue // Skip this variant if the quantity is 0
+            }
+            
             let variantStackView = UIStackView()
             variantStackView.axis = .horizontal
             variantStackView.spacing = 8
             
-            
             let variantButton = UIButton(type: .system)
             
-            //Handle the currency
+            // Handle the currency
             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
                 let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
                 variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)", for: .normal)
@@ -347,14 +347,12 @@ class ProductViewController: UIViewController {
             
             variantButton.setTitleColor(.black, for: .normal)
             variantButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-            
             variantButton.addTarget(self, action: #selector(variantButtonTapped(_:)), for: .touchUpInside)
             
             let checkmarkImageView = UIImageView(image: UIImage(systemName: "checkmark"))
             checkmarkImageView.tintColor = .orange
             checkmarkImageView.contentMode = .scaleAspectFit
             checkmarkImageView.isHidden = true
-            
             
             // Highlight the selected variant
             if selectedVarientId == variant.id {
@@ -364,12 +362,10 @@ class ProductViewController: UIViewController {
                 variantStackView.layer.cornerRadius = 8.0
             }
             
-            
             variantStackView.addArrangedSubview(variantButton)
             variantStackView.addArrangedSubview(checkmarkImageView)
             stack.addArrangedSubview(variantStackView)
         }
-        
         
         stack.addArrangedSubview(reviewsHeader)
         stack.addArrangedSubview(reviewsTableView)
@@ -385,6 +381,105 @@ class ProductViewController: UIViewController {
         stack.addArrangedSubview(seeMoreButton)
         stack.setCustomSpacing(20, after: reviewsTableView)
     }
+
+//    func setupStackView(name: String, price: String, description: String, variants: [Variant]) {
+//        let nameText = UITextView()
+//        nameText.text = name
+//        nameText.isScrollEnabled = false
+//        nameText.isEditable = false
+//        nameText.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        
+//        let ratingView = CosmosView()
+//        ratingView.settings.updateOnTouch = false
+//        ratingView.rating = 4
+//        
+//        let descriptionTextView = UITextView()
+//        descriptionTextView.text = description
+//        descriptionTextView.isScrollEnabled = false
+//        descriptionTextView.isEditable = false
+//        descriptionTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+//        
+//        let reviewsHeader = UILabel()
+//        reviewsHeader.text = "Reviews"
+//        reviewsHeader.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        
+//        let reviewsTableView = UITableView()
+//        reviewsTableView.delegate = self
+//        reviewsTableView.dataSource = self
+//        reviewsTableView.isScrollEnabled = false
+//        reviewsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ReviewCell")
+//        
+//        let availableSizeAndColorLabel = UILabel()
+//        availableSizeAndColorLabel.text = "Available Size and Color:"
+//        availableSizeAndColorLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        
+//        
+//        stack.addArrangedSubview(nameText)
+//        stack.addArrangedSubview(ratingView)
+//        stack.addArrangedSubview(descriptionTextView)
+//        stack.addArrangedSubview(availableSizeAndColorLabel)
+//        
+//        
+//        // get it to save product to fav by it
+//        firstVariantId = variants.first?.id
+//        
+//        
+//        for variant in variants {
+//            let variantStackView = UIStackView()
+//            variantStackView.axis = .horizontal
+//            variantStackView.spacing = 8
+//            
+//            
+//            let variantButton = UIButton(type: .system)
+//            
+//            //Handle the currency
+//            if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
+//                let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
+//                variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)", for: .normal)
+//            } else {
+//                variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
+//            }
+//            
+//            variantButton.setTitleColor(.black, for: .normal)
+//            variantButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+//            
+//            variantButton.addTarget(self, action: #selector(variantButtonTapped(_:)), for: .touchUpInside)
+//            
+//            let checkmarkImageView = UIImageView(image: UIImage(systemName: "checkmark"))
+//            checkmarkImageView.tintColor = .orange
+//            checkmarkImageView.contentMode = .scaleAspectFit
+//            checkmarkImageView.isHidden = true
+//            
+//            
+//            // Highlight the selected variant
+//            if selectedVarientId == variant.id {
+//                // You can change the background color or add a border to highlight the selected variant
+//                variantStackView.layer.borderWidth = 2.0
+//                variantStackView.layer.borderColor = UIColor.orange.cgColor
+//                variantStackView.layer.cornerRadius = 8.0
+//            }
+//            
+//            
+//            variantStackView.addArrangedSubview(variantButton)
+//            variantStackView.addArrangedSubview(checkmarkImageView)
+//            stack.addArrangedSubview(variantStackView)
+//        }
+//        
+//        
+//        stack.addArrangedSubview(reviewsHeader)
+//        stack.addArrangedSubview(reviewsTableView)
+//        
+//        NSLayoutConstraint.activate([
+//            reviewsTableView.heightAnchor.constraint(equalToConstant: 200)
+//        ])
+//        
+//        let seeMoreButton = UIButton(type: .system)
+//        seeMoreButton.setTitle("See More", for: .normal)
+//        seeMoreButton.addTarget(self, action: #selector(seeMoreReviews), for: .touchUpInside)
+//        
+//        stack.addArrangedSubview(seeMoreButton)
+//        stack.setCustomSpacing(20, after: reviewsTableView)
+//    }
     
     
     @objc func variantButtonTapped(_ sender: UIButton) {
