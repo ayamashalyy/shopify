@@ -143,7 +143,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
             case .EGP:
                 egpAction.setValue(true, forKey: "checked")
             default:
-                usdAction.setValue(true, forKey: "checked")
+                egpAction.setValue(true, forKey: "checked")
             }
         }
         

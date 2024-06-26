@@ -423,7 +423,7 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                let convertedPrice = settingsViewModel.convertPrice(product.variants.first?.price ?? "N/A", to: selectedCurrency) {
                 cell.priceLabel.text = convertedPrice
             } else {
-                cell.priceLabel.text = "\(product.variants.first?.price ?? "0") USD"
+                cell.priceLabel.text = "\(product.variants.first?.price ?? "0") EGP"
             }
             
             if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
