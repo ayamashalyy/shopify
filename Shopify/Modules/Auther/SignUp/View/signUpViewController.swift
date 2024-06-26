@@ -95,6 +95,8 @@ class signUpViewController: UIViewController {
                     self.showAlert(message: "Account created successfully. Please check your email for verification.", action: { action in
                         self.showEmailOptionsAlert()
                     })
+                    
+                    
                 } else {
                     self.showAlert(message: "Sorry, try registering with a different email.")
                 }
@@ -104,8 +106,15 @@ class signUpViewController: UIViewController {
         }
         
     }
-    
+    @objc func goToLogin() {
+        Navigation.ToALogin(from: self)
+    }
     private func showEmailOptionsAlert() {
+        
+        signUpButton.setTitle("Go to Login", for: .normal)
+        signUpButton.removeTarget(self, action: #selector(self.signUpBtn(_:)), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(self.goToLogin), for: .touchUpInside)
+        
         let alertController = UIAlertController(title: "Open Email", message: "Please select your email provider to open.", preferredStyle: .alert)
         
         let gmailAction = UIAlertAction(title: "Gmail", style: .default) { _ in
@@ -115,7 +124,7 @@ class signUpViewController: UIViewController {
             self.openEmailProvider(url: "https://outlook.live.com/")
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            Navigation.ToALogin(from: self) 
+            Navigation.ToALogin(from: self)
         }
         
         alertController.addAction(gmailAction)
@@ -124,14 +133,14 @@ class signUpViewController: UIViewController {
         
         present(alertController, animated: true, completion: nil)
     }
-
+    
     
     private func openEmailProvider(url: String) {
         let storyboard = UIStoryboard(name: "third", bundle: nil)
         
         if let webViewController = storyboard.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController {
             webViewController.urlString = url
-            //  webViewController.modalPresentationStyle = .fullScreen // Optional: Set the presentation style
+            //  webViewController.modalPresentationStyle = .fullScreen
             present(webViewController, animated: true, completion: nil)
         }
     }
