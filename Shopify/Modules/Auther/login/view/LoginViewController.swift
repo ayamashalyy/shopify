@@ -7,37 +7,41 @@
 
 import UIKit
 
+import GoogleSignIn
+import FirebaseAuth
+
 class LoginViewController: UIViewController {
-    
-    
+
+    var loginViewModel : LoginViewModel?
+    var isPasswordVisible = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
         loginViewModel = LoginViewModel()
-        
-     
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        GIDSignIn.sharedInstance()?.delegate = self
     }
     
-    
-    var loginViewModel : LoginViewModel?
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if  !CheckNetworkReachability.checkNetworkReachability(){
+            showAlert(message: "Connect with network then login")
+        }
+    }
+ 
+    @IBOutlet weak var siginUP: UIButton!
+    @IBOutlet weak var siginInGoogle: UIButton!
     @IBOutlet weak var guestBtn: UIButton!
     @IBOutlet weak var emailTxt: UITextField!
     @IBOutlet weak var passwordTxt: UITextField!
-    @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
-    
-    @IBOutlet weak var image: UIImageView!
-    
     @IBOutlet weak var showHideButton: UIButton!
-        
-        var isPasswordVisible = false
-    
+            
     @IBAction func signUpBtx(_ sender: UIButton) {
-        print("singup")
         Navigation.toSignUpViewController(from: self)
     }
-    
-    
+        
     @IBAction func showHideButtonTapped(_ sender: UIButton) {
            isPasswordVisible.toggle()
            let buttonImage = isPasswordVisible ? UIImage(systemName: "eye.fill") : UIImage(systemName: "eye.slash.fill")
@@ -57,14 +61,23 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            loginViewModel?.isACustomer(email: email, password: password) { isACustomer in
+        if  CheckNetworkReachability.checkNetworkReachability(){
+            
+            
+            loginViewModel?.isValidedEmail(email: email, password: password) { isACustomer in
                 if isACustomer {
                     print("Is a customer, go to home")
+                    print("customer id \(Authorize.getCustomerIDFromUserDefaults())")
+                    OrderViewModel.shared.setEmail(email: email)
                     Navigation.ToHome(from: self)
                 } else {
-                    self.showAlert(message: "Sorry, you do not have an account. Click on Sign up.")
+                    self.showAlert(message: "Please create acount and verify it througth the email,then login again")
                 }
             }
+        }else {
+            showAlert(message: "Connect with network then login")
+        }
+        
     }
     
     @IBAction func guestButton(_ sender: UIButton) {
@@ -81,17 +94,18 @@ class LoginViewController: UIViewController {
             present(alertController, animated: true, completion: nil)
    }
 
-        
     
     func setUpUI (){
         guestBtn.backgroundColor = UIColor(hex: "#FF7D29")
         guestBtn.layer.cornerRadius = 8
         loginButton.backgroundColor = UIColor(hex: "#FF7D29")
         loginButton.layer.cornerRadius = 8
+        siginInGoogle.layer.cornerRadius = 8
+        siginInGoogle.backgroundColor = UIColor(hex: "#FF7D29")
+        
         passwordTxt.isSecureTextEntry = true
         let orangeColor = UIColor(hex: "#FFA500")
                showHideButton.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(orangeColor), for: .normal)
-         
 
     }
     
@@ -100,5 +114,46 @@ class LoginViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func signInWithGoogle(_ sender: UIButton) {
+          GIDSignIn.sharedInstance().signIn()
+      }
+
+}
+
+// MARK: - GIDSignInDelegate
+extension LoginViewController: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if let error = error {
+            print("Google sign in error: \(error.localizedDescription)")
+           
+            if  !CheckNetworkReachability.checkNetworkReachability(){
+                showAlert(message: "Connect with network then login")
+            }
+                        
+            return
+        }
+        
+        guard let userEmail = user.profile.email else {
+            print("No user email found")
+            return
+        }
+        
+        let firstName = user.profile.givenName ?? ""
+        let lastName = user.profile.familyName ?? ""
+        
+        Authorize.saveCustomerEmail(Customeremail: userEmail)
+        
+        GoogleViewModel.siginInWithGoogleEmail(googleEmail: userEmail, firstName: firstName, lastName: lastName){ success in
+                if success {
+                  print("handle goole data succesfully")
+                    Navigation.ToHome(from: self)
+                        }
+                    else {
+                    print("No user email found")
+           }
+        }
     }
 }

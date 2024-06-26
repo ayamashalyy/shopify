@@ -9,3 +9,5 @@ import Foundation
 import UIKit
 
 
+ let fakeProductInDraftOrder = 45293432635640
+

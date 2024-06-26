@@ -9,8 +9,6 @@ import UIKit
 
 class SettingsViewController: UIViewController , UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var logoutButton: UIButton!
     
@@ -22,11 +20,10 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         setUpUI()
+        
     }
     
     func setUpUI(){
-        profileImageView.image = UIImage(named: "profile")
-        nameLabel.text = "Aya"
         logoutButton.setTitle("Log out", for: .normal)
         logoutButton.backgroundColor = UIColor(hex: "#FF7D29")
         logoutButton.layer.cornerRadius = 8
@@ -34,8 +31,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
-        profileImageView.clipsToBounds = true
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,6 +47,13 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         cell.accessoryView = disclosureIndicator
         return cell
     }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -93,23 +96,30 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
         }
     }
     
-
-        @IBAction func logoutButtonTapped(_ sender: UIButton) {
-            let alertController = UIAlertController(title: "Confirm Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
-                Authorize.logout()
-            }))
-            
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
-
+    
+    @IBAction func logoutButtonTapped(_ sender: UIButton) {
+        let alertController = UIAlertController(title: "Confirm Logout", message: "Are you sure you want to log out?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: { _ in
+            Authorize.logout()
+            Navigation.ToALogin(from: self)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
     
     func presentCurrencySelectionAlert() {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         let alert = UIAlertController(title: "Select Currency", message: nil, preferredStyle: .alert)
         
         let usdAction = UIAlertAction(title: "USD", style: .default) { _ in
@@ -133,7 +143,7 @@ class SettingsViewController: UIViewController , UITableViewDelegate, UITableVie
             case .EGP:
                 egpAction.setValue(true, forKey: "checked")
             default:
-                usdAction.setValue(true, forKey: "checked")
+                egpAction.setValue(true, forKey: "checked")
             }
         }
         

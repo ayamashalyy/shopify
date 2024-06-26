@@ -11,6 +11,9 @@ import JJFloatingActionButton
 class CategoriesViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    let shoppingCartViewModel = ShoppingCartViewModel()
+    
+    @IBOutlet weak var cartButton: UIBarButtonItem!
     
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
@@ -20,29 +23,133 @@ class CategoriesViewController: UIViewController {
     var selectedProductType: ProductType = .all
     
     var categoriesCollectionView: UICollectionView!
+    var backgroundImageView: UIImageView!
     
     var fabButton: JJFloatingActionButton!
     var additionalFABsVisible = false
     var blurEffectView: UIVisualEffectView?
     var settingsViewModel = SettingsViewModel()
+    let homeViewModel = HomeViewModel()
     
     @IBAction func goToAllFav(_ sender: UIBarButtonItem) {
-        Navigation.ToAllFavourite(from: self)
-
+        
+        if Authorize.isRegistedCustomer() {
+            if homeViewModel.isNetworkReachable() {
+                print("go to favss from home")
+                Navigation.ToAllFavourite(from: self)
+                print("go to favss from home after")
+            } else {
+                showNoInternetAlert()
+            }}else {
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                    okAction: {  _ in
+                    Navigation.ToALogin(from: self)
+                    print("Login OK button tapped")
+                })
+            }
+        
+        
     }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.indicator.startAnimating()
         
         setupUI()
+        setupCartButton()
+       
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchCategoryProducts(for: selectedCategory, productType: selectedProductType)
+
+        fetchCartItemsAndUpdateBadge()
         fetchExchangeRates()
+        checkNetworkConnection()
     }
     
     
+    
+    func updateCartBadge(itemCount:Int) {
+        print("Item count: \(itemCount)")
+        if itemCount > 0 {
+            cartButton.addBadge(text: "\(itemCount)", color: .orange)
+        } else {
+            cartButton.removeBadge()
+        }
+    }
+    
+    
+    private func fetchCartItemsAndUpdateBadge() {
+        
+        categoriesViewModel.getShoppingCartItemsCount { count, error in
+            guard let count = count else {return}
+            self.updateCartBadge(itemCount: count - 1)
+        }
+    }
+    
+
+    func setupCartButton() {
+        let button = UIButton(type: .custom)
+        
+        if let cartImage = UIImage(systemName: "cart.fill") {
+            print("System cart image loaded successfully")
+            let tintedImage = cartImage.withTintColor(.orange, renderingMode: .alwaysOriginal)
+            let scaledImage = pondsize(image: tintedImage, size: CGSize(width: 30, height: 25))
+            button.setImage(scaledImage, for: .normal)
+        } else {
+            print("Failed to load system cart image")
+        }
+        
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(goToCard(_:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 60, height: 80)
+        cartButton.customView = button
+    }
+    
+    func pondsize(image: UIImage, size: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let scaledImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return scaledImage
+    }
+    
+    @IBAction func goToCard(_ sender: UIBarButtonItem) {
+        if Authorize.isRegistedCustomer() {
+            if homeViewModel.isNetworkReachable() {
+                Navigation.ToOrders(from: self)
+            } else {
+                showNoInternetAlert()
+            }
+        }else {      showAlertWithTwoOptionOkayAndCancel(message: "Login to add to cart?",
+                                                         okAction: {  _ in
+            Navigation.ToALogin(from: self)
+            print("Login OK button tapped")
+        })
+        }
+    }
+    
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
-        Navigation.ToSearch(from: self, comeFromHome: false, products: categoriesViewModel.categoryProducts)
+        if homeViewModel.isNetworkReachable() {
+            
+            let storyboard = UIStoryboard(name: "third", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+                vc.comeFromHome = false
+                let searchViewModel = SearchViewModel()
+                searchViewModel.recevingProductFromANotherScreen = categoriesViewModel.categoryProducts
+                vc.searchViewModel = searchViewModel
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: false, completion: nil)
+                
+            }
+            
+        } else {
+            showNoInternetAlert()
+        }
     }
     
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -83,6 +190,19 @@ class CategoriesViewController: UIViewController {
         
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "categoriesCell")
         
+        // Add background image view
+        backgroundImageView = UIImageView(image: UIImage(named: "no_items.jpg"))
+        backgroundImageView.contentMode = .scaleAspectFit
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(backgroundImageView)
+        
+        NSLayoutConstraint.activate([
+            backgroundImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            backgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            backgroundImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.8)
+        ])
+        
         fabButton = createFABButton()
         view.addSubview(fabButton)
         fabButton.buttonColor = UIColor(hex: "#FF7D29")
@@ -92,13 +212,18 @@ class CategoriesViewController: UIViewController {
             fabButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             fabButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -120)
         ])
+        updateBackgroundImageViewVisibility()
+    }
+    
+    func updateBackgroundImageViewVisibility() {
+        backgroundImageView.isHidden = categoriesViewModel.numberOfCategoryProducts() != 0
     }
     
     func createLabel(withText text: String) -> UILabel {
         let label = UILabel()
         label.text = text
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .black
+        label.textColor = .white
         return label
     }
     
@@ -219,6 +344,7 @@ class CategoriesViewController: UIViewController {
                 print("Error fetching category products: \(error)")
             } else {
                 self.categoriesCollectionView.reloadData()
+                self.updateBackgroundImageViewVisibility()
             }
         }
     }
@@ -248,18 +374,34 @@ class CategoriesViewController: UIViewController {
     }
     
     func applyBlurEffect() {
-        let blurEffect = UIBlurEffect(style: .extraLight)
+        let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView?.frame = view.bounds
         blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
         if let blurEffectView = blurEffectView {
+            // Adjust the alpha of the blur effect view to make it very light
+            blurEffectView.alpha = 0.6
             view.insertSubview(blurEffectView, belowSubview: fabButton)
         }
     }
     
+    
     func removeBlurEffect() {
         blurEffectView?.removeFromSuperview()
         blurEffectView = nil
+    }
+    
+    private func checkNetworkConnection() {
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+        }
+    }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
 }
@@ -281,7 +423,7 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
                let convertedPrice = settingsViewModel.convertPrice(product.variants.first?.price ?? "N/A", to: selectedCurrency) {
                 cell.priceLabel.text = convertedPrice
             } else {
-                cell.priceLabel.text = product.variants.first?.price
+                cell.priceLabel.text = "\(product.variants.first?.price ?? "0") EGP"
             }
             
             if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
@@ -314,68 +456,95 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
             guard let product = categoriesViewModel.product(at: indexPath.row) else {
                 return
             }
-
+            
             if Authorize.isRegistedCustomer() {
                 cell.heartButton.isEnabled = false
-// deafult now if false
-                if product.variants[0].isSelected {
-                    // Remove from fav
-                    showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
-                                           okAction: { [weak self] _ in
-                        print("OK button remove tapped")
-                      productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                
+                if product.variants[0].id != fakeProductInDraftOrder {
+                    // deafult now if false
+                    if product.variants[0].isSelected {
+                        // Remove from fav
+                        showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
+                                               okAction: { [weak self] _ in
+                            print("OK button remove tapped")
+                            productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                                DispatchQueue.main.async {
+                                    if isSuccess {
+                                        product.variants[0].isSelected = false
+                                        cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                        cell.heartButton.isEnabled = true
+                                        print("remove succeful")
+                                    } else {
+                                        self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                        cell.heartButton.isEnabled = true
+                                    }
+                                }
+                            }
+                            
+                        }, cancelAction: { _ in
+                            cell.heartButton.isEnabled = true
+                        }
+                        )
+                    } else {
+                        // Add to fav
+                        productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
                             DispatchQueue.main.async {
                                 if isSuccess {
-                                    product.variants[0].isSelected = false
-                                    cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                    cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                                     cell.heartButton.isEnabled = true
-                                    print("remove succeful")
+                                    print("added succesfully ")
+                                    product.variants[0].isSelected = true
+                                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                                    
                                 } else {
-                                    self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                    self?.showAlertWithTwoOption(message: "Failed to add to favorites")
                                     cell.heartButton.isEnabled = true
                                 }
                             }
                         }
-                    })
-                } else {
-                    // Add to fav
-                    productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
-                        DispatchQueue.main.async {
-                            if isSuccess {
-                                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                                cell.heartButton.isEnabled = true
-                                print("added succesfully ")
-                                product.variants[0].isSelected = true
-                                self?.showCheckMarkAnimation(mark: "heart.fill")
-
-                            } else {
-                                self?.showAlertWithTwoOption(message: "Failed to add to favorites")
-                                cell.heartButton.isEnabled = true
-                            }
-                        }
+                    }}else {
+                        showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
+                        
                     }
-                }
             } else {
-                showAlertWithTwoOption(message: "Login to add to favorites?",
-                                       okAction: {  _ in
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                    okAction: {  _ in
                     Navigation.ToALogin(from: self)
                     print("Login OK button tapped")
                 })
             }
         }
     }
-
-    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+    private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
-        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
-        alertController.addAction(okAlertAction)
-        alertController.addAction(cancelAlertAction)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+        alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-
     
-    
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)
+        alertController.addAction(okAlertAction)
+        
+        if let cancelAction = cancelAction {
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+            alertController.addAction(cancelAlertAction)
+        }
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width / 2 - 20 , height: 260)
@@ -383,9 +552,14 @@ extension CategoriesViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let product = categoriesViewModel.product(at: indexPath.row)
-        {
-            Navigation.ToProduct(productId: "\(product.id)", from: self)
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+            return
+        }else{
+            if let product = categoriesViewModel.product(at: indexPath.row)
+            {
+                Navigation.ToProduct(productId: "\(product.id)", from: self)
+            }
         }
     }
     

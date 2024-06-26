@@ -25,6 +25,30 @@ class Authorize{
     }
     
     
+    
+    static let CustomerEmailKey = "CustomerEmail"
+    static func saveCustomerEmail(Customeremail: String) {
+        UserDefaults.standard.set(Customeremail, forKey: CustomerEmailKey)
+    }
+    static func getCustomeremail() -> String? {
+        return UserDefaults.standard.string(forKey: CustomerEmailKey)
+    }
+    static func clearCustomerEmail() {
+        UserDefaults.standard.removeObject(forKey: CustomerEmailKey)
+    }
+    
+    static let CustomerFullName = "CustomerName"
+    static func saveCustomerFullName(customerFullName: String) {
+        UserDefaults.standard.set(customerFullName, forKey: CustomerFullName)
+    }
+    static func getCustomerFullName() -> String? {
+        return UserDefaults.standard.string(forKey: CustomerFullName)
+    }
+    static func clearCustomerFullName() {
+        UserDefaults.standard.removeObject(forKey: CustomerFullName)
+    }
+    
+    
     static let draftOrderIDOneSting = "draftOrderIDOne"
     static func favDraftOrder(draftOrderIDOne: Int) {
         print("favDraftOrder seeeet   \(draftOrderIDOne) ")
@@ -38,18 +62,16 @@ class Authorize{
         UserDefaults.standard.removeObject(forKey: draftOrderIDOneSting)
     }
     
-    
-    
+        
     static let draftOrderIDTwoSting = "draftOrderIDTwo"
     static func cardDraftOrderId(draftOrderIDTwo: Int) {
-        print("cardDraftOrderId seeeet  \(draftOrderIDTwo) ")
         UserDefaults.standard.set(draftOrderIDTwo, forKey: draftOrderIDTwoSting )
     }
     
-    static  func cardDraftOrderId() -> Int? {
+    static func cardDraftOrderId() -> Int? {
         return UserDefaults.standard.integer(forKey: draftOrderIDTwoSting)
     }
-    static  func clearCardDraftOrderId() {
+    static func clearCardDraftOrderId() {
         UserDefaults.standard.removeObject(forKey: draftOrderIDTwoSting)
     }
     
@@ -58,37 +80,26 @@ class Authorize{
         Authorize.clearCardDraftOrderId()
         Authorize.clearCustomerIDFromUserDefaults()
         Authorize.clearFavDraftOrder()
-        
+        Authorize.clearCustomerEmail()
+        Authorize.clearCustomerFullName()
+        Authorize.clearCurrency()
+    }
+    
+    static  func clearCurrency() {
+        HomeViewModel().storeDiscountCodeWithPriceRule(code:"", priceRuleValue: 0)  
     }
     
     static func isRegistedCustomer () -> Bool {
-        
-        if (Authorize.getCustomerIDFromUserDefaults() != 0)
-        {
+        let customerID = Authorize.getCustomerIDFromUserDefaults()
+        let customerEmail = Authorize.getCustomeremail()
+        if customerID != 0 || customerEmail != nil {
             print("he isRegistedCustomer ")
             return true
         }
         else{
             print("he is guest ")
-
+            
             return false
         }
     }
 }
-
-/*
- 
- // To access the customer ID from anywhere in the application
- if let customerID = Authorize.getCustomerIDFromUserDefaults() {
- print("Customer ID:", customerID)
- }
- 
- // Log out action
- func logout() {
- // Clear the saved customer ID
- Authorize.clearCustomerIDFromUserDefaults()
-
- // navigtion to login
- }
- 
- */

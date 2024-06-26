@@ -27,3 +27,53 @@ extension UIColor {
         self.init(red: red, green: green, blue: blue, alpha: 1)
     }
 }
+
+class BadgeView: UILabel {
+    init(text: String, color: UIColor) {
+        super.init(frame: .zero)
+        self.text = text
+        self.textColor = .white
+        self.backgroundColor = color
+        self.font = UIFont.boldSystemFont(ofSize: 12)
+        self.textAlignment = .center
+        self.layer.cornerRadius = 8
+        self.clipsToBounds = true
+        self.sizeToFit()
+        self.frame.size = CGSize(width: self.frame.size.width + 8, height: 16)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension UIBarButtonItem {
+    private var badgeViewTag: Int { return 999 }
+
+    func addBadge(text: String, color: UIColor) {
+        removeBadge()
+        guard let customView = self.customView else {
+            return
+        }
+
+        let badgeView = BadgeView(text: text, color: color)
+        badgeView.tag = badgeViewTag
+
+        let badgeX = customView.frame.size.width - badgeView.frame.size.width - 4
+        let badgeY = customView.frame.size.height / 10
+        badgeView.frame.origin = CGPoint(x: badgeX, y: badgeY)
+
+        customView.addSubview(badgeView)
+    }
+
+    func removeBadge() {
+        guard let customView = self.customView else {
+            return
+        }
+        customView.subviews.forEach { view in
+            if view is BadgeView {
+                view.removeFromSuperview()
+            }
+        }
+    }
+}

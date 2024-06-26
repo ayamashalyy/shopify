@@ -21,7 +21,7 @@ class ProductViewController: UIViewController {
     var isComeFromFaviourts: Bool?
     var selectedVarientId : Int?
     var isFav = false
-
+    
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var addToCart: UIButton!
@@ -52,14 +52,15 @@ class ProductViewController: UIViewController {
                 {
                     //            print("is come from fav")
                     self.updateFavButton(iscomefromFav: true)
+                    self.isFav =  true
                     
                 }
                 else{
                     //             print("is noooooot come from fav")
                     
-                    self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isFav in
-                        self.updateFavButton(iscomefromFav: isFav)
-                        self.isFav = isFav
+                    self.productViewModel?.checkIsFav(imageUrl: self.firstImageURL ?? "") { isInFav in
+                        self.updateFavButton(iscomefromFav: isInFav)
+                        self.isFav = isInFav
                         
                     }
                 }
@@ -69,10 +70,14 @@ class ProductViewController: UIViewController {
                 self.indicator.stopAnimating()
             }
         }
-        productViewModel?.getProductDetails(id: productId!)
-        
+        if  CheckNetworkReachability.checkNetworkReachability(){
+            productViewModel?.getProductDetails(id: productId!)
+        }else {
+            showAlert(message: "Failed to get product details as lost network connection")
+        }
         
     }
+    
     func updateFavButton(iscomefromFav: Bool) {
         if iscomefromFav {
             productFavButton.setImage(UIImage(systemName: "suit.heart.fill"), for: .normal)
@@ -91,71 +96,93 @@ class ProductViewController: UIViewController {
     
     
     @IBOutlet weak var pageContoller: UIPageControl!
-    
-    
-    
+        
     @IBAction func productFavBtn(_ sender: UIButton) {
         
-        if   (Authorize.isRegistedCustomer())
-        {
-            productFavButton.isEnabled = false
+        if Authorize.isRegistedCustomer() {
             
+            productFavButton.isEnabled = false
             guard let productIdString = productId, let firstImageURL = firstImageURL else {
                 showAlert(message: "The product not loaded yet")
                 return
             }
+            
             // i need variant id not product id as draft order deal with it
-            if isFav{
-                
-                // remove from fav
-                let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
-                    guard let self = self else { return }
-                    self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
-                        DispatchQueue.main.async {
-                            if isSuccess {
-                                self.isFav = false
-                                self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
-                                self.productFavButton.isEnabled = true
-                                
+            if firstVariantId != fakeProductInDraftOrder {
+                if isFav{
+                    // remove from fav
+                    let alertController = UIAlertController(title: "Confirmation", message: "Are you sure ? Remove from favorites?", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+                        self.productFavButton.isEnabled = true
+                        
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+                        guard let self = self else { return }
+                        if  CheckNetworkReachability.checkNetworkReachability(){
+                            self.productViewModel?.removeFromFavDraftOrders(VariantsId: self.firstVariantId!) { isSuccess in
+                                DispatchQueue.main.async {
+                                    if isSuccess {
+                                        self.isFav = false
+                                        self.productFavButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                        self.productFavButton.isEnabled = true
+                                    }}}
+                        }else {
+                            self.productFavButton.isEnabled = true
+                            self.showAlert(message: "Failed to remove from faviourt as lost network connection")
+                        } }))
+                    present(alertController, animated: true, completion: nil)
+                }
+                else{ // add to fav
+                    if  CheckNetworkReachability.checkNetworkReachability(){
+                        productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
+                            DispatchQueue.main.async {
+                                if isSuccess {
+                                    self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                                    self?.isFav = true
+                                    self?.productFavButton.isEnabled = true
+                                    
+                                } else {
+                                    self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
+                                    self?.productFavButton.isEnabled = true
+                                }
                             }
                         }
-                    }
-                }))
-                present(alertController, animated: true, completion: nil)
-            }
-            else{
-                // add to fav
-                productViewModel?.addToFavDraftOrders(selectedVariantsData: [(firstVariantId!, firstImageURL,1)]){ [weak self ] isSuccess in
-                    DispatchQueue.main.async {
-                        if isSuccess {
-                            self?.productFavButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                            self?.showCheckMarkAnimation(mark: "heart.fill")
-                            self?.isFav = true
-                            self?.productFavButton.isEnabled = true
-                            
-                        } else {
-                            self?.showAlert(message: "Sorry,Failed to add to Faviourts" )
-                            self?.productFavButton.isEnabled = true
-                        }
+                    }else {
+                        productFavButton.isEnabled = true
+                        showAlert(message: "Failed to add from faviourt as lost network connection")
+
                     }
                 }
-            }}else {
-                
-                self.showAlertWithTwoOption(message: "Login to add to faviourts?",
-                                            okAction: { action in
+            } else {
+                showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
+            }}
+            else {
+                self.showAlertWithTwoOptionOkayAndCancel(message: "Login to add to faviourts?",
+                                                         okAction: { action in
                     Navigation.ToALogin(from: self)
                     print("OK button tapped")
                 }
                 )
             }
+            
     }
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
-        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
         
         alertController.addAction(okAlertAction)
@@ -181,6 +208,8 @@ class ProductViewController: UIViewController {
                     if let variantText = variantButton.titleLabel?.text {
                         selectedVariants.append(variantText)
                         
+                //        print("the selectedVariants number = \(selectedVariants.count)")
+                        
                         for variant in productViewModel?.product?.variants ?? [] {
                             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
                                 let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
@@ -200,27 +229,42 @@ class ProductViewController: UIViewController {
                     }
                 }
             }
-            productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
-                DispatchQueue.main.async {
-                    if isSuccess {
-                        self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
-                        self.addToCard.isEnabled = true
-                        self.hideAllCheckmarkImages()
-                    } else {
-                        self.showAlert(message: "Failed to add to cart" )
-                        self.addToCard.isEnabled = true
-                        
+            
+     //       print("selectedVariantsIDsAndImageUrl number\(selectedVariantsIDsAndImageUrl.count)")
+            
+            if selectedVariantsIDsAndImageUrl.count == 0 {
+                self.showAlert(message: "Please choose your size and color first, then add to card" ){
+                    action in
+                    self.addToCard.isEnabled = true
+                }
+            }else {
+                if  CheckNetworkReachability.checkNetworkReachability(){
+                    productViewModel?.addToCartDraftOrders(selectedVariantsData:selectedVariantsIDsAndImageUrl) { isSuccess in
+                        DispatchQueue.main.async {
+                            if isSuccess {
+                                self.showCheckMarkAnimation(mark: "cart.fill.badge.plus")
+                                self.addToCard.isEnabled = true
+                                self.hideAllCheckmarkImages()
+                            } else {
+                                self.showAlert(message: "Failed to add to cart" )
+                                self.addToCard.isEnabled = true
+                                //       print("number is not succes")
+                            }
+                        }
                     }
+                }else {
+                    showAlert(message: "Failed to add product to cart as lost network connection")
+                    addToCard.isEnabled = true
+                    
                 }
-            }}else {
-                self.showAlertWithTwoOption(message: "Login to add to faviourts?",
-                                            okAction: { action in
-                    Navigation.ToALogin(from: self)
-                    print("OK button tapped")
-                }
-                )
-                
             }
+        } else {
+            self.showAlertWithTwoOptionOkayAndCancel(message: "Login to add to cart?",
+                                                     okAction: { action in
+                Navigation.ToALogin(from: self)
+            }
+            )
+        }
     }
     
     func hideAllCheckmarkImages() {
@@ -241,7 +285,6 @@ class ProductViewController: UIViewController {
         indicator.startAnimating()
         view.addSubview(indicator)
     }
-    
     
     func setupStackView(name: String, price: String, description: String, variants: [Variant]) {
         let nameText = UITextView()
@@ -274,28 +317,27 @@ class ProductViewController: UIViewController {
         availableSizeAndColorLabel.text = "Available Size and Color:"
         availableSizeAndColorLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         
-        
         stack.addArrangedSubview(nameText)
         stack.addArrangedSubview(ratingView)
         stack.addArrangedSubview(descriptionTextView)
         stack.addArrangedSubview(availableSizeAndColorLabel)
         
-        
-        
         // get it to save product to fav by it
         firstVariantId = variants.first?.id
         
-        
-        
         for variant in variants {
+            // Check the inventory quantity before adding the variant to the stack
+            guard let quantity = variant.inventory_quantity, quantity > 0 else {
+                continue // Skip this variant if the quantity is 0
+            }
+            
             let variantStackView = UIStackView()
             variantStackView.axis = .horizontal
             variantStackView.spacing = 8
             
-            
             let variantButton = UIButton(type: .system)
             
-            //Handle the currency
+            // Handle the currency
             if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
                 let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
                 variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)", for: .normal)
@@ -305,14 +347,12 @@ class ProductViewController: UIViewController {
             
             variantButton.setTitleColor(.black, for: .normal)
             variantButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-            
             variantButton.addTarget(self, action: #selector(variantButtonTapped(_:)), for: .touchUpInside)
             
             let checkmarkImageView = UIImageView(image: UIImage(systemName: "checkmark"))
             checkmarkImageView.tintColor = .orange
             checkmarkImageView.contentMode = .scaleAspectFit
             checkmarkImageView.isHidden = true
-            
             
             // Highlight the selected variant
             if selectedVarientId == variant.id {
@@ -322,12 +362,10 @@ class ProductViewController: UIViewController {
                 variantStackView.layer.cornerRadius = 8.0
             }
             
-            
             variantStackView.addArrangedSubview(variantButton)
             variantStackView.addArrangedSubview(checkmarkImageView)
             stack.addArrangedSubview(variantStackView)
         }
-        
         
         stack.addArrangedSubview(reviewsHeader)
         stack.addArrangedSubview(reviewsTableView)
@@ -343,6 +381,105 @@ class ProductViewController: UIViewController {
         stack.addArrangedSubview(seeMoreButton)
         stack.setCustomSpacing(20, after: reviewsTableView)
     }
+
+//    func setupStackView(name: String, price: String, description: String, variants: [Variant]) {
+//        let nameText = UITextView()
+//        nameText.text = name
+//        nameText.isScrollEnabled = false
+//        nameText.isEditable = false
+//        nameText.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        
+//        let ratingView = CosmosView()
+//        ratingView.settings.updateOnTouch = false
+//        ratingView.rating = 4
+//        
+//        let descriptionTextView = UITextView()
+//        descriptionTextView.text = description
+//        descriptionTextView.isScrollEnabled = false
+//        descriptionTextView.isEditable = false
+//        descriptionTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+//        
+//        let reviewsHeader = UILabel()
+//        reviewsHeader.text = "Reviews"
+//        reviewsHeader.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        
+//        let reviewsTableView = UITableView()
+//        reviewsTableView.delegate = self
+//        reviewsTableView.dataSource = self
+//        reviewsTableView.isScrollEnabled = false
+//        reviewsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "ReviewCell")
+//        
+//        let availableSizeAndColorLabel = UILabel()
+//        availableSizeAndColorLabel.text = "Available Size and Color:"
+//        availableSizeAndColorLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+//        
+//        
+//        stack.addArrangedSubview(nameText)
+//        stack.addArrangedSubview(ratingView)
+//        stack.addArrangedSubview(descriptionTextView)
+//        stack.addArrangedSubview(availableSizeAndColorLabel)
+//        
+//        
+//        // get it to save product to fav by it
+//        firstVariantId = variants.first?.id
+//        
+//        
+//        for variant in variants {
+//            let variantStackView = UIStackView()
+//            variantStackView.axis = .horizontal
+//            variantStackView.spacing = 8
+//            
+//            
+//            let variantButton = UIButton(type: .system)
+//            
+//            //Handle the currency
+//            if let selectedCurrency = settingsViewModel.getSelectedCurrency() {
+//                let convertedPrice = settingsViewModel.convertPrice(variant.price, to: selectedCurrency)
+//                variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(convertedPrice ?? variant.price)", for: .normal)
+//            } else {
+//                variantButton.setTitle("Size: \(variant.size), Color: \(variant.color ?? "N/A"), Price: \(variant.price)$", for: .normal)
+//            }
+//            
+//            variantButton.setTitleColor(.black, for: .normal)
+//            variantButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+//            
+//            variantButton.addTarget(self, action: #selector(variantButtonTapped(_:)), for: .touchUpInside)
+//            
+//            let checkmarkImageView = UIImageView(image: UIImage(systemName: "checkmark"))
+//            checkmarkImageView.tintColor = .orange
+//            checkmarkImageView.contentMode = .scaleAspectFit
+//            checkmarkImageView.isHidden = true
+//            
+//            
+//            // Highlight the selected variant
+//            if selectedVarientId == variant.id {
+//                // You can change the background color or add a border to highlight the selected variant
+//                variantStackView.layer.borderWidth = 2.0
+//                variantStackView.layer.borderColor = UIColor.orange.cgColor
+//                variantStackView.layer.cornerRadius = 8.0
+//            }
+//            
+//            
+//            variantStackView.addArrangedSubview(variantButton)
+//            variantStackView.addArrangedSubview(checkmarkImageView)
+//            stack.addArrangedSubview(variantStackView)
+//        }
+//        
+//        
+//        stack.addArrangedSubview(reviewsHeader)
+//        stack.addArrangedSubview(reviewsTableView)
+//        
+//        NSLayoutConstraint.activate([
+//            reviewsTableView.heightAnchor.constraint(equalToConstant: 200)
+//        ])
+//        
+//        let seeMoreButton = UIButton(type: .system)
+//        seeMoreButton.setTitle("See More", for: .normal)
+//        seeMoreButton.addTarget(self, action: #selector(seeMoreReviews), for: .touchUpInside)
+//        
+//        stack.addArrangedSubview(seeMoreButton)
+//        stack.setCustomSpacing(20, after: reviewsTableView)
+//    }
     
     
     @objc func variantButtonTapped(_ sender: UIButton) {
@@ -418,7 +555,7 @@ extension ProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         tableView.register(ReviewTableViewCell.self, forCellReuseIdentifier: "ReviewTableViewCell")
-
+        
         var arrayOfReviews = ProductViewModel.getReviews()
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewTableViewCell", for: indexPath) as! ReviewTableViewCell
         let review = arrayOfReviews[indexPath.row]

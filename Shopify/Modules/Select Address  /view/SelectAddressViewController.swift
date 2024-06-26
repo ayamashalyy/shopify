@@ -13,10 +13,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     private let viewModel: AddressViewModel
-    
+    var isFromShoppingCart: Bool = false
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navToPlaceOrder: UIButton!
-    
+    var address: String = ""
+    var country: String = ""
+    var phone: String = ""
     init(viewModel: AddressViewModel) {
         self.viewModel = viewModel
         super.init(nibName: "SelectAddressViewController", bundle: nil)
@@ -28,82 +30,51 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     @IBAction func addAddress(_ sender: UIBarButtonItem) {
-        showAddAddressAlert()
-    }
-    
-    private func showAddAddressAlert() {
-        let alert = UIAlertController(title: "Add Address", message: nil, preferredStyle: .alert)
         
-        alert.addTextField { (textField) in
-            textField.placeholder = "Address"
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
         }
         
-        alert.addTextField { (textField) in
-            textField.placeholder = "Phone"
-        }
-        
-        alert.addTextField { (textField) in
-            textField.placeholder = "City"
-        }
-        
-        alert.addTextField { textField in
-            textField.placeholder = "Country"
-        }
-        
-        alert.addTextField { (textField) in
-            textField.placeholder = "Zip Code"
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let addAction = UIAlertAction(title: "Add Address", style: .default) { (_) in
-            guard let address = alert.textFields?.first?.text,!address.isEmpty,
-                  let phone = alert.textFields?[1].text, !phone.isEmpty,
-                  let city = alert.textFields?[2].text,!city.isEmpty,
-                  let country = alert.textFields?[3].text,!country.isEmpty,
-                  let zip = alert.textFields?[4].text,!zip.isEmpty else {
-                let emptyFieldAlert = UIAlertController(title: "Error", message: "Please fill in all fields", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                emptyFieldAlert.addAction(okAction)
-                self.present(emptyFieldAlert, animated: true, completion: nil)
-                return
-            }
-            if !self.isValidEgyptianPhone(phone) {
-                let invalidPhoneAlert = UIAlertController(title: "Invalid Phone Number", message: "Please enter a valid Egyptian phone number (+20xxxxxxxxx).", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                invalidPhoneAlert.addAction(okAction)
-                self.present(invalidPhoneAlert, animated: true, completion: nil)
-                return
-            }
-            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-            let newAddress = Address(id: self.viewModel.addresses.count + 1, address1: address, phone: phone, city: city, country: country, zip: zip, isDefault: false)
-            self.viewModel.addAddress(newAddress) { result in
-                switch result {
-                case .success(let address):
-                    print("Address added successfully: \(address)")
-                    let successAlert = UIAlertController(title: "Success", message: "Address added successfully", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                        self.tableView.reloadData()
+        let storyboard = UIStoryboard(name: "Second", bundle: nil)
+        if let addAddressVC = storyboard.instantiateViewController(withIdentifier: "AddAddressViewController") as? AddAddressViewController {
+            addAddressVC.modalPresentationStyle = .overFullScreen
+            
+            addAddressVC.addAddressAction = { [weak self] (address, phone, city, country, zip) in
+                let newAddress = Address(id: self?.viewModel.addresses.count ?? 0 + 1, address1: address, phone: phone, city: city, country: country, zip: zip, isDefault: false)
+                
+                self?.viewModel.addAddress(newAddress) { result in
+                    switch result {
+                    case .success(let address):
+                        print("Address added successfully: \(address)")
+                        DispatchQueue.main.async {
+                            self?.tableView.reloadData()
+                            self?.showAlert(title: "Success", message: "Address added successfully")
+                        }
+                    case .failure(let error):
+                        print("Failed to post address: \(error)")
+                        DispatchQueue.main.async {
+                            self?.showAlert(title: "Error", message: "Failed to post address: \(error.localizedDescription)")
+                        }
                     }
-                    
-                    successAlert.addAction(okAction)
-                    self.present(successAlert, animated: true, completion: nil)
-                case .failure(let error):
-                    print("Failed to post address: \(error)")
-                    let postFailureAlert = UIAlertController(title: "Error", message: "Failed to post address: \(error)", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    postFailureAlert.addAction(okAction)
-                    self.present(postFailureAlert, animated: true, completion: nil)
-                    
                 }
             }
+            
+            self.present(addAddressVC, animated: true, completion: nil)
         }
-        alert.addAction(cancelAction)
-        alert.addAction(addAction)
-        present(alert, animated: true, completion: nil)
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if isFromShoppingCart {
+            navToPlaceOrder.isHidden = false
+            navToPlaceOrder.addTarget(self, action: #selector(getter: navToPlaceOrder), for: .touchUpInside)
+        } else {
+            navToPlaceOrder.isHidden = true
+        }
+        
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         tableView.dataSource = self
         tableView.delegate = self
@@ -112,13 +83,15 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
         navToPlaceOrder.layer.cornerRadius = 8
         
     }
-    func isValidEgyptianPhone(_ phone: String) -> Bool {
-        let phoneRegex = "^\\+20[0-9]{9}$"
-        let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
-        return phoneTest.evaluate(with: phone)
-    }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
+        
         super.viewWillAppear(animated)
         viewModel.getAllAddresses { [weak self] result in
             switch result {
@@ -138,25 +111,33 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  viewModel.addresses.count
+        if viewModel.addresses.isEmpty {
+            let noAddressesImageView = UIImageView(image: UIImage(named: "no_items"))
+            noAddressesImageView.contentMode = .scaleAspectFit
+            tableView.backgroundView = noAddressesImageView
+            return 0
+        } else {
+            tableView.backgroundView = nil
+            return viewModel.addresses.count
+        }
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SelectAddressCell", for: indexPath) as? SelectAddressCell else {
             return UITableViewCell()
         }
         
-        let address = viewModel.addresses[indexPath.row]
-        // print("addressTest\(address)")
-        print("addressTest..............................\(address.isDefault)")
-        cell.addressLabel.text = address.address1
-        cell.phoneLabel.text = address.phone
-        cell.cityLabel.text = address.city
-        cell.countryLabel.text = address.country
-        cell.zipCodeLabel.text = address.zip
+        var addressDefault = viewModel.addresses[indexPath.row]
+        print("addressTest..............................\(addressDefault.isDefault)")
+        cell.addressLabel.text = addressDefault.address1
+        cell.phoneLabel.text = addressDefault.phone
+        cell.cityLabel.text = addressDefault.city
+        cell.countryLabel.text = addressDefault.country
+        cell.zipCodeLabel.text = addressDefault.zip
         cell.indexPath = indexPath
         cell.delegate = self
-        if address.isDefault {
+        if addressDefault.isDefault {
             cell.containerView.backgroundColor = UIColor.white
             cell.containerView.layer.borderColor = UIColor(hex: "#FF7D29").cgColor
             cell.containerView.layer.borderWidth = 1.0
@@ -165,6 +146,11 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
             cell.containerView.layer.shadowOpacity = 0.25
             cell.containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
             cell.containerView.layer.shadowRadius = 2.0
+            
+            phone = addressDefault.phone ?? ""
+            country = addressDefault.country
+            address = addressDefault.address1
+            
         } else {
             cell.containerView.backgroundColor = UIColor.white
             cell.containerView.layer.borderColor = UIColor.clear.cgColor
@@ -179,6 +165,12 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         if editingStyle == UITableViewCell.EditingStyle.delete {
             let address = viewModel.addresses[indexPath.row]
             self.showConfirmDeleteAlert(address: address, indexPath: indexPath)
@@ -222,9 +214,13 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         
         for i in 0..<viewModel.addresses.count {
@@ -236,6 +232,10 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
             switch result {
             case .success(let updatedAddress):
                 print("Address updated successfully: \(updatedAddress)")
+                self?.phone = updatedAddress.customer_address.phone!
+                self?.country = updatedAddress.customer_address.country
+                self?.address = updatedAddress.customer_address.address1
+                
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
                 }
@@ -251,76 +251,25 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     }
     
     
-    
-    
-    
     func editAddress(at indexPath: IndexPath) {
-        let address = viewModel.addresses[indexPath.row]
         
-        let alert = UIAlertController(title: "Edit Address", message: nil, preferredStyle: .alert)
-        
-        alert.addTextField { textField in
-            textField.placeholder = "Address"
-            textField.text = address.address1
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
         }
         
-        alert.addTextField { textField in
-            textField.placeholder = "Phone"
-            textField.text = address.phone
+        guard let editAddressVC = storyboard?.instantiateViewController(withIdentifier: "EditAddressViewController") as? EditAddressViewController else {
+            return
         }
         
-        alert.addTextField { textField in
-            textField.placeholder = "City"
-            textField.text = address.city
+        let selectedAddress = viewModel.addresses[indexPath.row]
+        editAddressVC.modalPresentationStyle = .overFullScreen
+        editAddressVC.viewModel = viewModel
+        editAddressVC.editCompletion = { [weak self] in
+            self?.tableView.reloadData()
         }
         
-        alert.addTextField { textField in
-            textField.placeholder = "Country"
-            textField.text = address.country
-            
-        }
-        
-        alert.addTextField { textField in
-            textField.placeholder = "Zip Code"
-            textField.text = address.zip
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let updateAction = UIAlertAction(title: "Update", style: .default) { _ in
-            guard let address1 = alert.textFields?[0].text, !address1.isEmpty,
-                  let phone = alert.textFields?[1].text, !phone.isEmpty,
-                  let city = alert.textFields?[2].text, !city.isEmpty,
-                  let country = alert.textFields?[3].text, !country.isEmpty,
-                  let zip = alert.textFields?[4].text, !zip.isEmpty else {
-                self.showAlert(title: "Error", message: "Please fill in all fields")
-                return
-            }
-            if !self.isValidEgyptianPhone(phone) {
-                let invalidPhoneAlert = UIAlertController(title: "Invalid Phone Number", message: "Please enter a valid Egyptian phone number (+20xxxxxxxxx).", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                invalidPhoneAlert.addAction(okAction)
-                self.present(invalidPhoneAlert, animated: true, completion: nil)
-                return
-            }
-            
-            let updatedAddress = Address(id: address.id, address1: address1, phone: phone, city: city, country: country, zip: zip, isDefault: address.isDefault)
-            
-            self.viewModel.updateAddress(updatedAddress) { result in
-                switch result {
-                case .success(let updatedAddress):
-                    print("Address updated successfully: \(updatedAddress)")
-                    self.tableView.reloadData()
-                    self.showAlert(title: "Success", message: "Address updated successfully")
-                case .failure(let error):
-                    print("Failed to update address: \(error)")
-                    self.showAlert(title: "Error", message: "Failed to update address: \(error.localizedDescription)")
-                }
-            }
-        }
-        
-        alert.addAction(cancelAction)
-        alert.addAction(updateAction)
-        present(alert, animated: true, completion: nil)
+        present(editAddressVC, animated: true, completion: nil)
     }
     
     
@@ -344,11 +293,35 @@ class SelectAddressViewController: UIViewController ,UITableViewDataSource, UITa
     
     
     @IBAction func navToPlaceOrder(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Second", bundle: nil)
-        if let PlaceOrderViewController = storyboard.instantiateViewController(withIdentifier: "PlaceOrderViewController") as? PlaceOrderViewController {
-            PlaceOrderViewController.modalPresentationStyle = .fullScreen
-            present(PlaceOrderViewController, animated: true, completion: nil)
+        
+        guard CheckNetworkReachability.checkNetworkReachability() else {
+            showNoInternetAlert()
+            return
+        }
+        
+        if viewModel.addresses.isEmpty {
+            showAlert(title: "No Address", message: "Please add an address before placing an order.")
+        } else {
+            let storyboard = UIStoryboard(name: "Second", bundle: nil)
+            if let placeOrderViewController = storyboard.instantiateViewController(withIdentifier: "PlaceOrderViewController") as? PlaceOrderViewController {
+                placeOrderViewController.modalPresentationStyle = .fullScreen
+                
+                placeOrderViewController.selectedAddress = address
+                placeOrderViewController.selectedCountry = country
+                placeOrderViewController.selectedPhone = phone
+                
+                
+                present(placeOrderViewController, animated: true, completion: nil)
+            }
         }
     }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
     
 }

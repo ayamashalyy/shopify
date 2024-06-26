@@ -9,29 +9,94 @@ import UIKit
 import Kingfisher
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
-        
+    
+    
+    @IBOutlet weak var cartButton: UIBarButtonItem!
+    
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     var brandsCollectionView: UICollectionView!
     let homeViewModel = HomeViewModel()
     let brandProductsViewModel = BrandProductsViewModel()
+    let shoppingCartViewModel = ShoppingCartViewModel()
     
-    let coponesImages = ["eid_sale.jpeg", "sum3_disc30.jpeg","sum1_disc30.jpeg"]
+    let coponesImages = ["special_offer.jpg","best_offer3.jpeg","eid_sale.jpeg"]
     var couponsCollectionView: UICollectionView!
+    
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPage = 0
+        pageControl.currentPageIndicatorTintColor = .orange
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        return pageControl
+    }()
     
     
     @IBAction func goToFav(_ sender: UIBarButtonItem) {
-        print("go to favss from home")
-        Navigation.ToAllFavourite(from: self)
-        print("go to favss from home after")
+        if Authorize.isRegistedCustomer() {
+            if homeViewModel.isNetworkReachable() {
+                print("go to favss from home")
+                Navigation.ToAllFavourite(from: self)
+                print("go to favss from home after")
+            } else {
+                showNoInternetAlert()
+            }
+        }else
+        {
+            //guest
+            showAlertWithTwoOptionOkayAndCancel(message: "Login to add to favorites?",
+                                                okAction: {  _ in
+                Navigation.ToALogin(from: self)
+                print("Login OK button tapped")
+            })
+        }
         
     }
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
-        Navigation.ToSearch(from: self, comeFromHome: true, products: [])
+        if homeViewModel.isNetworkReachable() {
+            
+            let storyboard = UIStoryboard(name: "third", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+                vc.comeFromHome = true
+                let searchViewModel = SearchViewModel()
+                searchViewModel.recevingProductFromANotherScreen = []
+
+                vc.searchViewModel = searchViewModel
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: true, completion: nil)
+            }
+        } else {
+            showNoInternetAlert()
+        }
     }
     
     @IBAction func goToCard(_ sender: UIBarButtonItem) {
-        Navigation.ToOrders(from: self)
-
+        if Authorize.isRegistedCustomer(){
+            if homeViewModel.isNetworkReachable() {
+                Navigation.ToOrders(from: self)
+            } else {
+                showNoInternetAlert()
+            }}else{
+                //guest
+                showAlertWithTwoOptionOkayAndCancel(message: "Login to add to cart?",
+                                                    okAction: {  _ in
+                    Navigation.ToALogin(from: self)
+                    print("Login OK button tapped")
+                })
+                
+            }
     }
     
     
@@ -42,7 +107,76 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         setupUI()
         fetchBrands()
         fetchPriceRules()
+        setupCartButton()
+        checkNetworkConnection()
+        
+        if Authorize.isRegistedCustomer() {
+            if let profileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
+                self.tabBarController?.viewControllers?[2] = profileViewController
+            }
+        } else {
+            if let meGuestViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MeGuestViewController") as? MeGuestViewController {
+                meGuestViewController.tabBarItem = UITabBarItem(title: "Me", image: UIImage(systemName: "person.circle"), selectedImage: nil)
+                self.tabBarController?.viewControllers?[2] = meGuestViewController
+            }
+
+            }
+        }
+    
+
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchBrands()
+        fetchCartItemsAndUpdateBadge()
+        checkNetworkConnection()
     }
+    
+    func updateCartBadge(itemCount:Int) {
+        print("Item count: \(itemCount)")
+        if itemCount > 0 {
+            cartButton.addBadge(text: "\(itemCount)", color: .orange)
+        } else {
+            cartButton.removeBadge()
+        }
+    }
+    
+    
+    private func fetchCartItemsAndUpdateBadge() {
+
+        homeViewModel.getShoppingCartItemsCount { count, error in
+            guard let count = count else {return}
+            self.updateCartBadge(itemCount: count - 1)
+        }
+    }
+    
+    func setupCartButton() {
+        let button = UIButton(type: .custom)
+        
+        if let cartImage = UIImage(systemName: "cart.fill") {
+            print("System cart image loaded successfully")
+            let tintedImage = cartImage.withTintColor(.orange, renderingMode: .alwaysOriginal)
+            let scaledImage = pondsize(image: tintedImage, size: CGSize(width: 30, height: 25))
+            button.setImage(scaledImage, for: .normal)
+        } else {
+            print("Failed to load system cart image")
+        }
+        
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(goToCard(_:)), for: .touchUpInside)
+        button.frame = CGRect(x: 0, y: 0, width: 60, height: 80)
+        cartButton.customView = button
+    }
+    
+    func pondsize(image: UIImage, size: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let scaledImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return scaledImage
+    }
+    
     func fetchBrands() {
         homeViewModel.fetchBrands { [weak self] error in
             guard let self = self else { return }
@@ -87,11 +221,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupUI(){
         //view.backgroundColor = UIColor(hex: "#F5F5F5")
-
+        
         let layout = UICollectionViewFlowLayout()
         brandsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-
+        
         view.addSubview(brandsCollectionView)
+        view.addSubview(pageControl)
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
         
         // Setup couponsCollectionView
         let couponLayout = UICollectionViewFlowLayout()
@@ -99,19 +235,26 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         couponsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: couponLayout)
         view.addSubview(couponsCollectionView)
         couponsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        couponsCollectionView.contentInsetAdjustmentBehavior = .never
+        couponsCollectionView.showsHorizontalScrollIndicator = false
         
         NSLayoutConstraint.activate([
             couponsCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 110),
             couponsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             couponsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            couponsCollectionView.heightAnchor.constraint(equalToConstant: 190)
+            couponsCollectionView.heightAnchor.constraint(equalToConstant: 190),
+            pageControl.topAnchor.constraint(equalTo: couponsCollectionView.bottomAnchor, constant: 10),
+            pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            pageControl.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            pageControl.heightAnchor.constraint(equalToConstant: 20)
         ])
-
+        
         couponsCollectionView.backgroundColor = UIColor.clear
         couponsCollectionView.dataSource = self
         couponsCollectionView.delegate = self
-
+        
         couponsCollectionView.register(CustomCouponCell.self, forCellWithReuseIdentifier: "couponCell")
+        pageControl.numberOfPages = coponesImages.count
         
         //Setup Brands Label
         let brandsTitleLabel = UILabel()
@@ -126,7 +269,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             brandsTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             brandsTitleLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
-
+        
         //Setup BrandsCollectionView
         brandsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -141,10 +284,30 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         brandsCollectionView.register(CustomBrandCell.self, forCellWithReuseIdentifier: "brandCell")
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == couponsCollectionView {
+            let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
+            pageControl.currentPage = Int(pageIndex)
+        }
+    }
+    
+    private func checkNetworkConnection() {
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+        }
+    }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == couponsCollectionView {
             return coponesImages.count
@@ -152,7 +315,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return homeViewModel.numberOfBrands()
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == couponsCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "couponCell", for: indexPath) as! CustomCouponCell
@@ -166,7 +329,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return cell
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == couponsCollectionView {
             return CGSize(width: view.frame.width, height: 260)
@@ -175,6 +338,14 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+            return
+        }
+        
+        
+        
         if collectionView == brandsCollectionView {
             guard let brand = homeViewModel.brand(at: indexPath.item) else { return }
             
@@ -187,7 +358,16 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             self.present(brandsVC, animated: true, completion: nil)
             
         } else if collectionView == couponsCollectionView {
-            fetchDiscountCodesAndShowAlert(for: indexPath)
+            if !Authorize.isRegistedCustomer(){
+                self.showAlertWithTwoOption(message: "Log in to get Offers and do Shopping",
+                                            okAction: { action in
+                    Navigation.ToALogin(from: self)
+                    print("OK button tapped")
+                }
+                )
+            }else{
+                fetchDiscountCodesAndShowAlert(for: indexPath)
+            }
         }
     }
     
@@ -197,7 +377,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return
         }
         
-        let message = "Here is a discount code with \(priceRuleValue)% off: \(code) , do you want to get it"
+        let message = "Enjoy an Extraordinary \(priceRuleValue)% Discount with \(code) 💐 \n Do you want to get it?"
         let alert = UIAlertController(title: "Discount Code", message: message, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -223,5 +403,17 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         present(alert, animated: true, completion: nil)
     }
-
+    
+    func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
+        alertController.addAction(okAlertAction)
+        alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
 }

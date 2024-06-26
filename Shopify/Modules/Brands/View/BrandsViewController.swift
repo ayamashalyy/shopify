@@ -10,6 +10,7 @@ import UIKit
 class BrandsViewController: UIViewController {
     
     var productViewModel = ProductViewModel()
+    let homeViewModel = HomeViewModel()
     
     @IBOutlet weak var sliderFilter: UISlider!
     
@@ -27,18 +28,36 @@ class BrandsViewController: UIViewController {
         
         self.indicator.startAnimating()
         setupUI()
-        fetchProducts()
-        fetchExchangeRates()
-        
-        valueLabel.text = "50.0"
+    
+        valueLabel.text = "10.0"
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchProducts()
+        fetchExchangeRates()
+        checkNetworkConnection()
+        
+        
+    }
+    
     
     @IBAction func goToSearch(_ sender: UIBarButtonItem) {
-        Navigation.ToSearch(from: self, comeFromHome: false, products: brandProductsViewModel.filteredProducts)
+      
+        let storyboard = UIStoryboard(name: "third", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController {
+            vc.comeFromHome = false
+            let searchViewModel = SearchViewModel()
+            searchViewModel.recevingProductFromANotherScreen = brandProductsViewModel.filteredProducts
+            vc.searchViewModel = searchViewModel
+            
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: false, completion: nil)
+            
+        }
     }
     
     func setupUI(){
@@ -63,7 +82,7 @@ class BrandsViewController: UIViewController {
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "brandsCell")
         
         // Set the range for the slider
-        sliderFilter.minimumValue = 50.0
+        sliderFilter.minimumValue = 10.0
         sliderFilter.maximumValue = 500.0
         
         //Add target for value changed event
@@ -117,7 +136,7 @@ class BrandsViewController: UIViewController {
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(valueLabel.text ?? "50.0") {
+        if let currentValue = Float(valueLabel.text ?? "10.0") {
             print("Filtering products by price: \(currentValue)")
             brandProductsViewModel.filterProducts(byPrice: currentValue)
             categoriesCollectionView.reloadData()
@@ -134,6 +153,18 @@ class BrandsViewController: UIViewController {
                 self?.categoriesCollectionView.reloadData()
             }
         }
+    }
+    
+    private func checkNetworkConnection() {
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+        }
+    }
+
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
 }
@@ -156,7 +187,7 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
                let convertedPrice = settingsViewModel.convertPrice(product.variants.first?.price ?? "N/A", to: selectedCurrency) {
                 cell.priceLabel.text = convertedPrice
             } else {
-                cell.priceLabel.text = product.variants.first?.price
+                cell.priceLabel.text = "\(product.variants.first?.price ?? "0") EGP"
             }
             
             if let imageUrlString = product.images.first?.url, let imageUrl = URL(string: imageUrlString) {
@@ -187,63 +218,91 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
             guard let product = brandProductsViewModel.product(at: indexPath.row) else {
                 return
             }
-
+            
             if Authorize.isRegistedCustomer() {
                 cell.heartButton.isEnabled = false
-// deafult now if false
-                if product.variants[0].isSelected {
-                    // Remove from fav
-                    showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
-                                           okAction: { [weak self] _ in
-                        print("OK button remove tapped")
-                        self?.productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                if product.variants[0].id != fakeProductInDraftOrder {
+                    // deafult now if false
+                    if product.variants[0].isSelected {
+                        // Remove from fav
+                        showAlertWithTwoOption(message: "Are you sure you want to remove from favorites?",
+                                               okAction: { [weak self] _ in
+                            print("OK button remove tapped")
+                            self?.productViewModel.removeFromFavDraftOrders(VariantsId: product.variants[0].id) { isSuccess in
+                                DispatchQueue.main.async {
+                                    if isSuccess {
+                                        product.variants[0].isSelected = false
+                                        cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                        cell.heartButton.isEnabled = true
+                                        print("remove succeful")
+                                    } else {
+                                        self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                        cell.heartButton.isEnabled = true
+                                    } } }
+                        }, cancelAction: { _ in
+                            cell.heartButton.isEnabled = true
+                        } )
+                    } else {
+                        // Add to fav
+                        productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
                             DispatchQueue.main.async {
                                 if isSuccess {
-                                    product.variants[0].isSelected = false
-                                    cell.heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                                    cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
                                     cell.heartButton.isEnabled = true
-                                    print("remove succeful")
+                                    print("added succesfully ")
+                                    product.variants[0].isSelected = true
+                                    self?.showCheckMarkAnimation(mark: "heart.fill")
+                                    
                                 } else {
-                                    self?.showAlertWithTwoOption(message: "Failed to remove from favorites")
+                                    self?.showAlertWithTwoOption(message: "Failed to add to favorites")
                                     cell.heartButton.isEnabled = true
                                 }
                             }
                         }
-                    })
-                } else {
-                    // Add to fav
-                    productViewModel.addToFavDraftOrders(selectedVariantsData: [(product.variants[0].id, product.images.first?.url ?? "", 1)]) { [weak self] isSuccess in
-                        DispatchQueue.main.async {
-                            if isSuccess {
-                                cell.heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-                                cell.heartButton.isEnabled = true
-                                print("added succesfully ")
-                                product.variants[0].isSelected = true
-                                self?.showCheckMarkAnimation(mark: "heart.fill")
-
-                            } else {
-                                self?.showAlertWithTwoOption(message: "Failed to add to favorites")
-                                cell.heartButton.isEnabled = true
-                            }
-                        }
                     }
-                }
-            } else {
-                showAlertWithTwoOption(message: "Login to add to favorites?",
-                                       okAction: {  _ in
-                    Navigation.ToALogin(from: self)
-                    print("Login OK button tapped")
-                })
-            }
-        }
-    }
+                } else {
+                    showAlert(message: "Sorry ,failed to handle favourite status of this product...check another products")
 
-    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+                }} else {
+                    self.showAlertWithTwoOptionOkayAndCancel(message: "Login to add to faviourts?",
+                                                             okAction: { action in
+                        Navigation.ToALogin(from: self)
+                        print("OK button tapped")
+                    }
+                    )
+                }
+            }
+    }
+    
+    private func showAlert(message: String, action: ((UIAlertAction) -> Void)? = nil) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        let okAlertAction = UIAlertAction(title: "OK", style: .default, handler: okAction)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: action)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func showAlertWithTwoOptionOkayAndCancel(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        
+        let okAlertAction = UIAlertAction(title: "Okay", style: .default, handler: okAction)
         let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+        
         alertController.addAction(okAlertAction)
         alertController.addAction(cancelAlertAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
+        let okAlertAction = UIAlertAction(title: "Delete", style: .destructive, handler: okAction)
+        alertController.addAction(okAlertAction)
+        
+        if let cancelAction = cancelAction {
+            let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelAction)
+            alertController.addAction(cancelAlertAction)
+        }
+        
         present(alertController, animated: true, completion: nil)
     }
 
@@ -253,10 +312,15 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let product = brandProductsViewModel.product(at: indexPath.row)
-        {
-            Navigation.ToProduct(productId: "\(product.id)", from: self)
-            
+        if !homeViewModel.isNetworkReachable() {
+            showNoInternetAlert()
+            return
+        }else{
+            if let product = brandProductsViewModel.product(at: indexPath.row)
+            {
+                Navigation.ToProduct(productId: "\(product.id)", from: self)
+                
+            }
         }
     }
     

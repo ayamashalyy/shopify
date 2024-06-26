@@ -1,3 +1,10 @@
+//
+//  ShoppingCartViewController.swift
+//  Shopify
+//
+//  Created by aya on 03/06/2024.
+//
+
 import UIKit
 import Kingfisher
 
@@ -12,31 +19,56 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     var productViewModel = ProductViewModel()
     let settingsViewModel = SettingsViewModel()
     
-    var cartItems = [(String, Int, Int,String?)]()
+    
+    
+    let emptyCartImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "no_items")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isHidden = true
+        return imageView
+    }()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        fetchDraftOrders()
         setupButtons()
+        setupEmptyCartImageView()
         updateSubtotal()
         tableView.register(UINib(nibName: "ShoppingCartableViewCell", bundle: nil), forCellReuseIdentifier: "ShoppingCartableViewCell")
-        fetchDraftOrders()
-        fetchExchangeRates()
+        
+    }
+    
+    func setupEmptyCartImageView() {
+        view.addSubview(emptyCartImageView)
+        NSLayoutConstraint.activate([
+            emptyCartImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyCartImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCartImageView.widthAnchor.constraint(equalToConstant: 200),
+            emptyCartImageView.heightAnchor.constraint(equalToConstant: 200)
+        ])
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+            showNoInternetAlert()
+            return
+        }
         
         shoppingCartViewModel.updateCartItemsHandler = { [weak self] in
             self?.tableView.reloadData()
             self?.updateSubtotal()
         }
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        fetchExchangeRates()
         if Authorize.isRegistedCustomer() {
             getThemButton.isEnabled = true
-
+            
         }else{
             getThemButton.isEnabled = false
             self.showAlertWithTwoOption(message: "Login to add to cart?",
@@ -46,6 +78,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             }
             )
         }
+    }
+    
+    private func showNoInternetAlert() {
+        let alert = UIAlertController(title: "No Internet Connection", message: "Please check your internet connection and try again.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     private func showAlertWithTwoOption(message: String, okAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
@@ -61,6 +99,12 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func fetchDraftOrders() {
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+            showNoInternetAlert()
+            return
+        }
+        
         shoppingCartViewModel.fetchDraftOrders { [weak self] error in
             if let error = error {
                 print("Error fetching draft orders: \(error.localizedDescription)")
@@ -73,16 +117,21 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     
     func fetchExchangeRates(){
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+            showNoInternetAlert()
+            return
+        }
+        
+        
         settingsViewModel.fetchExchangeRates { [weak self] error in
             if let error = error {
                 print("Error fetching exchange rates: \(error)")
             } else {
-                // Reload data once exchange rates are fetched
                 self?.tableView.reloadData()
             }
         }
     }
-    
     
     
     func setupButtons() {
@@ -109,10 +158,8 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         }
         let item = shoppingCartViewModel.cartItems[indexPath.row]
         cell.productNameLabel.text = "\(item.0)"
-        
-        // Convert price using SettingsViewModel
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-        let convertedPriceString = settingsViewModel.convertPrice(String(item.1), to: selectedCurrency) ?? "\(item.1)$"
+        let convertedPriceString = settingsViewModel.convertPrice(String(item.1), to: selectedCurrency) ?? "\(item.1)USD"
         cell.productPriceLabel.text = convertedPriceString
         
         cell.quantityLabel.text = "\(item.2)"
@@ -130,6 +177,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         cell.decrementButton.addTarget(self, action: #selector(decrementQuantity(_:)), for: .touchUpInside)
         customizeButton(button: cell.incrementButton)
         customizeButton(button: cell.decrementButton)
+        cell.isHidden = item.4 == 45293432635640 ? true : false
         return cell
     }
     
@@ -144,10 +192,15 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var productId = shoppingCartViewModel.cartItems[indexPath.row].7
-        
-        
-        Navigation.ToProduct(productId: "\(productId)", from: self)
+        let storyboard = UIStoryboard(name: "third", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "productDetails") as? ProductViewController {
+            vc.productId = String(productId)
+            vc.selectedVarientId = shoppingCartViewModel.cartItems[indexPath.row].4
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true, completion: nil)
+        }
     }
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
         footerView.backgroundColor = UIColor.clear
@@ -161,7 +214,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
         print("newQuantity\(newQuantity)")
         let maxQuantity = item.5 / 2
         print("maxQuantity\(maxQuantity)")
-
+        
         if newQuantity > maxQuantity {
             showAlert(message: "You cannot order more than half of the available quantity.")
         } else {
@@ -208,7 +261,7 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
             }
         }
     }
-
+    
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -239,27 +292,39 @@ class ShoppingCartViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func updateSubtotal() {
-        
-        let subtotal = shoppingCartViewModel.cartItems.reduce(0) { $0 + $1.1 * $1.2 }
-        subtotalLabel.text = "\(subtotal)$"
-        
-        
-        // Convert subtotal using SettingsViewModel
+        let filteredItems = shoppingCartViewModel.cartItems.filter { $0.4 != 45293432635640 }
+        let subtotal = filteredItems.reduce(0) { ($0 + $1.1 * $1.2) }
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
         let convertedSubtotalString = settingsViewModel.convertPrice(String(subtotal), to: selectedCurrency) ?? "\(subtotal)$"
-        
         subtotalLabel.text = convertedSubtotalString
+        emptyCartImageView.isHidden = !filteredItems.isEmpty
     }
     
+    
     @IBAction func getThemButtonTapped(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Second", bundle: nil)
-        if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
-            selectAddressVC.modalPresentationStyle = .fullScreen
-            present(selectAddressVC, animated: true, completion: nil)
+        
+        if !CheckNetworkReachability.checkNetworkReachability() {
+            showNoInternetAlert()
+            return
+        }
+        
+        let filteredItems = shoppingCartViewModel.cartItems.filter { $0.4 != 45293432635640 }
+        if filteredItems.isEmpty {
+            showAlert(message: "Your cart is empty. Please add items to your cart before proceeding.")
+        } else {
+            let storyboard = UIStoryboard(name: "Second", bundle: nil)
+            if let selectAddressVC = storyboard.instantiateViewController(withIdentifier: "SelectAddressViewController") as? SelectAddressViewController {
+                selectAddressVC.isFromShoppingCart = true
+                selectAddressVC.modalPresentationStyle = .fullScreen
+                present(selectAddressVC, animated: true, completion: nil)
+            }
         }
     }
+    
+    
     
     @IBAction func backToProfile(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
 }
+

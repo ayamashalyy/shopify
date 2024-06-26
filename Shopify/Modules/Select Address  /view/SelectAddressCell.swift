@@ -46,9 +46,9 @@ class SelectAddressCell: UITableViewCell {
     }
     
     @IBAction func edit(_ sender: UIButton) {
-            if let indexPath = indexPath {
-                delegate?.editAddress(at: indexPath)
-            }
+        if let indexPath = indexPath {
+            delegate?.editAddress(at: indexPath)
         }
+    }
     
 }

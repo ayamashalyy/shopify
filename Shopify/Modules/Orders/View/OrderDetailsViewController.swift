@@ -6,21 +6,25 @@
 //
 
 import UIKit
+import Kingfisher
 
 class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
     @IBOutlet weak var totalPrice: UILabel!
     @IBOutlet weak var creationDate: UILabel!
-    @IBOutlet weak var shipedTo: UILabel!
-    @IBOutlet weak var phone: UILabel!
+//    @IBOutlet weak var shipedTo: UILabel!
+//    @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var itemsLabel: UILabel!
     
     let tableView = UITableView()
     var orderViewModel: OrderViewModel?
+    let settingsViewModel = SettingsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        
+        fetchExchangeRates()
         updateUI()
     }
     
@@ -48,11 +52,28 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private func updateUI() {
         guard let order = orderViewModel?.selectedOrder else { return }
-        totalPrice.text = order.current_subtotal_price
+        
+        // Convert price using SettingsViewModel
+        let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+        let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(String(describing: order.total_price))USD"
+                
+        totalPrice.text = convertedPriceString
         creationDate.text = order.created_at
-        shipedTo.text = order.shipping_address?.address1
-        phone.text = order.shipping_address?.phone
+//        shipedTo.text = "\(order.customer?.default_address?.address1 ?? "Alex"), \(order.customer?.default_address?.city ?? "Egypt")"
+//        phone.text = order.customer?.default_address?.phone
         tableView.reloadData()
+    }
+    
+    func fetchExchangeRates() {
+        settingsViewModel.fetchExchangeRates { error in
+            if let error = error {
+                print("Failed to fetch exchange rates: \(error.localizedDescription)")
+                return
+            }
+            // Fetch orders after exchange rates are fetched
+            self.tableView.reloadData()
+            self.updateUI()
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,7 +84,18 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
         let cell = tableView.dequeueReusableCell(withIdentifier: "OrderItemCell", for: indexPath) as! OrderItemCell
         if let item = orderViewModel?.selectedOrder?.line_items?[indexPath.row] {
             cell.titleLabel.text = item.title
-            cell.priceLabel.text = "Price: \(item.price ?? "0.00") USD"
+            
+            if let properties = item.properties, let firstProperty = properties.first, let imageURL = URL(string: firstProperty.value) {
+                cell.itemImageView.kf.setImage(with: imageURL)
+            } else {
+                cell.itemImageView.image = UIImage(named: "splash_img.jpeg") // or set a placeholder image
+            }
+            
+            // Convert price using SettingsViewModel
+            let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
+            let convertedPriceString = settingsViewModel.convertPrice(item.price ?? "0", to: selectedCurrency) ?? "\(item.price) EGP"
+            
+            cell.priceLabel.text = "Price: \(convertedPriceString)"
             cell.quantityLabel.text = "Quantity: \(item.quantity ?? 0)"
         }
         return cell
@@ -79,10 +111,8 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
 
 }
 
-import UIKit
-
 class OrderItemCell: UITableViewCell {
-
+    
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -92,6 +122,14 @@ class OrderItemCell: UITableViewCell {
         view.layer.masksToBounds = true
         view.backgroundColor = .white
         return view
+    }()
+    
+    let itemImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        return imageView
     }()
     
     let titleLabel: UILabel = {
@@ -129,6 +167,7 @@ class OrderItemCell: UITableViewCell {
     
     private func setupViews() {
         contentView.addSubview(containerView)
+        containerView.addSubview(itemImageView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(priceLabel)
         containerView.addSubview(quantityLabel)
@@ -140,17 +179,24 @@ class OrderItemCell: UITableViewCell {
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            containerView.heightAnchor.constraint(equalToConstant: 150),
+            
+            itemImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            itemImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            itemImageView.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 1/3, constant: -10),
+            itemImageView.heightAnchor.constraint(equalToConstant: 130),
+            itemImageView.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -10),
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            titleLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-            priceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            priceLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 10),
             priceLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             
             quantityLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 5),
-            quantityLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            quantityLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 10),
             quantityLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
             quantityLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
         ])
