@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Reachability
 
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {

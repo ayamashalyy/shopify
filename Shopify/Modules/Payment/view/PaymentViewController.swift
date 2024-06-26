@@ -7,7 +7,7 @@
 
 import UIKit
 import PassKit
-import Reachability
+
 class PaymentViewController: UIViewController {
     
     @IBOutlet weak var codButton: UIButton!
@@ -79,17 +79,17 @@ class PaymentViewController: UIViewController {
                         self.orderViewModel.storeTotalDiscount("0.00")
                         self.homeViewModel.storeDiscountCodeWithPriceRule(code: "", priceRuleValue: 0)
 
-                        self.showOrderSuccessAlert()
-                        
-                        self.orderViewModel.sendInvoiceToCustomer { result in
-                            switch result {
-                            case .success():
-                                print("Invoice sent successfully")
-                            case .failure(let error):
-                                print("Failed to send invoice: \(error.localizedDescription)")
-                            }
-                        }
-                        
+//                        self.showOrderSuccessAlert()
+//                        
+//                        self.orderViewModel.sendInvoiceToCustomer { result in
+//                            switch result {
+//                            case .success():
+//                                print("Invoice sent successfully")
+//                            case .failure(let error):
+//                                print("Failed to send invoice: \(error.localizedDescription)")
+//                            }
+//                        }
+//                        
 
                     }
                 }

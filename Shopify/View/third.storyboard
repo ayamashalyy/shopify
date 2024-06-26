@@ -546,7 +546,6 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="hWI-7k-2AJ" secondAttribute="trailing" id="5iN-Lm-f54"/>
                             <constraint firstAttribute="trailing" secondItem="R5q-mJ-uZp" secondAttribute="trailing" constant="10" id="9Y6-pD-xvy"/>
-                            <constraint firstItem="R5q-mJ-uZp" firstAttribute="width" secondItem="0kG-Iv-Rxd" secondAttribute="width" multiplier="0.949109" id="APY-AZ-gdp"/>
                             <constraint firstItem="R5q-mJ-uZp" firstAttribute="leading" secondItem="WKS-zo-bMb" secondAttribute="leading" constant="10" id="BDG-5I-02e"/>
                             <constraint firstItem="R5q-mJ-uZp" firstAttribute="top" secondItem="hWI-7k-2AJ" secondAttribute="bottom" constant="5" id="E9j-R7-A0w"/>
                             <constraint firstAttribute="trailing" secondItem="hWI-7k-2AJ" secondAttribute="trailing" id="M4y-wD-gWr"/>
@@ -556,7 +555,6 @@
                             <constraint firstItem="KHM-2X-QGU" firstAttribute="trailing" secondItem="R5q-mJ-uZp" secondAttribute="trailing" id="Rb5-8Q-jlc"/>
                             <constraint firstItem="hWI-7k-2AJ" firstAttribute="top" secondItem="WKS-zo-bMb" secondAttribute="top" id="Riw-wL-yje"/>
                             <constraint firstItem="hWI-7k-2AJ" firstAttribute="leading" secondItem="WKS-zo-bMb" secondAttribute="leading" id="W8S-Ac-Tnr"/>
-                            <constraint firstItem="WKS-zo-bMb" firstAttribute="trailing" secondItem="R5q-mJ-uZp" secondAttribute="trailing" constant="10" id="W8u-gC-Szd"/>
                             <constraint firstItem="R5q-mJ-uZp" firstAttribute="top" secondItem="hWI-7k-2AJ" secondAttribute="bottom" constant="5" id="Wu0-4u-fRo"/>
                             <constraint firstItem="pq7-kM-KiS" firstAttribute="leading" secondItem="R5q-mJ-uZp" secondAttribute="leading" id="XaA-Hy-Yus"/>
                             <constraint firstItem="hWI-7k-2AJ" firstAttribute="leading" secondItem="WKS-zo-bMb" secondAttribute="leading" id="XbE-Rd-EKr"/>
@@ -577,6 +575,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="buh-C3-ppC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2768.7022900763359" y="759.85915492957747"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="o9j-CE-Pz2">
+            <objects>
+                <viewController storyboardIdentifier="WebViewController" id="tFj-T3-rsH" customClass="WebViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="45n-cP-swR">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="1Wc-n2-ycy"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Eo4-Vl-60o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3450" y="760"/>
         </scene>
         <!--Reviews View Controller-->
         <scene sceneID="jrm-eH-V4N">
