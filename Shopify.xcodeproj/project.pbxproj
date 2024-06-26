@@ -99,6 +99,7 @@
 		7DC25B512C1379C600D046D7 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC25B502C1379C600D046D7 /* ProductViewModel.swift */; };
 		7DC25B5D2C13A9F800D046D7 /* Decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC25B5C2C13A9F800D046D7 /* Decoding.swift */; };
 		7DCAADC12C132FA6000FC551 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAADC02C132FA6000FC551 /* Product.swift */; };
+		7DCAAF892C2BC5E20035FD07 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAAF882C2BC5E20035FD07 /* WebView.swift */; };
 		7DDC92592C190472002B5AD6 /* FavViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDC92582C190472002B5AD6 /* FavViewModel.swift */; };
 		7DDC925B2C19402D002B5AD6 /* animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDC925A2C19402D002B5AD6 /* animation.swift */; };
 		7DEFA6912C11DCC700DBD777 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEFA6902C11DCC700DBD777 /* LoginViewController.swift */; };
@@ -225,6 +226,7 @@
 		7DC25B502C1379C600D046D7 /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
 		7DC25B5C2C13A9F800D046D7 /* Decoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoding.swift; sourceTree = "<group>"; };
 		7DCAADC02C132FA6000FC551 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Product.swift; path = Shopify/Modules/Fav/Product.swift; sourceTree = SOURCE_ROOT; };
+		7DCAAF882C2BC5E20035FD07 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		7DDC92582C190472002B5AD6 /* FavViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FavViewModel.swift; path = Shopify/Modules/Auther/SignUp/viewModel/FavViewModel.swift; sourceTree = SOURCE_ROOT; };
 		7DDC925A2C19402D002B5AD6 /* animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = animation.swift; sourceTree = "<group>"; };
 		7DEFA6902C11DCC700DBD777 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -928,6 +930,7 @@
 			isa = PBXGroup;
 			children = (
 				7DEFA6922C11EDE900DBD777 /* signUpViewController.swift */,
+				7DCAAF882C2BC5E20035FD07 /* WebView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1245,6 +1248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D30296A2C1290FA00B235B4 /* SearchViewController.swift in Sources */,
+				7DCAAF892C2BC5E20035FD07 /* WebView.swift in Sources */,
 				03EAA80A2C14337600A60BDA /* Address.swift in Sources */,
 				7DB79FE72C2A05F0006B45C9 /* UrlParts.swift in Sources */,
 				7DC25B4D2C1379A000D046D7 /* SearchViewModel.swift in Sources */,
