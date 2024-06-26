@@ -126,7 +126,7 @@ class OrdersViewController: UIViewController , UITableViewDataSource, UITableVie
         let order = orderViewModel.orders[indexPath.row]
         
         let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-        let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(order.total_price)USD"
+        let convertedPriceString = settingsViewModel.convertPrice(order.total_price ?? "0", to: selectedCurrency) ?? "\(order.total_price) EGP"
         
         cell.TotalPriceValue.text = convertedPriceString
         cell.CreationDateValue.text = order.created_at

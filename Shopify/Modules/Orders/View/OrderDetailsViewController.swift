@@ -93,7 +93,7 @@ class OrderDetailsViewController: UIViewController, UITableViewDataSource, UITab
             
             // Convert price using SettingsViewModel
             let selectedCurrency = settingsViewModel.getSelectedCurrency() ?? .USD
-            let convertedPriceString = settingsViewModel.convertPrice(item.price ?? "0", to: selectedCurrency) ?? "\(item.price)USD"
+            let convertedPriceString = settingsViewModel.convertPrice(item.price ?? "0", to: selectedCurrency) ?? "\(item.price) EGP"
             
             cell.priceLabel.text = "Price: \(convertedPriceString)"
             cell.quantityLabel.text = "Quantity: \(item.quantity ?? 0)"
