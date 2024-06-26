@@ -62,18 +62,16 @@ class Authorize{
         UserDefaults.standard.removeObject(forKey: draftOrderIDOneSting)
     }
     
-    
-    
+        
     static let draftOrderIDTwoSting = "draftOrderIDTwo"
     static func cardDraftOrderId(draftOrderIDTwo: Int) {
-        print("cardDraftOrderId seeeet  \(draftOrderIDTwo) ")
         UserDefaults.standard.set(draftOrderIDTwo, forKey: draftOrderIDTwoSting )
     }
     
-    static  func cardDraftOrderId() -> Int? {
+    static func cardDraftOrderId() -> Int? {
         return UserDefaults.standard.integer(forKey: draftOrderIDTwoSting)
     }
-    static  func clearCardDraftOrderId() {
+    static func clearCardDraftOrderId() {
         UserDefaults.standard.removeObject(forKey: draftOrderIDTwoSting)
     }
     
@@ -84,6 +82,11 @@ class Authorize{
         Authorize.clearFavDraftOrder()
         Authorize.clearCustomerEmail()
         Authorize.clearCustomerFullName()
+        Authorize.clearCurrency()
+    }
+    
+    static  func clearCurrency() {
+        HomeViewModel().storeDiscountCodeWithPriceRule(code:"", priceRuleValue: 0)  
     }
     
     static func isRegistedCustomer () -> Bool {
