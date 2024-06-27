@@ -18,7 +18,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     var searchViewModel: SearchViewModel!
     
     var searchCollectionView: UICollectionView!
-
+    
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var priceFilter: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -26,7 +26,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true)
     }
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -163,6 +163,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let product = isSearching || isFiltering ? searchViewModel.filteredProducts[indexPath.row] : searchViewModel.recevingProductFromANotherScreen[indexPath.row]
+        Navigation.ToProduct(productId: "\(product.id)", from: self)
+    }
+
     
     func didTapHeartButton(in cell: CustomCategoriesCell) {
         var productViewModel = ProductViewModel()

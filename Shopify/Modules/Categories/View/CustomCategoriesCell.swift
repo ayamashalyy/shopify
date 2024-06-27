@@ -78,6 +78,7 @@ class CustomCategoriesCell: UICollectionViewCell {
         //heartButton.backgroundColor = UIColor.red.withAlphaComponent(0.5) // Red color for debugging
         heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
         heartButton.isUserInteractionEnabled = true
+        heartButton.tintColor = .red
         
         bringSubviewToFront(heartButton)
     }
