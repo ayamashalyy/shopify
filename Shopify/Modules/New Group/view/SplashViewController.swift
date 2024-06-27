@@ -9,6 +9,7 @@ import UIKit
 
 class SplashViewController: UIViewController {
     let viewModel = ShoppingCartViewModel()
+    let settingsViewModel = SettingsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +26,10 @@ class SplashViewController: UIViewController {
      var  isRegistedCustomer  = Authorize.isRegistedCustomer()
         if isRegistedCustomer  {
             Navigation.ToHome(from: self)
+            settingsViewModel.saveCurrencySelection(.EGP)
         } else {
             Navigation.ToALogin(from: self)
+            settingsViewModel.saveCurrencySelection(.EGP)
        }
     }
     
