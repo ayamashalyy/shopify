@@ -29,7 +29,7 @@ class BrandsViewController: UIViewController {
         self.indicator.startAnimating()
         setupUI()
     
-        valueLabel.text = "10.0"
+        valueLabel.text = "50.0"
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
@@ -82,7 +82,7 @@ class BrandsViewController: UIViewController {
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "brandsCell")
         
         // Set the range for the slider
-        sliderFilter.minimumValue = 10.0
+        sliderFilter.minimumValue = 50.0
         sliderFilter.maximumValue = 500.0
         
         //Add target for value changed event
@@ -136,7 +136,7 @@ class BrandsViewController: UIViewController {
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(valueLabel.text ?? "10.0") {
+        if let currentValue = Float(valueLabel.text ?? "50.0") {
             print("Filtering products by price: \(currentValue)")
             brandProductsViewModel.filterProducts(byPrice: currentValue)
             categoriesCollectionView.reloadData()

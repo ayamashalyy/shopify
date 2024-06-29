@@ -45,7 +45,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         }
         
         priceFilter.isHidden = true
-        priceFilter.text = "10.0"
+        priceFilter.text = "50.0"
         slider.isHidden = true
     }
     
@@ -86,7 +86,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(priceFilter.text ?? "10.0") {
+        if let currentValue = Float(priceFilter.text ?? "50.0") {
             searchViewModel.filteredProducts = searchViewModel.filterProducts(filteredProducts: searchViewModel.recevingProductFromANotherScreen ?? [], byPrice: currentValue)
             searchCollectionView.reloadData()
         }
@@ -105,7 +105,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         searchCollectionView.dataSource = self
         searchCollectionView.delegate = self
         searchCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "CustomCategoriesCell")
-        slider.minimumValue = 10.0
+        slider.minimumValue = 50.0
         slider.maximumValue = 500.0
     }
     
