@@ -19,7 +19,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let brandProductsViewModel = BrandProductsViewModel()
     let shoppingCartViewModel = ShoppingCartViewModel()
     
-    let coponesImages = ["special_offer.jpg","best_offer3.jpeg","eid_sale.jpeg"]
+    let coponesImages = ["20","25","30"]
     var couponsCollectionView: UICollectionView!
     
     private let pageControl: UIPageControl = {
@@ -353,7 +353,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
                 return
             }
             // Pass collectionId to BrandsViewController
-            brandsVC.brandProductsViewModel.setCollectionId(brand.id)
+            brandsVC.brandProductsViewModel.setCollectionId(brand.title)
             brandsVC.modalPresentationStyle = .fullScreen
             self.present(brandsVC, animated: true, completion: nil)
             

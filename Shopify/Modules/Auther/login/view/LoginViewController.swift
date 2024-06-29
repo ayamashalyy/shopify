@@ -101,7 +101,6 @@ class LoginViewController: UIViewController {
         loginButton.backgroundColor = UIColor(hex: "#FF7D29")
         loginButton.layer.cornerRadius = 8
         siginInGoogle.layer.cornerRadius = 8
-        siginInGoogle.backgroundColor = UIColor(hex: "#FF7D29")
         
         passwordTxt.isSecureTextEntry = true
         let orangeColor = UIColor(hex: "#FFA500")
