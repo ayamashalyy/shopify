@@ -22,6 +22,8 @@ struct ConfirmOrder: Codable {
     let total_tax: String?
     let created_at: String?
     let shipping_address: DefaultAddress?
+    let send_receipt: Bool?
+    let inventory_behaviour : String?
 }
 
 struct OrdersResponse: Codable {

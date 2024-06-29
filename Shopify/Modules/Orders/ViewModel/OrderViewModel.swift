@@ -56,14 +56,16 @@ class OrderViewModel {
         let confirmOrder = ConfirmOrder(
             line_items: lineItems,
             financial_status: "paid",
-            currency: "USD",
+            currency: "EGP",
             phone: phone,
             customer: customer,
             total_discounts: discountTotal,
             current_total_price: gradeTotal,
             total_tax: "5.00",
             created_at: nil,
-            shipping_address: shippingAddress
+            shipping_address: shippingAddress, 
+            send_receipt: true,
+            inventory_behaviour: "decrement_obeying_policy"
         )
         print("shippingAddress : \(shippingAddress)")
         
