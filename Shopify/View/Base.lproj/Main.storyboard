@@ -175,7 +175,7 @@
         <!--Contianer Page View Controller-->
         <scene sceneID="Ahy-fP-G5k">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="kka-a0-o8x" customClass="ContianerPageViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="ContianerPageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="kka-a0-o8x" customClass="ContianerPageViewController" customModule="Shopify" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fpF-1T-5Sn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1402" y="58"/>

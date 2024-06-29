@@ -29,7 +29,9 @@ class OnbordingViewController: UIViewController {
         let vc = storyboard.instantiateViewController(withIdentifier: "SplashViewController") as! SplashViewController
         vc.modalPresentationStyle = .fullScreen
         vc.modalTransitionStyle = .crossDissolve
-        self.present(vc, animated: true)
+        self.present(vc, animated: true) {
+                UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+            }
     }
     
         override func viewDidLoad() {

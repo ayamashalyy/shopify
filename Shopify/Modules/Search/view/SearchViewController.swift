@@ -45,7 +45,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         }
         
         priceFilter.isHidden = true
-        priceFilter.text = "50.0"
+        priceFilter.text = "50.0 EGP"
         slider.isHidden = true
     }
     
@@ -81,12 +81,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     @IBAction func slider(_ sender: UISlider) {
         let currentValue = String(format: "%.2f", sender.value)
-        priceFilter.text = "\(currentValue)"
+        priceFilter.text = "\(currentValue) EGP"
         filterProductsByCurrentSliderValue()
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(priceFilter.text ?? "50.0") {
+        var stringValue = priceFilter.text?.dropLast(4)
+        if let currentValue = Float(stringValue ?? "50.0") {
             searchViewModel.filteredProducts = searchViewModel.filterProducts(filteredProducts: searchViewModel.recevingProductFromANotherScreen ?? [], byPrice: currentValue)
             searchCollectionView.reloadData()
         }

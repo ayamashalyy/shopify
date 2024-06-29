@@ -29,7 +29,7 @@ class BrandsViewController: UIViewController {
         self.indicator.startAnimating()
         setupUI()
     
-        valueLabel.text = "50.0"
+        valueLabel.text = "50.0 EGP"
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
@@ -130,13 +130,14 @@ class BrandsViewController: UIViewController {
     
     @objc func sliderValueChanged(_ sender: UISlider) {
         let currentValue = String(format: "%.2f", sender.value)
-        valueLabel.text = "\(currentValue)"
+        valueLabel.text = "\(currentValue) EGP"
         
         filterProductsByCurrentSliderValue()
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(valueLabel.text ?? "50.0") {
+        var stringValue = valueLabel.text?.dropLast(4)
+        if let currentValue = Float(stringValue ?? "50.0") {
             print("Filtering products by price: \(currentValue)")
             brandProductsViewModel.filterProducts(byPrice: currentValue)
             categoriesCollectionView.reloadData()

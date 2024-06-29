@@ -32,7 +32,6 @@ class ContianerPageViewController:  UIPageViewController, UIPageViewControllerDa
                guard let index = (viewController as? OnbordingViewController)?.pageIndex else { return nil }
                let nextIndex = index + 1
                guard nextIndex < onboardingImages.count else {
-                 //  transitionToSplashScreen()
                    return nil
                    
                }
