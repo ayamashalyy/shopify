@@ -62,7 +62,7 @@ class OrderViewModel {
             total_discounts: discountTotal,
             current_total_price: gradeTotal,
             total_tax: "5.00",
-            created_at: nil, 
+            created_at: nil,
             shipping_address: shippingAddress
         )
         print("shippingAddress : \(shippingAddress)")
@@ -88,6 +88,12 @@ class OrderViewModel {
                     if let orderData = responseDict?["order"] {
                         let orderDataJson = try JSONSerialization.data(withJSONObject: orderData)
                         let decodedOrder = try JSONDecoder().decode(ConfirmOrder.self, from: orderDataJson)
+                        print ( ": Response Data decodedOrder.line_items\(decodedOrder.line_items?.count)")
+                        
+                        
+                        self.updateVariantQuantityAfterOrder(lineItems: decodedOrder.line_items!)
+                        
+                        
                         completion(decodedOrder, nil)
                     } else {
                         completion(nil, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Order data missing in response"]))
@@ -98,6 +104,108 @@ class OrderViewModel {
             }
         } catch let encodeError {
             completion(nil, encodeError)
+        }
+    }
+    
+   
+
+    
+    func getProductDetails(id: String, completion: @escaping (Product?) -> Void) {
+          let addition = "\(id).json"
+     print("addition \(addition)")
+          NetworkManager.fetchDataFromApi(endpoint: .specificProduct, rootOfJson: .product, addition: addition) { data, error in
+              guard let data = data, error == nil else {
+                  print("error in data")
+                  completion(nil)
+                  return
+              }
+
+              Decoding.decodeData(data: data, objectType: Product.self) { (product, decodeError) in
+                  if let product = product {
+                      completion(product)
+                  } else {
+                      completion(nil)
+                  }
+              }
+          }
+      }
+    func updateVariantQuantityAfterOrder(lineItems: [LineItem]) {
+        print("Response Data in updateVariantQuantityAfterOrder lineItem.count \(lineItems.count)")
+        for item in lineItems {
+            
+            print("Response Data item.variant_id \(item.product_id!) \(item.variant_id!) and item.quantity \(item.quantity!)")
+            
+            getProductDetails(id: "\(item.product_id!)") { product in
+                guard let product = product else { return }
+                if let variantIndex = product.variants.firstIndex(where: { $0.id == item.variant_id }) {
+                    if let currentQuantity = product.variants[variantIndex].inventory_quantity, let itemQuantity = item.quantity {
+                        
+                        print("currentQuantity\(currentQuantity) and itemQuantity\(itemQuantity) ")
+                        
+                        product.variants[variantIndex].inventory_quantity = currentQuantity - itemQuantity
+                        
+                        print("Response Data new quantity product.variants[\(variantIndex)].inventory_quantity \(product.variants[variantIndex].inventory_quantity!)")
+                        
+                        self.updateProductDetails(product: product) { success in
+                            if success {
+  
+                                print(" sucess in update")
+                                
+                            } else {
+                                print("Failed to update variant quantity for product id \(item.product_id!)")
+                            }
+                        }
+                    } else {
+                        print("Invalid quantity data for variant \(item.variant_id!)")
+                    }
+                }
+            }
+        }
+    }
+    
+    func updateProductDetails(product: Product, completion: @escaping (Bool) -> Void) {
+        do {
+            let productData: [String: Any] = [
+                "id": product.id,
+                 "variants": product.variants.map {
+                    [
+                        "id": $0.id,
+                        "inventory_quantity": $0.inventory_quantity!
+                    ]
+                }
+            ]
+           
+            let requestBody: [String: Any] = ["product": productData]
+            let data = try JSONSerialization.data(withJSONObject: requestBody, options: [])
+            
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Request Body JSON updateProductDetails: \(jsonString)")
+            }
+            
+            let addition = "\(product.id).json"
+            print("addition updateProductDetails: \(addition)")
+            
+            NetworkManager.updateResource(endpoint: .specificProduct, rootOfJson: .product, body: data, addition: addition) { responseData, networkError in
+                if let responseData = responseData, networkError == nil {
+                    
+                    if let jsonResponse = String(data: responseData, encoding: .utf8) {
+                        print("Response JSON of updateResource: \(jsonResponse)") // Print response data for debugging
+                    }
+                    
+                    completion(true)
+                } else {
+                    if let error = networkError {
+                        print("Network error: in update \(error)")
+                    } else {
+                        print("Unknown network error occurred")
+                    }
+                    
+                    completion(false)
+                }
+            }
+        } catch {
+            print("Encoding error: \(error)")
+            completion(false)
         }
     }
     
@@ -207,3 +315,4 @@ class OrderViewModel {
 
 
 }
+
