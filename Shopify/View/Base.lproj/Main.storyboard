@@ -110,7 +110,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RrU-AX-BKH">
-                                <rect key="frame" x="109" y="608" width="175" height="44"/>
+                                <rect key="frame" x="35" y="608" width="323" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="sUd-FY-Ydb"/>
                                 </constraints>
@@ -118,8 +118,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BcB-gW-m14">
-                                <rect key="frame" x="35" y="660" width="323" height="73"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BcB-gW-m14">
+                                <rect key="frame" x="35" y="660" width="323" height="20.333333333333371"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -130,12 +130,14 @@
                                     <constraint firstAttribute="height" constant="35" id="QvF-94-Sap"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Start"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Start">
+                                    <color key="baseForegroundColor" red="0.92606841409999996" green="0.5419354086" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="start:" destination="zSq-dH-5hb" eventType="touchUpInside" id="Qk0-Xw-bM7"/>
                                 </connections>
                             </button>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="9da-uC-zxB">
+                            <pageControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="9da-uC-zxB">
                                 <rect key="frame" x="138.66666666666666" y="574" width="116" height="26"/>
                             </pageControl>
                         </subviews>
@@ -146,16 +148,14 @@
                             <constraint firstItem="RrU-AX-BKH" firstAttribute="top" secondItem="9da-uC-zxB" secondAttribute="bottom" constant="8" id="5RP-KO-5Yh"/>
                             <constraint firstItem="BcB-gW-m14" firstAttribute="top" secondItem="RrU-AX-BKH" secondAttribute="bottom" constant="8" id="B1F-1M-fEA"/>
                             <constraint firstItem="de3-IN-bl7" firstAttribute="trailing" secondItem="ZkF-6W-oJL" secondAttribute="trailing" constant="41" id="DMp-bi-Ijp"/>
-                            <constraint firstItem="RrU-AX-BKH" firstAttribute="centerX" secondItem="sNc-1U-3LR" secondAttribute="centerX" id="M5O-hW-xFT"/>
                             <constraint firstItem="de3-IN-bl7" firstAttribute="trailing" secondItem="BcB-gW-m14" secondAttribute="trailing" constant="35" id="MrT-s5-T1K"/>
                             <constraint firstItem="de3-IN-bl7" firstAttribute="bottom" secondItem="ZkF-6W-oJL" secondAttribute="bottom" constant="17" id="SQH-pc-c3G"/>
                             <constraint firstAttribute="bottom" secondItem="RrU-AX-BKH" secondAttribute="bottom" constant="200" id="ZTK-s6-Uev"/>
                             <constraint firstItem="de3-IN-bl7" firstAttribute="trailing" secondItem="sNc-1U-3LR" secondAttribute="trailing" constant="35" id="a68-fP-dih"/>
                             <constraint firstItem="ZkF-6W-oJL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="de3-IN-bl7" secondAttribute="leading" id="cYO-tk-DzB"/>
-                            <constraint firstItem="RrU-AX-BKH" firstAttribute="leading" secondItem="de3-IN-bl7" secondAttribute="leading" constant="109" id="da1-Sa-7B5"/>
                             <constraint firstItem="sNc-1U-3LR" firstAttribute="leading" secondItem="de3-IN-bl7" secondAttribute="leading" constant="35" id="gGC-L2-g3p"/>
-                            <constraint firstItem="ZkF-6W-oJL" firstAttribute="top" secondItem="BcB-gW-m14" secondAttribute="bottom" constant="33" id="iV6-1P-yOZ"/>
-                            <constraint firstItem="RrU-AX-BKH" firstAttribute="centerX" secondItem="9da-uC-zxB" secondAttribute="centerX" id="qeA-7B-rhd"/>
+                            <constraint firstItem="RrU-AX-BKH" firstAttribute="leading" secondItem="9Jx-An-wI4" secondAttribute="leading" id="jvK-L0-3n8"/>
+                            <constraint firstItem="RrU-AX-BKH" firstAttribute="centerX" secondItem="S8V-Bq-Jaz" secondAttribute="centerX" id="ndZ-aS-7mR"/>
                             <constraint firstItem="sNc-1U-3LR" firstAttribute="top" secondItem="de3-IN-bl7" secondAttribute="top" constant="46" id="wBx-Qm-BCc"/>
                             <constraint firstItem="sNc-1U-3LR" firstAttribute="centerX" secondItem="S8V-Bq-Jaz" secondAttribute="centerX" id="zqs-bv-Ii5"/>
                         </constraints>
@@ -782,7 +782,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

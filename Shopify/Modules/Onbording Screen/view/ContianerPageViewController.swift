@@ -9,7 +9,9 @@ import UIKit
 
 class ContianerPageViewController:  UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
-        let onboardingImages = ["man2", "woman", "mmm"]
+    let onboardingImages = ["p", "t", "we"]
+    let onboardingTitle = ["Shopping in the mobile app", "Fit you", "Big sales"]
+    let onboardingDescrption = ["Choose clothes online and place order.Get sales!", "Choose your favourite color and suitable size ", "Get discount and offers"]
 
         override func viewDidLoad() {
             super.viewDidLoad()
@@ -46,6 +48,8 @@ class ContianerPageViewController:  UIPageViewController, UIPageViewControllerDa
                let contentViewController = storyboard?.instantiateViewController(withIdentifier: "page1") as? OnbordingViewController
                contentViewController?.pageIndex = index
                contentViewController?.imageFileName = onboardingImages[index]
+               contentViewController?.titl = onboardingTitle [index]
+               contentViewController?.descrit = onboardingDescrption[index]
                return contentViewController
            }
         
