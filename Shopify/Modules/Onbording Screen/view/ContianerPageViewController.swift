@@ -8,7 +8,7 @@
 import UIKit
 
 class ContianerPageViewController:  UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-        let onboardingImages = ["o3", "o2", "o3"]
+        let onboardingImages = ["77", "88", "99"]
 
         override func viewDidLoad() {
             super.viewDidLoad()
