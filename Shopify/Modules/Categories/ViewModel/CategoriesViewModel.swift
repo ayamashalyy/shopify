@@ -23,7 +23,7 @@ class CategoriesViewModel{
         print("Request URL: \(urlString)")
         
         
-        NetworkManager.fetchDataFromApi(endpoint: .listOfBrandProducts, rootOfJson:.products, addition: additionalParams) { data, error in
+        NetworkManager.fetchDataFromApi(endpoint: .listOfCategoriesProducts, rootOfJson:.products, addition: additionalParams) { data, error in
             guard let data = data, error == nil else {
                 completion(error)
                 return

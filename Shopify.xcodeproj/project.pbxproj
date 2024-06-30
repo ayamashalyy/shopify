@@ -91,6 +91,7 @@
 		7DB875B42C2988450075048B /* MockNetworkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B32C2988450075048B /* MockNetworkManger.swift */; };
 		7DB875B62C2988FB0075048B /* MockMethodsOfNetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */; };
 		7DB875B82C298E430075048B /* getShoppingCartItemsCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */; };
+		7DB8A1A62C3084DF003DE9A6 /* ContianerPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB8A1A52C3084DF003DE9A6 /* ContianerPageViewController.swift */; };
 		7DBCA50A2C1BBFED005DFD33 /* ReviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBCA5092C1BBFED005DFD33 /* ReviewTableViewCell.swift */; };
 		7DBE8ACC2C1FE18000D466F0 /* Auth Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE8ACB2C1FE18000D466F0 /* Auth Manager.swift */; };
 		7DC183CA2C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC183C92C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift */; };
@@ -218,6 +219,7 @@
 		7DB875B32C2988450075048B /* MockNetworkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkManger.swift; sourceTree = "<group>"; };
 		7DB875B52C2988FB0075048B /* MockMethodsOfNetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMethodsOfNetworkTests.swift; sourceTree = "<group>"; };
 		7DB875B72C298E430075048B /* getShoppingCartItemsCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getShoppingCartItemsCount.swift; sourceTree = "<group>"; };
+		7DB8A1A52C3084DF003DE9A6 /* ContianerPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContianerPageViewController.swift; sourceTree = "<group>"; };
 		7DBCA5092C1BBFED005DFD33 /* ReviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTableViewCell.swift; sourceTree = "<group>"; };
 		7DBE8ACB2C1FE18000D466F0 /* Auth Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Auth Manager.swift"; path = "Network service/Auth Manager.swift"; sourceTree = SOURCE_ROOT; };
 		7DC183C92C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsimagesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -635,6 +637,7 @@
 			isa = PBXGroup;
 			children = (
 				03ED90F42C0DCED600EE0A50 /* OnbordingViewController.swift */,
+				7DB8A1A52C3084DF003DE9A6 /* ContianerPageViewController.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -1286,6 +1289,7 @@
 				7DC183CA2C1256EE00ECE7CD /* ProductsimagesCollectionViewCell.swift in Sources */,
 				037955D12C0E7250003A3AF9 /* SelectAddressCell.swift in Sources */,
 				03D35C8F2C0CEC1300523AF7 /* Shopify.xcdatamodeld in Sources */,
+				7DB8A1A62C3084DF003DE9A6 /* ContianerPageViewController.swift in Sources */,
 				517FF60A2C1456C800FA0FD2 /* BrandProductsViewModel.swift in Sources */,
 				517E826C2C1278A3004FBD00 /* Brands.swift in Sources */,
 				7DC25B5D2C13A9F800D046D7 /* Decoding.swift in Sources */,

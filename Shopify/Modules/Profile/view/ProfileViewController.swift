@@ -207,7 +207,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         if orderViewModel.orders.isEmpty && visibleFavItems.isEmpty {
             noItemsImageView.isHidden = false
             tableview.isHidden = true
-            showAlertWithSingleOption(message: "There are no items in your orders and wish list.")
+      //      showAlertWithSingleOption(message: "There are no items in your orders and wish list.")
         } else {
             noItemsImageView.isHidden = true
             tableview.isHidden = false

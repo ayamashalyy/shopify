@@ -4,7 +4,6 @@
 //
 //  Created by Rawan Elsayed on 07/06/2024.
 //
-
 import Foundation
 import UIKit
 
@@ -15,17 +14,21 @@ class CustomBrandCell: UICollectionViewCell{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(brandImgView)
-        addSubview(nameBrandLabel)
-        
+       
+       contentView.addSubview(brandImgView)
+       contentView.addSubview(nameBrandLabel)
+          
         brandImgView.translatesAutoresizingMaskIntoConstraints = false
         nameBrandLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        brandImgView.contentMode = .scaleAspectFit
+
         NSLayoutConstraint.activate([
-            brandImgView.topAnchor.constraint(equalTo: topAnchor , constant: 10),
+            brandImgView.topAnchor.constraint(equalTo: topAnchor , constant: 17),
             brandImgView.leadingAnchor.constraint(equalTo: leadingAnchor , constant: 10),
             brandImgView.trailingAnchor.constraint(equalTo: trailingAnchor , constant: -10),
-            brandImgView.heightAnchor.constraint(equalToConstant: 130),
+            brandImgView.heightAnchor.constraint(equalToConstant: 90),
+          
+            
             brandImgView.bottomAnchor.constraint(equalTo: nameBrandLabel.topAnchor, constant: -10),
             
             nameBrandLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -39,12 +42,15 @@ class CustomBrandCell: UICollectionViewCell{
         brandImgView.layer.cornerRadius = 20
         brandImgView.layer.masksToBounds = true
         
-        contentView.layer.cornerRadius = 20
         contentView.layer.masksToBounds = true
-        contentView.backgroundColor = .clear
-
-        contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = UIColor.gray.cgColor
+        contentView.clipsToBounds = false
+        contentView.layer.cornerRadius = 8
+        contentView.backgroundColor = .white
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        contentView.layer.shadowRadius = 5
+        contentView.layer.shadowOpacity = 0.2
+            
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,4 +64,12 @@ class CustomBrandCell: UICollectionViewCell{
         nameBrandLabel.text = brand.title
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds, cornerRadius: contentView.layer.cornerRadius).cgPath
+    }
+    
+    
 }
+
+

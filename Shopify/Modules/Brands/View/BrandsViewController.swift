@@ -29,7 +29,7 @@ class BrandsViewController: UIViewController {
         self.indicator.startAnimating()
         setupUI()
     
-        valueLabel.text = "10.0"
+        valueLabel.text = "50.0 EGP"
         
         sliderFilter.isHidden = true
         valueLabel.isHidden = true
@@ -82,7 +82,7 @@ class BrandsViewController: UIViewController {
         categoriesCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "brandsCell")
         
         // Set the range for the slider
-        sliderFilter.minimumValue = 10.0
+        sliderFilter.minimumValue = 50.0
         sliderFilter.maximumValue = 500.0
         
         //Add target for value changed event
@@ -130,13 +130,14 @@ class BrandsViewController: UIViewController {
     
     @objc func sliderValueChanged(_ sender: UISlider) {
         let currentValue = String(format: "%.2f", sender.value)
-        valueLabel.text = "\(currentValue)"
+        valueLabel.text = "\(currentValue) EGP"
         
         filterProductsByCurrentSliderValue()
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(valueLabel.text ?? "10.0") {
+        var stringValue = valueLabel.text?.dropLast(4)
+        if let currentValue = Float(stringValue ?? "50.0") {
             print("Filtering products by price: \(currentValue)")
             brandProductsViewModel.filterProducts(byPrice: currentValue)
             categoriesCollectionView.reloadData()
@@ -307,7 +308,7 @@ extension BrandsViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width / 2 - 20 , height: 260)
+        return CGSize(width: view.frame.width / 2 - 20 , height: 220)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

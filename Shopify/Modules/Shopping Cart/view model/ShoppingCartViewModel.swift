@@ -351,13 +351,6 @@ class ShoppingCartViewModel {
 
     
     private func sendInvoiceAndReupdate(lineItemsDictHaveDefaultOnly: [[String: Any]], completion: @escaping (Error?) -> Void) {
-        self.orderViewModel.sendInvoiceToCustomer { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success():
-                print(" Invoice sent successfully fffff")
-
                 self.updateDraftOrder(lineItems: lineItemsDictHaveDefaultOnly) { error in
                     if let error = error {
                         completion(error)
@@ -366,12 +359,8 @@ class ShoppingCartViewModel {
                     print("Re-update with default one fffff")
                     completion(nil)
                 }
-            case .failure(let error):
-                print("Failed to send invoice: \(error.localizedDescription)")
-                completion(error)
-            }
         }
-    }    
+        
     
     
     func getShoppingCartItemsCount(completion: @escaping (Int?, Error?) -> Void)

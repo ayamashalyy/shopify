@@ -11,10 +11,10 @@ class BrandProductsViewModel{
 
         var products: [Product] = []
         var favViewModel = FavViewModel()
-        private var collectionId: Int?
+        private var collectionId: String?
         var filteredProducts: [Product] = []
 
-        func setCollectionId(_ id: Int) {
+        func setCollectionId(_ id: String) {
             self.collectionId = id
         }
 
@@ -25,7 +25,7 @@ class BrandProductsViewModel{
             }
             
             let additionalParams = "\(collectionId)"
-            
+            print("additionalParams\(additionalParams) ")
             NetworkManager.fetchDataFromApi(endpoint: .listOfBrandProducts, rootOfJson: .products, addition: additionalParams) { [weak self] data, error in
                 guard let self = self else { return }
                 guard let data = data, error == nil else {

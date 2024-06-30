@@ -86,12 +86,15 @@ class LoginViewController: UIViewController {
             print("Customer ID:", customerID)
         }
 
-            let alertController = UIAlertController(title: "Alert", message: "As A Guest you can not make orders or set products as favourites", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                Navigation.ToHome(from: self)
-            }
-            alertController.addAction(okAction)
-            present(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "Alert", message: "As A Guest you can not make orders or set products as favourites", preferredStyle: .alert)
+
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            Navigation.ToHome(from: self)
+        }
+        alertController.addAction(okAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
    }
 
     
@@ -101,7 +104,6 @@ class LoginViewController: UIViewController {
         loginButton.backgroundColor = UIColor(hex: "#FF7D29")
         loginButton.layer.cornerRadius = 8
         siginInGoogle.layer.cornerRadius = 8
-        siginInGoogle.backgroundColor = UIColor(hex: "#FF7D29")
         
         passwordTxt.isSecureTextEntry = true
         let orangeColor = UIColor(hex: "#FFA500")

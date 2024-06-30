@@ -23,7 +23,7 @@ class SettingsViewModel{
     
     let currencyKey = "selectedCurrency"
     var currencyConversionRates: [String: Double] = [:]
-    let urlString = "https://v6.exchangerate-api.com/v6/5dbdcdc8754bed3357f7d746/latest/EGP"
+    let urlString = "https://v6.exchangerate-api.com/v6/006118cc529b582fd140c3c5/latest/EGP"
     
     // save the selected currency to UserDefaults
     func saveCurrencySelection(_ currency: CurrencySelected) {

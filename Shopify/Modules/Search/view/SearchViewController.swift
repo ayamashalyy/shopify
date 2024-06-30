@@ -45,7 +45,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         }
         
         priceFilter.isHidden = true
-        priceFilter.text = "10.0"
+        priceFilter.text = "50.0 EGP"
         slider.isHidden = true
     }
     
@@ -81,12 +81,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     @IBAction func slider(_ sender: UISlider) {
         let currentValue = String(format: "%.2f", sender.value)
-        priceFilter.text = "\(currentValue)"
+        priceFilter.text = "\(currentValue) EGP"
         filterProductsByCurrentSliderValue()
     }
     
     func filterProductsByCurrentSliderValue() {
-        if let currentValue = Float(priceFilter.text ?? "10.0") {
+        var stringValue = priceFilter.text?.dropLast(4)
+        if let currentValue = Float(stringValue ?? "50.0") {
             searchViewModel.filteredProducts = searchViewModel.filterProducts(filteredProducts: searchViewModel.recevingProductFromANotherScreen ?? [], byPrice: currentValue)
             searchCollectionView.reloadData()
         }
@@ -105,7 +106,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
         searchCollectionView.dataSource = self
         searchCollectionView.delegate = self
         searchCollectionView.register(CustomCategoriesCell.self, forCellWithReuseIdentifier: "CustomCategoriesCell")
-        slider.minimumValue = 10.0
+        slider.minimumValue = 50.0
         slider.maximumValue = 500.0
     }
     
@@ -227,7 +228,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UICollectionV
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width / 2 - 20, height: 260)
+        return CGSize(width: view.frame.width / 2 - 20, height: 220)
     }
     
     

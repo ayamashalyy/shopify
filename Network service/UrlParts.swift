@@ -11,7 +11,7 @@ import Foundation
 enum Endpoint: String {
     case smartCollections = "smart_collections.json"
     case specificProduct = "products/"
-    case listOfBrandProducts = "products.json?collection_id="
+    case listOfBrandProducts = "products.json?vendor="
     case customers = "customers.json"
     case addressCastomer = "customers/"
     case order = "orders.json"
@@ -19,7 +19,7 @@ enum Endpoint: String {
     case allProduct = "products.json"
     case draftOrder = "draft_orders.json"
     case specficDraftOeder = "draft_orders/"
-    
+    case listOfCategoriesProducts = "products.json?collection_id="
 }
 
 enum Root: String {
