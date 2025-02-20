@@ -39,6 +39,10 @@ The app provides a seamless shopping experience with features like user authenti
 * Backend Services: Firebase
 * UI Components: JJFloatingActionButton, BadgeSwift
 
+## 🎬 Watch Demo Video
+
+[Watch the video](https://drive.google.com/file/d/1eySA6dpd4gRflSSz043PmMliW2DjQ4-N/view?usp=sharing)
+
 # Installation and Usage
 1- Clone the Repository:git clone https://github.com/ayamashalyy/Shopify.git
 
